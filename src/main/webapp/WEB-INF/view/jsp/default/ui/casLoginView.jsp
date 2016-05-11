@@ -130,7 +130,7 @@
 					</ul>
 					<ul>
 						<li><select class="select-login-small" id="userType"
-							tabindex="1" accesskey="${userTypeAccessKey}" path="userType">
+							tabindex="1" accesskey="${userTypeAccessKey}" name="userType">
 								<option value="00">个人</option>
 								<option value="01">企业</option>
 								<option value="02">代理商</option>
@@ -140,7 +140,7 @@
 					<ul>
 						<li class="user"><input type="text" class="int-xlarge"
 							cssErrorClass="error" id="username" tabindex="2"
-							accesskey="${userNameAccessKey}" path="username"
+							accesskey="${userNameAccessKey}" name="username"
 							autocomplete="off" htmlEscape="true" placeholder="用户名/手机号/已验证邮箱"></li>
 						<span><spring:message
 								code="screen.welcome.label.netid.accesskey"
@@ -149,7 +149,7 @@
 					<ul>
 						<li><input type="password" class="int-xlarge"
 							cssClass="required int-xlarge-password" cssErrorClass="error"
-							id="password" size="25" tabindex="3" path="password"
+							id="password" size="25" tabindex="3" name="password"
 							accesskey="${passwordAccessKey}" htmlEscape="true"
 							autocomplete="off" onkeydown="encryptPwd(event)"
 							placeholder="请输入密码"></li>
@@ -157,7 +157,7 @@
 							</ul>
 							<ul>
 						<li><input type="text" class="int-yzm" cssErrorClass="error"
-							id="yzm" size="25" tabindex="4" path="yzm"
+							id="yzm" size="25" tabindex="4" name="yzm"
 							accesskey="${yzmAccessKey}" htmlEscape="true" autocomplete="off"
 							placeholder="请输入验证码"></li>
 						<li class="yazm"><img src="../images/yzm.png"></li>
