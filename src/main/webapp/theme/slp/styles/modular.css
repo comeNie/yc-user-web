@@ -1,0 +1,122 @@
+/**快充**/
+.fsast-charge{ width:100%; float:left;min-width:1200px;}
+
+.big-wrapper{width:1200px; margin:0 auto;}
+.recharge-bj{ width:1200px; margin:40px auto 14px auto; background:#fff; overflow:hidden; padding-bottom:40px;}
+.recharge-bj-tow{ width:1200px; margin:20px auto 14px auto; background:#fff; overflow:hidden; padding-bottom:20px;}
+.recharge-bj-three{ padding-bottom:0px;}
+.center-main{ width:1000px; margin:0 100px;}
+.center-table{ width:100%;border-bottom:1px solid #e6e6e6; height:50px; margin-top:20px;}
+.center-table ul{ width:100%; float:left;}
+.center-table ul li{width:107px; float:left; line-height:50px;text-align:center;margin-right:60px; margin-left:30px;}
+.center-table ul li a{ font-size:20px; color:#333;}
+.center-table ul li .current{ width:100%; float:left; border-bottom:2px solid #f4792c; height:50px;}
+
+.recharge-list{width:820px;float:left; margin-left:80px; padding-top:40px;}
+.recharge-list ul{ width:100%;float:left; margin-top:20px;}
+.recharge-list ul li{float:left;margin-right:15px; line-height:40px;}
+.recharge-list ul li p{ float:left;}
+.recharge-list ul .word{ width:120px; text-align:right; font-size:16px;}
+.recharge-list ul .bder{ width:565px; float:left;}
+.recharge-list ul .bder p{ height:50px;}
+.recharge-list ul .bder a{width:100px; height:40px; border:1px solid #e7e7e7; float:left; text-align:center; color:#666; line-height:40px; margin-right:10px;}
+.recharge-list ul .bder .current a{width:100px; height:40px;background:url(../images/kc-a.png) right bottom no-repeat; border:1px solid #f4792c; margin-right:10px;}
+.recharge-list .color{ margin-top:0px;}
+.recharge-list .color span{ color:#f4792c; font-size:22px;}
+.rech-btn{ width:230px; height:40px; float:left; margin-left:135px;}
+
+/**快充支付**/
+.payment-title{ width:100%; float:left; margin:16px 0 6px 0; }
+.payment-title span{ color:#f17938;}
+.payment-method{ width:100%; float:left; border-bottom:1px solid #e7e7e7; padding-bottom:16px; font-size:16px;}
+.payment-method p,.payment-method  ul{ width:100%;float:left; padding-left:24px; margin-top:20px;}
+.payment-method ul li a{ width:170px; height:52px;float:left; border:1px solid #e7e7e7; margin-right:12px; text-align:center;}
+.payment-method ul .current a{ width:170px; height:52px; float:left; border:1px solid #f4792c;  background: url(../images/kc-a.png) right bottom no-repeat;margin-right:12px;}
+.information-title{ width:100%; float:left; padding-left:24px; margin-top:22px; font-size:16px;}
+.information-list{width:820px;float:left; margin-left:80px; padding-top:30px;padding-bottom:20px;}
+.information-list ul{ width:100%;float:left; margin-top:20px;}
+.information-list ul li{float:left;margin-right:15px; line-height:20px;}
+.information-list ul li p{ float:left;}
+.information-list ul .word{ width:120px; text-align:right;}
+.information-list span{ color:#f4792c; font-size:22px; font-weight: bold;}
+.balance-title{ width:100%; float:left; margin:20px 0 0 0; padding-left:24px;}
+.balance-title p{float:left; margin-right:16px; line-height:30px;}
+.balance-title .checkbox{ width:14px; height:14px;}
+
+.balance-table{ width:1100px; height:150px; float:left; margin:12px 50px; background:#fffaf8; border:1px solid #fed3c2;}
+.balance-table ul{ width:1000px; float:left; margin:10px 0 0 50px;}
+.balance-table ul li{width:100%;float:left; margin-bottom:16px;}
+.balance-table ul li p{ float:left; line-height:30px; margin-right:14px;}
+.balance-table ul li p a{ color:#666;}
+.balance-table ul li p a:hover{color:#f4792c;}
+.balance-table ul li .color,.balance-table ul li .color a{color:#f4792c;}
+.balance-table ul li .color a:hover{color:#fc721c;}
+.right-btn{ float:right;}
+
+.information-table{ width:1150px; float:left; margin:20px 0 0 25px;}
+.information-table table{ width:100%;}
+.information-table table tr{ height:46px; border-bottom:1px solid #e7e7e7;}
+.information-table table tr:hover{background:#fbfafa; }
+.information-table table .bj{ background:#fbfafa;}
+.information-table table .bj td{font-size:14px; color:#333;}
+.information-table table .bj:hover{background:#fbfafa;}
+.information-table table tr td{ text-align:center; font-size:14px; color:#666;}
+.information-table table tr .color{ color:#f17a38;font-weight:bold;}
+.information-money{width:1150px; float:left; margin:20px 0 0 25px;}
+.information-money p{float:right; color:#666;}
+.information-money p span{ color:#f07938; font-size:22px; font-weight:bold;}
+/**购物车**/
+.shopping-cart{ width:100%; float:left;position:relative; margin-top:15px;}
+.shopping-cart table{ width:100%; float:left;}
+.shopping-cart table tr{ height:120px; border-bottom:1px solid #e7e7e7;}
+.shopping-cart table tr:hover{ background:#fbfafa}
+.shopping-cart table .bj-s{ background:#fafafa; height:46px;}
+.shopping-cart table .bj{ height:60px;}
+.shopping-cart table .bj td{ color:#333;}
+.shopping-cart table .bj:hover{ background:#fff;}
+.shopping-cart table tr td{ text-align:center;color:#666; }
+.shopping-cart table tr .sp table tr{ border-bottom:none;}
+.shopping-cart table tr .sp table tr td{ text-align:left;}
+.shopping-cart table tr .sp table tr .word{ text-align:left; padding-left:10px;}
+.shopping-cart table tr .clp-btn tr{ border-bottom:none; height:60px;}
+.shopping-cart table tr .clp-btn .number label{ width:100%; float:left; text-align:center; font-size:12px; color:#666;}
+.shopping-cart table a{color:#666;}
+.shopping-cart table a:hover{ color:#f07938;} 
+.shopping-cart table a i{ margin-right:4px;}
+
+.small-xbtn{ width:35px; height:35px; border:1px solid #e7e7e7; background:#fff; cursor:pointer; color:#888; font-size:20px; float:left;}
+.xz-int{ width:60px; height:35px; border-bottom:1px solid #e7e7e7; border-top:1px solid #e7e7e7;float:left; padding-left:4px;}
+.shopping-cart table tr .bold{ color:#f17a38; font-weight:bold;}
+
+.shopping-cart table tr .ash{ color:#666;}
+.shopping-cart table .none-color{ background:#f5f5f5;}
+.shopping-cart table .none-color .bold{ color:#666; font-weight:bold;}
+.shopping-cart table .none-color:hover,.shopping-cart table .none-color table tr:hover{background:#f5f5f5;}
+
+.left-chix{ width:300px; float:left; margin: 0 0 0 20px;}
+.left-chix ul{ width:100%; float:left;}
+.left-chix ul li{ float:left; line-height:66px; margin-right:20px;color:#666;}
+.left-chix ul li a{ color:#666;}
+.left-chix ul li a:hover{color:#fc721c;}
+.order-amount{ width:500px;float:left; margin-left:170px; margin-top:15px; display:inline-block;}
+.order-amount ul{ width:100%;  display:inline-block;}
+.order-amount ul li{ width:100%;float:right; overflow:hidden; text-align:right;}
+.order-amount ul li p{ display:inline-block; margin-left:15px;}
+.order-amount ul li p span{ color:#f07938; font-size:16px;}
+/**提交订单**/
+.total-amount{ width:100%; float:left; border-top:1px solid #e7e7e7; margin-top:25px;}
+.total-amount ul{ float:right; padding-top:10px; padding-right:24px;}
+.total-amount ul li{ line-height:30px;}
+.total-amount ul li p{ float:left; margin-left:20px;}
+.total-amount ul li .word{ width:120px; text-align:right; color:#666;}
+.total-amount ul li .right{ float:right; color:#333; font-size:16px;}
+.total-amount ul li .right span{ font-size:22px; color:#f4792c;}
+/**支付成功**/
+.payment-success{width:100%;height:632px;min-width:1200px;padding-bottom:96px;}
+.payment-success p{text-align:center; margin-bottom:16px; color:#666;}
+.payment-success p img{ margin-top:95px; margin-bottom:46px;}
+.payment-success .word{ font-size:26px; color:#333; margin-bottom:16px;}
+.payment-success p a{ color:#666; margin-right:8px; padding-left:8px;}
+.payment-success p a:hover{ color:#f4792c;}
+.payment-success .alink{ margin-top:30px;}
+.payment-success .blod{ color:#f4792c;}
