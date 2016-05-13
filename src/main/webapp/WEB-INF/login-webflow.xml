@@ -24,7 +24,7 @@
       xsi:schemaLocation="http://www.springframework.org/schema/webflow
                           http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
-    <var name="credential" class="com.ai.opt.sso.principal.BssCredentials" />
+    <var name="credential" class="com.ai.opt.sso.principal.SLPCredentials" />
     <on-start>
         <evaluate expression="initialFlowSetupAction" />
     </on-start>
@@ -86,6 +86,8 @@
             <binding property="username" />
             <binding property="password" />
             <binding property="tenantId" />
+            <binding property="userType" />
+            
             <binding property="rememberMe" />
         </binder>
         <on-entry>
