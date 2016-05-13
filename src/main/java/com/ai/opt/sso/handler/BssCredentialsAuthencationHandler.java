@@ -23,6 +23,7 @@ import org.jasig.cas.authentication.principal.SimplePrincipal;
 import org.jasig.cas.authentication.support.PasswordPolicyConfiguration;
 import org.springframework.util.StringUtils;
 
+import com.ai.opt.base.exception.RPCSystemException;
 import com.ai.opt.sdk.util.Md5Encoder;
 import com.ai.opt.sso.constants.SSOConstants;
 import com.ai.opt.sso.exception.AccountNameNotExistException;
@@ -45,9 +46,6 @@ public final class BssCredentialsAuthencationHandler
     @Resource
     private LoadAccountService loadAccountService;
 
-    @Resource
-    private ILoginSV loginSV;
-    
     @NotNull
     private PasswordEncoder passwordEncoder;
 
@@ -99,8 +97,10 @@ public final class BssCredentialsAuthencationHandler
         LoginResponse user = null;
         try {
             LoginRequest request = new LoginRequest();
-            org.springframework.beans.BeanUtils.copyProperties(bssCredentials, request);
-            user = loginSV.login(request);
+            request.setTenantId(bssCredentials.getTenantId());
+            request.setUserType(bssCredentials.getUserType());
+            
+            user = loadAccountService.login(request);
             if (user == null || ("null").equals(user.getUserId())) {
                 if (RegexUtils.checkIsPhone(bssCredentials.getUsername())) {
                     logger.error("手机号码未注册");
@@ -136,6 +136,9 @@ public final class BssCredentialsAuthencationHandler
 
             BeanUtils.copyProperties(bssCredentials, user);
         } catch (IllegalAccessException | InvocationTargetException e) {
+            logger.error("从user拷贝属性到bssCredentials出错", e);
+            throw new SystemErrorException();
+        } catch (RPCSystemException e) {
             logger.error("从user拷贝属性到bssCredentials出错", e);
             throw new SystemErrorException();
         }

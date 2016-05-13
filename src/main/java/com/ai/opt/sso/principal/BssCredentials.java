@@ -24,21 +24,6 @@ public class BssCredentials extends RememberMeUsernamePasswordCredential {
     private String userType;
 
     /**
-     * 用户登陆用户名
-     */
-    private String userLoginName;
-
-    /**
-     * 用户邮箱
-     */
-    private String userEmail;
-
-    /**
-     * 用户手机号
-     */
-    private String userMp;
-
-    /**
      * 验证码
      */
     private String captchaCode;
@@ -67,28 +52,6 @@ public class BssCredentials extends RememberMeUsernamePasswordCredential {
         this.captchaCode = captchaCode;
     }
 
-    public String getUserLoginName() {
-        return userLoginName;
-    }
 
-    public void setUserLoginName(String userLoginName) {
-        this.userLoginName = userLoginName;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public String getUserMp() {
-        return userMp;
-    }
-
-    public void setUserMp(String userMp) {
-        this.userMp = userMp;
-    }
 
 }
