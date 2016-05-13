@@ -40,7 +40,7 @@
 		
 	<dubbo:reference id="iRegisterSV"
 		interface="com.ai.slp.user.api.register.interfaces.IRegisterSV"/>
-		
+		 
 	<dubbo:reference id="iAccountSecurityManageSV"
 		interface="com.ai.opt.uac.api.security.interfaces.IAccountSecurityManageSV"/>
 		
