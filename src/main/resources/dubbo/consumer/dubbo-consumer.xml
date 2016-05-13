@@ -39,7 +39,7 @@
 		interface="com.ai.opt.uac.api.account.interfaces.ITenantManageSV"/>
 		
 	<dubbo:reference id="iRegisterSV"
-		interface="com.ai.opt.uac.api.register.interfaces.IRegisterSV"/>
+		interface="com.ai.slp.user.api.register.interfaces.IRegisterSV"/>
 		
 	<dubbo:reference id="iAccountSecurityManageSV"
 		interface="com.ai.opt.uac.api.security.interfaces.IAccountSecurityManageSV"/>
