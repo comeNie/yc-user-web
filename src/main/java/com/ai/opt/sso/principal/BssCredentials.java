@@ -26,7 +26,7 @@ public class BssCredentials extends RememberMeUsernamePasswordCredential {
     /**
      * 用户登陆用户名
      */
-    private String UserLoginName;
+    private String userLoginName;
 
     /**
      * 用户邮箱
@@ -68,11 +68,11 @@ public class BssCredentials extends RememberMeUsernamePasswordCredential {
     }
 
     public String getUserLoginName() {
-        return UserLoginName;
+        return userLoginName;
     }
 
     public void setUserLoginName(String userLoginName) {
-        UserLoginName = userLoginName;
+        this.userLoginName = userLoginName;
     }
 
     public String getUserEmail() {

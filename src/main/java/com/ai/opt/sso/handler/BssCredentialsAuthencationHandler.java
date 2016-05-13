@@ -5,7 +5,6 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.security.auth.login.CredentialException;
 import javax.security.auth.login.LoginException;
 import javax.validation.constraints.NotNull;
 
@@ -24,7 +23,6 @@ import org.jasig.cas.authentication.principal.SimplePrincipal;
 import org.jasig.cas.authentication.support.PasswordPolicyConfiguration;
 import org.springframework.util.StringUtils;
 
-import com.ai.opt.base.exception.RPCSystemException;
 import com.ai.opt.sdk.util.Md5Encoder;
 import com.ai.opt.sso.constants.SSOConstants;
 import com.ai.opt.sso.exception.AccountNameNotExistException;
@@ -37,7 +35,9 @@ import com.ai.opt.sso.exception.UsernameIsNullException;
 import com.ai.opt.sso.principal.BssCredentials;
 import com.ai.opt.sso.service.LoadAccountService;
 import com.ai.opt.sso.util.RegexUtils;
-import com.ai.opt.uac.api.sso.param.UserLoginResponse;
+import com.ai.slp.user.api.login.interfaces.ILoginSV;
+import com.ai.slp.user.api.login.param.LoginRequest;
+import com.ai.slp.user.api.login.param.LoginResponse;
 
 public final class BssCredentialsAuthencationHandler
         extends AbstractPreAndPostProcessingAuthenticationHandler {
@@ -45,6 +45,9 @@ public final class BssCredentialsAuthencationHandler
     @Resource
     private LoadAccountService loadAccountService;
 
+    @Resource
+    private ILoginSV loginSV;
+    
     @NotNull
     private PasswordEncoder passwordEncoder;
 
@@ -93,10 +96,12 @@ public final class BssCredentialsAuthencationHandler
             throw new PasswordIsNullException();
         }
 
-        UserLoginResponse user = null;
+        LoginResponse user = null;
         try {
-            user = loadAccountService.loadAccount(bssCredentials);
-            if (user == null || user.getAccountId() == 0) {
+            LoginRequest request = new LoginRequest();
+            org.springframework.beans.BeanUtils.copyProperties(bssCredentials, request);
+            user = loginSV.login(request);
+            if (user == null || ("null").equals(user.getUserId())) {
                 if (RegexUtils.checkIsPhone(bssCredentials.getUsername())) {
                     logger.error("手机号码未注册");
                     throw new PhoneNotExistException();
@@ -108,7 +113,8 @@ public final class BssCredentialsAuthencationHandler
                     throw new AccountNameNotExistException();
                 }
             }
-            String dbPwd = user.getAccountPassword();
+            //String dbPwd = user.getAccountPassword();
+            String dbPwd=null;
             logger.info("【dbPwd】=" + dbPwd);
             String encryDbPwd = Md5Encoder.encodePassword(SSOConstants.AIOPT_SALT_KEY + dbPwd);
             logger.info("【encryDbPwd】=" + encryDbPwd);
@@ -132,10 +138,6 @@ public final class BssCredentialsAuthencationHandler
         } catch (IllegalAccessException | InvocationTargetException e) {
             logger.error("从user拷贝属性到bssCredentials出错", e);
             throw new SystemErrorException();
-        } catch (RPCSystemException e) {
-            // TODO
-            logger.error("调用查询账户服务（Dubbo）失败", e);
-            throw new CredentialException("系统错误");
         }
         logger.info("用户 [" + username + "] 认证成功。");
         return creatHandlerResult(bssCredentials, new SimplePrincipal(username), null);

@@ -30,7 +30,7 @@
 	
 	<!-- 账号登录服务 -->		
 	<dubbo:reference id="iLoginSV"
-		interface="com.ai.opt.uac.api.sso.interfaces.ILoginSV" />	
+		interface="com.ai.slp.user.api.login.interfaces.ILoginSV" />	
 		
 	<dubbo:reference id="iAccountManageSV"
 		interface="com.ai.opt.uac.api.account.interfaces.IAccountManageSV"/>

@@ -75,10 +75,14 @@ dependencies {
     compile 'com.ai.opt.uni.session:opt-uni-session:2.0-SNAPSHOT'
     compile 'com.ai.opt.sso.client:opt-sso-client:1.0.1-SNAPSHOT'
     
+    compile 'com.ai.slp.user:login:1.0-SNAPSHOT'
+    compile 'com.ai.opt.uac:register:1.0-SNAPSHOT'
+    
     compile 'com.ai.opt.uac:account:2.0-SNAPSHOT'
     compile 'com.ai.opt.uac:register:2.0-SNAPSHOT'
     compile 'com.ai.opt.uac:security:2.0-SNAPSHOT'
     compile 'com.ai.opt.uac:seq:2.0-SNAPSHOT'
+    
     
     testCompile(
         "org.springframework:spring-test:3.2.6.RELEASE",
