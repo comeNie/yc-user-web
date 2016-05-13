@@ -179,7 +179,7 @@
 									tabindex="5">
 							</p>
 							<p>记住密码</p></li>
-						<li class="right"><a href="#">忘记密码</a>|<a href="#">注册新账户</a></li>
+						<li class="right"><a href="#">忘记密码</a>|<a href="${_base}/reg/toRegister">注册新账户</a></li>
 					</ul>
 					<ul>
 						<div class="login-note">
