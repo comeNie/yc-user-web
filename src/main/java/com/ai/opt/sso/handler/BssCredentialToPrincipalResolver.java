@@ -21,18 +21,10 @@ public class BssCredentialToPrincipalResolver implements PrincipalResolver {
 		String principalId = bssCredentials.getUsername();
 		
 		Map<String, Object> attributes = new HashMap<String, Object>();
-		attributes.put("username", bssCredentials.getUsername());
-		attributes.put("accountId", bssCredentials.getAccountId());
 		attributes.put("tenantId", bssCredentials.getTenantId());
-		attributes.put("accountName", bssCredentials.getAccountName());
-        attributes.put("nickName", bssCredentials.getNickName());
-        attributes.put("phone", bssCredentials.getPhone());
-        attributes.put("email", bssCredentials.getEmail());
-        attributes.put("accountType", bssCredentials.getAccountType());
-        attributes.put("accountLevel", bssCredentials.getAccountLevel());
-        attributes.put("weixin", bssCredentials.getWeixin());
-        attributes.put("weibo", bssCredentials.getWeibo());
-        attributes.put("qq", bssCredentials.getQq());
+		attributes.put("username", bssCredentials.getUsername());
+        attributes.put("userType", bssCredentials.getUserType());
+        
 		return new SimplePrincipal(principalId , attributes);
 	}
 

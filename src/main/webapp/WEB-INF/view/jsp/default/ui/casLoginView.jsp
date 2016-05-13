@@ -29,7 +29,7 @@
 
 <script language="javascript" type="text/javascript">
 	$(function() {
-		
+
 		var errors = $("div.login-note").html();
 		if (isNull(errors)) {
 			$("div.login-note").css("padding", "0px");
@@ -81,9 +81,10 @@
 	function validate() {
 		var username = document.getElementById("username").value;
 		var password = document.getElementById("password").value;
+		var captchaCode = document.getElementById("captchaCode").value;
 		try {
 			if (isNull(username)) {
-				$("div.login-note").html("请输入手机号码或邮箱地址");
+				$("div.login-note").html("请输入用户名/手机号码/邮箱");
 				$("div.login-note").css("padding", "3px 10px");
 				return false;
 			} else {
@@ -96,7 +97,13 @@
 			} else {
 				$("div.login-note").html("");
 			}
-
+			if (isNull(captchaCode)) {
+				$("div.login-note").html("请输入验证码");
+				$("div.login-note").css("padding", "3px 10px");
+				return false;
+			} else {
+				$("div.login-note").html("");
+			}
 			return true;
 		} catch (ex) {
 			return false;
@@ -123,62 +130,71 @@
 				<!--登录框-->
 				<div class="login-main">
 					<ul>
-						<div class="login-note">
-							<form:errors path="*" id="msg" cssClass="errors" element="div"
-								htmlEscape="false" />
-						</div>
+						<li><form:select class="select-login-small" id="userType"
+								path="userType" tabindex="1" name="userType">
+								<option value="10">个人用户</option>
+								<option value="11">企业用户</option>
+								<option value="12">代理商用户</option>
+								<option value="13">分销商用户</option>
+							</form:select></li>
 					</ul>
 					<ul>
-						<li><select class="select-login-small" id="userType"
-							tabindex="1" accesskey="${userTypeAccessKey}" name="userType">
-								<option value="00">个人</option>
-								<option value="01">企业</option>
-								<option value="02">代理商</option>
-								<option value="03">分销商</option>
-						</select></li>
-					</ul>
-					<ul>
-						<li class="user"><input type="text" class="int-xlarge"
-							cssErrorClass="error" id="username" tabindex="2"
-							accesskey="${userNameAccessKey}" name="username"
-							autocomplete="off" htmlEscape="true" placeholder="用户名/手机号/已验证邮箱"></li>
+						<li class="user"><form:input cssClass="required int-xlarge"
+								cssErrorClass="error" id="username" tabindex="1"
+								accesskey="${userNameAccessKey}" path="username"
+								autocomplete="off" htmlEscape="true" placeholder="用户名/手机号/已验证邮箱" /></li>
 						<span><spring:message
 								code="screen.welcome.label.netid.accesskey"
 								var="userNameAccessKey" /></span>
 					</ul>
 					<ul>
-						<li><input type="password" class="int-xlarge"
-							cssClass="required int-xlarge-password" cssErrorClass="error"
-							id="password" size="25" tabindex="3" name="password"
-							accesskey="${passwordAccessKey}" htmlEscape="true"
-							autocomplete="off" onkeydown="encryptPwd(event)"
-							placeholder="请输入密码"></li>
-							<span><spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" /></span>
-							</ul>
-							<ul>
-						<li><input type="text" class="int-yzm" cssErrorClass="error"
-							id="yzm" size="25" tabindex="4" name="yzm"
-							accesskey="${yzmAccessKey}" htmlEscape="true" autocomplete="off"
-							placeholder="请输入验证码"></li>
-						<li class="yazm"><img src="../images/yzm.png"></li>
-						 <span><spring:message code="screen.welcome.label.yzm.accesskey" var="yzmAccessKey" /></span>
-						 </ul>
-						 <ul>
+						<%-- <li class="password"><form:password
+								
+								id="password" name="password"  size="25" tabindex="3" path="password"
+								accesskey="${passwordAccessKey}" htmlEscape="true"
+								autocomplete="off" placeholder="请输入密码"
+								onkeydown="encryptPwd(event)" /></li> --%>
+							<li><form:input type="password" cssClass="required int-xlarge"
+								cssErrorClass="error" path="password" placeholder="请输入密码" 
+								accesskey="${passwordAccessKey}" htmlEscape="true"
+								autocomplete="off" onkeydown="encryptPwd(event)"/></li>
+						<span><spring:message
+								code="screen.welcome.label.password.accesskey"
+								var="passwordAccessKey" /></span>
+					</ul>
+					<ul>
+						<li class="identifying"><input type="text"
+							class="int-xlarge-identifying" style="width: 176px;" size="25"
+							tabindex="4" name="captchaCode" path="captchaCode"
+							placeholder="请输入验证码" id="captchaCode"> <span><A><img
+									src="${_base}/reg/getImageVerifyCode" id="pictureVitenfy"></A></span>
+						</li>
+						<span><spring:message
+								code="screen.welcome.label.captchaCode.accesskey"
+								var="passwordAccessKey" /></span>
+					</ul>
+					<ul>
 						<li><p>
 								<input id="rememberMe" name="rememberMe" type="checkbox"
 									tabindex="5">
 							</p>
 							<p>记住密码</p></li>
 						<li class="right"><a href="#">忘记密码</a>|<a href="#">注册新账户</a></li>
-						</ul>
-						<ul>
-						<li><input type="button" class="login-bigbtn" value="立即登录"
-							 accesskey="l" tabindex="6" onclick="javascript:dologin();" ></li>
 					</ul>
-					<input type="hidden" name="lt" value="${loginTicket}" />
-			    	<input type="hidden" name="execution" value="${flowExecutionKey}" />
-			    	<input type="hidden" name="_eventId" value="submit" />
-			    	<input type="hidden" name="tenantId" value="test111" />
+					<ul>
+						<div class="login-note">
+							<form:errors path="*" id="msg" cssClass="errors" element="div"
+								htmlEscape="false" />
+						</div>
+					</ul>
+					<ul>
+						<li><input type="button" class="login-bigbtn" value="立即登录"
+							accesskey="l" tabindex="6" onclick="javascript:dologin();"></li>
+					</ul>
+					<input type="hidden" name="lt" value="${loginTicket}" /> <input
+						type="hidden" name="execution" value="${flowExecutionKey}" /> <input
+						type="hidden" name="_eventId" value="submit" /> <input
+						type="hidden" name="tenantId" value="test111" />
 				</div>
 			</div>
 		</form:form>
