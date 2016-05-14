@@ -10,7 +10,6 @@ import com.ai.opt.sso.principal.BssCredentials;
 import com.ai.slp.user.api.login.interfaces.ILoginSV;
 import com.ai.slp.user.api.login.param.LoginRequest;
 import com.ai.slp.user.api.login.param.LoginResponse;
-import com.ai.slp.user.api.register.interfaces.IRegisterSV;
 
 /**
  * 加载账号信息服务（Dubbo服务）
