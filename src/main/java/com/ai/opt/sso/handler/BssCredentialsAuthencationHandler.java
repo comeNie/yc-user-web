@@ -23,20 +23,16 @@ import org.jasig.cas.authentication.principal.SimplePrincipal;
 import org.jasig.cas.authentication.support.PasswordPolicyConfiguration;
 import org.springframework.util.StringUtils;
 
+import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.RPCSystemException;
-import com.ai.opt.sdk.util.Md5Encoder;
-import com.ai.opt.sso.constants.SSOConstants;
-import com.ai.opt.sso.exception.AccountNameNotExistException;
-import com.ai.opt.sso.exception.EmailNotExistException;
+import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.opt.sso.exception.PasswordErrorException;
 import com.ai.opt.sso.exception.PasswordIsNullException;
-import com.ai.opt.sso.exception.PhoneNotExistException;
-import com.ai.opt.sso.exception.SystemErrorException;
-import com.ai.opt.sso.exception.UsernameIsNullException;
 import com.ai.opt.sso.principal.BssCredentials;
 import com.ai.opt.sso.service.LoadAccountService;
 import com.ai.opt.sso.util.RegexUtils;
-import com.ai.slp.user.api.login.interfaces.ILoginSV;
+import com.ai.opt.uac.web.constants.Constants;
+import com.ai.opt.uac.web.constants.Constants.LoginConstant;
 import com.ai.slp.user.api.login.param.LoginRequest;
 import com.ai.slp.user.api.login.param.LoginResponse;
 
@@ -82,7 +78,7 @@ public final class BssCredentialsAuthencationHandler
         // 用户名非空校验
         if (!StringUtils.hasText(username)) {
             logger.error("请输入用户名/手机号码/邮箱地址");
-            throw new UsernameIsNullException();
+            throw new BusinessException("ERROR_CODE1","请输入用户名/手机号码/邮箱地址");
         }
         // 密码非空校验
         if (!StringUtils.hasText(pwdFromPage)) {
@@ -93,33 +89,31 @@ public final class BssCredentialsAuthencationHandler
             logger.error("验证码为空！");
             throw new PasswordIsNullException();
         }
-
-        LoginResponse user = null;
-        try {
-            LoginRequest request = new LoginRequest();
+        
+        //校验验证码
+        //String service_url = MCSClientFactory.getCacheClient(LoginConstant.CACHE_NAMESPACE).get(Constants.URLConstant.INDEX_URL_KEY);
+        LoginRequest request = new LoginRequest();
+        LoginResponse response = null;
             request.setTenantId(bssCredentials.getTenantId());
             request.setUserType(bssCredentials.getUserType());
-            
-            user = loadAccountService.login(request);
-            if (user == null || ("null").equals(user.getUserId())) {
-                if (RegexUtils.checkIsPhone(bssCredentials.getUsername())) {
-                    logger.error("手机号码未注册");
-                    throw new PhoneNotExistException();
-                } else if (RegexUtils.checkIsEmail(bssCredentials.getUsername())) {
-                    logger.error("邮箱未绑定");
-                    throw new EmailNotExistException();
-                } else {
-                    logger.error("账号未注册");
-                    throw new AccountNameNotExistException();
-                }
+            if (RegexUtils.checkIsPhone(bssCredentials.getUsername())) {
+                request.setUserMp(bssCredentials.getUsername());
+            } else if (RegexUtils.checkIsEmail(bssCredentials.getUsername())) {
+                request.setUserEmail(bssCredentials.getUsername());
+            } else {
+                request.setUserLoginName(bssCredentials.getUsername());
             }
-            //String dbPwd = user.getAccountPassword();
-            String dbPwd=null;
+            try{
+            response = loadAccountService.login(request);
+            }catch (RPCSystemException e) {
+                e.printStackTrace();
+            }
+            String dbPwd = response.getUserLoginPwd();
             logger.info("【dbPwd】=" + dbPwd);
-            String encryDbPwd = Md5Encoder.encodePassword(SSOConstants.AIOPT_SALT_KEY + dbPwd);
-            logger.info("【encryDbPwd】=" + encryDbPwd);
+            //String encryDbPwd = Md5Encoder.encodePassword(SSOConstants.AIOPT_SALT_KEY + dbPwd);
+            //logger.info("【encryDbPwd】=" + encryDbPwd);
             logger.info("【pwdFromPage】=" + pwdFromPage);
-            if (!pwdFromPage.equals(encryDbPwd)) {
+            if (!pwdFromPage.equals(dbPwd)) {
                 // 密码不对
                 logger.error("密码错误！");
                 throw new PasswordErrorException();
@@ -134,17 +128,14 @@ public final class BssCredentialsAuthencationHandler
              * CredentialException("账号已失效"); }
              */
 
-            BeanUtils.copyProperties(bssCredentials, user);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            logger.error("从user拷贝属性到bssCredentials出错", e);
-            throw new SystemErrorException();
-        } catch (RPCSystemException e) {
-            logger.error("从user拷贝属性到bssCredentials出错", e);
-            throw new SystemErrorException();
-        }
-        logger.info("用户 [" + username + "] 认证成功。");
-        return creatHandlerResult(bssCredentials, new SimplePrincipal(username), null);
-    }
+            try {
+                BeanUtils.copyProperties(bssCredentials, response);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            logger.info("用户 [" + username + "] 认证成功。");
+            return creatHandlerResult(bssCredentials, new SimplePrincipal(response.getUserId()), null);
+        } 
 
     private HandlerResult creatHandlerResult(BssCredentials bssCredentials,
             SimplePrincipal simplePrincipal, List<Message> warnings) {
