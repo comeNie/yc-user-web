@@ -146,7 +146,7 @@
 								code="screen.welcome.label.netid.accesskey"
 								var="userNameAccessKey" /></span>
 					</ul>
-					<ul>
+					<ul> 
 						<%-- <li class="password"><form:password
 								
 								id="password" name="password"  size="25" tabindex="3" path="password"
