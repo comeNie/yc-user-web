@@ -6,6 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" /> 
 <title>注册</title>
 <script type="text/javascript" src="${_base}/theme/baas/js/jquery.toggle-password.js" ></script> 
+<script type="text/javascript" src="${_base}/theme/slp/scripts/md5.js" ></script> 
 
 <script type="text/javascript">
  (function () {
@@ -87,85 +88,141 @@ return;
 </script>
 </head>
 
-<body>
-<%@ include file="/inc/head-rgister.jsp"%>
-
-   <div class="regsiter-wrapper" id="register-form">
-     <div class="regsiter-box">
-        <div class="regsiter-wrapper-cnt">
-	         <ul>
-		         <li class="regsiter-title">账户注册</li>
-		         <li class="user">
-		         	<input type="text" name="phone" id="phone"class="int-xxlarge-user" placeholder="手机号码">
-		         	<p class="regsiter-po">
-			         	<span class="regsiter-note" id="errorPhoneMsg" style="display: none;">
-			         		<span id="showPhoneMsg" ></span>
-			         	</span>
-		         	</p>
-		         </li>
-		         
-		         <li class="password">
-		         	<input type="password" name="password" id="password"class="int-xxlarge" placeholder="密码"><!-- onKeyUp=pwStrength(this.value) onBlur=pwStrength(this.value) -->
-		         	<i class="icon-eye-open" id="togglePassword"></i>
-		         	<p class="regsiter-po">
-		         	<span class="regsiter-note" id="errorPawMsg" style="display: none;">
-		         		<span id="showPawMsg"></span>
-		         	</span>
-		         	</p>
-		         	<p>
-		         		<label id="errorShowPM" style="display: none;">6~14个字符，数字、字母、符号组合，不包含空格</label>
-		         	</p>
-		         	<div class="regsiter-set-password" style="display:none">
-				          <p class="low" id="strength_L">
-					          <span class="f00" id=""></span>
-					          <span>低</span>
-				          </p>
-				           <p class="in" id="strength_M">
-					          <span class="eb6100"></span>
-					          <span>中</span>
-				          </p>
-				          <p class="gao" id="strength_H">
-					          <span class="green"></span>
-					          <span>高</span>
-				          </p>
-	          			</div>	
-		         </li>
-		         	
-		         <li class="identifying">
-		         	<input type="text" class="int-xlarge-identifying" style="width:176px;" placeholder="图形验证码" id="pictureVitenfy">
-		         	<span ><A ><img src="${_base}/reg/getImageVerifyCode" id="randomImg"></A></span>
-		         	<span ><a id="refresh">看不清?换一个</a></span>
-		         	<p class="regsiter-po">
-			         	<span class="regsiter-note" id="errorPicMsg" style="display: none;">
-			         		<span id="showPicMsg" ></span>
-			         	</span>
-		         	</p>
-		         </li>
-		         <li class="SMSidentifying">
-		         	<input type="text" class="int-xlarge-SMSidentifying" placeholder="短信验证码" id="phoneVerifyCode">
-		         	 <span class="yzm">
-		         	 	<input class="button"id="PHONE_IDENTIFY"  type="button" value="获取验证码" >
-		         	 </span>
-		         	<p class="regsiter-po">	
-		         	<span class="regsiter-note" id="errorSmsMsg" style="display: none;">
-		         		<span id="showSmsMsg"></span>
-		         	</span>
-		         	</p>
-		         </li>
-		         <li>
-		         	<input type="button" class="regsiter-btn" value="注 册"  id="BTN_REGISTER">
-		         	<input type="hidden" id="errorPhoneFlag">
-		         	<input type="hidden" id="errorPicFlag">
-		         	<input type="hidden" id="errorPassFlag">
-		         	<input type="hidden" id="errorSMSFlag">
-		         </li>
-		         <li class="zuns">* 注册表示您同意遵守<A href="${_base }/reg/protocol" target="_blank">《亚信云计费服务条款》</A></li>
-	
-	         </ul>
-	         </div>
-   		</div>
+<body class="logo-body">
+   <!--login－头部-->
+   <div class="login-head">
+        <div class="logo">
+            <ul>
+                <li><a href="#"><img src="${_base}/theme/slp/images/login-logo.png"></a></li>
+                <li>用户注册</li>
+            </ul>
+        </div>
+        
+        <div class="login-btn">
+            <ul>
+                <li>已有账户，现在</li>
+                <li><input type="button" value="登录" class="slp-btn wih-btn" onclick="location.href='';"></li>
+            </ul>
+        </div>
     </div>
-    <%@ include file="/inc/foot.jsp"%>
-   
+  <!--login－头部结束-->
+  <div class="g-regsiter">
+      <!--白色框架-->
+        <div class="regsiter-center">
+            <!--主体内容-->
+                <div class="center-main">
+                    <div class="center-table">
+                       <ul>
+                           <li><A href="#" class="current">个人用户</A></li>
+                           <li><A href="#">企业用户</A></li>
+                       </ul>
+                    </div>
+                    
+                <div id="regeiter-date1">     
+                <div class="center-table-list">
+                 <!--步骤-->
+                     <div class="steps">
+                     <ul>
+                     <li class="yellow-border" id="SmsVerificationBorder"></li>
+                     <li class="yellow-yuan" id="SmsVerificationYuan">1</li>
+                     <li class="yellow-word" id="SmsVerificationWord">短信验证</li>
+                     </ul>
+                      <ul>
+                     <li class="ash-border" id="accountInfoBorder"></li>
+                     <li class="ash-yuan" id="accountInfoYuan">2</li>
+                     <li id="accountInfoWord">设置帐户信息</li>
+                     </ul>
+                      <ul>
+                     <li class="ash-border" id="registerSuccessBorder"></li>
+                     <li class="ash-yuan" id="registerSuccessYuan"><i class="icon-ok"></i></li>
+                     <li id="registerSuccessWord">注册成功</li>
+                     </ul>
+                     </div>
+                <!--步骤结束-->
+                <div class="list-int" id="regeiter-date5">
+                    <ul>
+                        <li class="word"><span>*</span>手机:</li>
+                        <li><input type="text" class="int-medium" placeholder="请输入您的有效手机号" id="phone"></li>
+                        <li class="lable" id="errorPhoneMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-a.png"><span id="showPhoneMsg">请输入正确有效的手机号</span></li>
+                    </ul>
+                    <ul>
+                        <li class="word"><span>*</span>短信验证码:</li>
+                        <li><input type="text" class="int-small"></li>
+                        <li class="re-btn"><input type="button" class="int-btn" value="获取短信验证码"></li>
+                        <li class="lable" id="errorSmsMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-a.png"><span class="red">验证码错误</span></li>
+                    </ul>
+                     <ul>
+                        <li class="checx-word"><input type="checkbox" class="int-chec" id="agreeChecbox">我已阅读并同意<A href="#">《个人用户注册协议》</A></li>
+                        <li class="lable" style="display: none" id="agreeProtocol"><img src="${_base}/theme/slp/images/icon-a.png"><span  class="red"  >您需要同意注册协议，才能进行注册</span></li>
+                    </ul>
+                      <ul>
+                        <li class="checx-word"><input type="button" id="next" class="slp-btn regsiter-btn" value="下一步"></li>
+                    </ul>
+                </div>
+                </div>
+              
+                </div>
+               
+               	<!-- 设置用户信息 -->
+                
+                <div id="regeiter-date2" style=" display:none;">     
+                <div class="center-table-list-none">
+
+                <div class="list-int">
+                    <ul>
+                        <li class="word"><span>*</span>用户名:</li>
+                        <li><input type="text" class="int-medium" placeholder="设置用于登录的账户名" id="userName"></li>
+                        <li class="lable" id="errorUserNameMsg" style="display: none"><img src="${_base}/theme/slp/images/icon-c.png"><span >4-20个字符，可用汉字、字母、数字、“-”及“_”的组合</span></li>
+                    </ul>
+                     <ul>
+                        <li class="word"><span>*</span>设置密码:</li>
+                        <li><input type="password" class="int-medium" placeholder="设置您的登录密码" id="inputPassword"></li>
+                        <li class="lable" id="errorPawMsg"><img src="${_base}/theme/slp/images/icon-c.png"><span id="showPawMsg">6-20个字符，可用字母、数字及符号的组合</span></li>
+                        <label><img src="${_base}/theme/baas/images/pass-a.png"><img src="${_base}/theme/baas/images/pass-b.png"><img src="${_base}/theme/baas/images/pass-c.png">有被盗风险,建议使用字母、数字和符号两种及以上组合</label>
+                    </ul>
+                    <ul>
+                        <li class="word"><span>*</span>确认密码:</li>
+                        <li><input type="password" class="int-medium" placeholder="再次确认密码" id="confirmationPassword"></li>
+                        <li class="lable" id="errorPasswordMsg" style="display: none"><img src="${_base}/theme/slp/images/icon-a.png"><span id="showPasswordMsg">两次输入的密码不一致</span></li>
+                    </ul>
+                      <ul>
+                        <li class="checx-word">
+                        	<input type="button" class="slp-btn regsiter-btn" id="BTN_REGISTER" value="立即注册">
+                        	<input type="hidden" id="errorPhoneFlag"/>
+				         	<input type="hidden" id="errorUserNameFlag"/>
+				         	<input type="hidden" id="errorPassFlag"/>
+				         	<input type="hidden" id="errorConfirmFlag"/>
+				         	<input type="hidden" id="errorPassEqualsFlag"/>
+                        	
+                        </li>
+                       
+                    </ul>
+                
+                </div>
+                </div>
+              
+                </div>
+                </div>
+           <!--主体内容结束-->
+        </div>
+       <!--白色框架结束-->
+  </div>
+  
+  
+  
+  
+  
+  <!--login－底部-->
+  <div class="login-footer">
+   <div class="login-footer-main">
+   <ul>
+   <li><A href="#">关于我们</A><A href="#">联系我们</A><A href="#">商家入驻</A><A href="#">货源合作</A><A href="#">代理合作</A><A href="#">联盟营销</A><A href="#">其他链接</A><A href="#">其他链接</A><A href="#">其他链接</A></li>
+   <li>京ICP备11005544号-15                京公网安备110108007119号</li>
+   <li>©2016-2018 亚信旗下话费充值平台，版权所有  All Rights Reserved</li>
+   </ul>
+   </div>                                                                                                         
+  </div>
 </body>
 </html>
+<script src="../scripts/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="../scripts/frame.js" type="text/javascript"></script>

@@ -42,17 +42,22 @@ define('app/register/register', function (require, exports, module) {
     		$("#refresh").on("click",this._refrashVitentify);
     		$("#phone").on("focus",this._hidePhoneError);
     		$("#phone").on("blur",this._validServicePho);
-    		$("#password").on("focus",this._passShow);
-    		$("#password").on("blur",this._validServicePaw);
+    		$("#inputPassword").on("focus",this._passShow);
+    		$("#inputPassword").on("blur",this._validServicePaw);
+    		$("#confirmationPassword").on("focus",this._passwordConfirmationShow);
+    		$("#confirmationPassword").on("blur",this._passwordConfirmation);
     		$("#pictureVitenfy").on("focus",this._hidePicError);
     		$("#pictureVitenfy").on("blur",this._validServicePic);
-    		$("#BTN_REGISTER").on("click",this._validServicePho);
+    		$("#next").on("click",this._validServicePho);
+    		$("#next").on("click",this._next);
+    		$("#userName").on("blur",this._userNameCheck);
+    		$("#userName").on("focus",this._hideUserNameError);
+    		$("#BTN_REGISTER").on("click",this._userNameCheck);
+    		$("#BTN_REGISTER").on("click",this._passwordConfirmation);
     		$("#BTN_REGISTER").on("click",this._validServicePaw);
-    		$("#BTN_REGISTER").on("click",this._validServicePic);
-    		$("#PHONE_IDENTIFY").on("click",this._validServicePho);
-    		$("#PHONE_IDENTIFY").on("click",this._getPhoneVitentify);
-    		$("#BTN_REGISTER").on("click",this._validServiceSSM);
     		$("#BTN_REGISTER").on("click",this._sumbit);
+    		/*$("#PHONE_IDENTIFY").on("click",this._validServicePho);
+    		$("#PHONE_IDENTIFY").on("click",this._getPhoneVitentify);*/
     	},
     	_hideErroText: function(){
     		var _this = this;
@@ -62,7 +67,7 @@ define('app/register/register', function (require, exports, module) {
     	//获取短信验证码
     	_getPhoneVitentify: function(){
     		$("#errorSmsMsg").attr("style","display:none");
-    		var phoneFlag=$('#errorPhoneFlag').val();
+    		var phoneFlag=$('#phone').val();
     		var picFlag=$('#errorPicFlag').val();
     		var passFlag=$('#errorPassFlag').val();
     		var smsFlag=$('#errorSMSFlag').val();
@@ -129,6 +134,9 @@ define('app/register/register', function (require, exports, module) {
     	_hidePicError: function(){
     		$("#errorPicMsg").attr("style","display:none");
     	},
+    	_hideUserNameError:function(){
+    		$("#errorUserNameMsg").attr("style","display:none");
+    	},
     	//校验手机
     	_validServicePho: function(){
     		$("#errorPhoneMsg").attr("style","display:none");
@@ -140,7 +148,7 @@ define('app/register/register', function (require, exports, module) {
 				return false;
 			}else if( /^1\d{10}$/.test(phone)){
 				var	param={
-    					phone:$("#phone").val()
+    					userMp:$("#phone").val()
     				   };
         		ajaxController.ajax({
     			        type: "post",
@@ -166,6 +174,7 @@ define('app/register/register', function (require, exports, module) {
     						 alert(XMLHttpRequest.readyState);
     						 alert(textStatus);
     						}
+    			        
     			    }); 
 			}else{
 				$('#showPhoneMsg').text("手机号码格式不正确");
@@ -176,18 +185,19 @@ define('app/register/register', function (require, exports, module) {
     	},
     	_passShow: function(){
     		$("#errorPawMsg").attr("style","display:none");
-    		//$('#showPM').text("6~14个字符，数字、字母、符号组合，不包含空格");
-			$("#errorShowPM").attr("style","display:");
+    	},
+    	_passwordConfirmationShow(){
+    		$("#errorPasswordMsg").attr("style","display:none");
     	},
     	//校验密码
     	_validServicePaw:function(){
     		$("#errorShowPM").attr("style","display:none");
     		$("#errorPawMsg").attr("style","display:none");
-    		var password = $('#password').val();
+    		var password = $('#inputPassword').val();
     		if(password==""){
     			$('#showPawMsg').text("请输入密码");
-    			$("#errorPawMsg").attr("style","display:");
-    			$('#errorPassFlag').val("0");
+    			
+    			$("#errorPawMsg").show();
 				return false;
     		}else if(/[\x01-\xFF]*/.test(password)){
     				if(/^\S*$/.test(password)){
@@ -214,6 +224,7 @@ define('app/register/register', function (require, exports, module) {
     				return false;
     			}
     	},
+    	
     	//图形验证码
     	_validServicePic: function(){
     		$("#errorPicMsg").attr("style","display:none");
@@ -242,24 +253,101 @@ define('app/register/register', function (require, exports, module) {
     			return true;
     		}
     	},
+    	//点击下一步用户信息显示
+    	_next:function(){
+    		var phone = $("#phone").val();
+    		var checkbox = $("#agreeChecbox").is(':checked');
+    		if(phone==""){
+    			$("#errorPhoneMsg").show();
+    			return false;
+    		}
+    		if(!checkbox){
+    			$("#agreeProtocol").show();
+    			return false;
+    		}
+    		
+    		$("#accountInfoBorder").removeClass().addClass("yellow-border");
+    		$("#accountInfoYuan").removeClass().addClass("yellow-yuan");
+    		$("#accountInfoWord").removeClass().addClass("yellow-word");
+    		$("#regeiter-date5").hide();
+    		$("#regeiter-date2").show();
+    		
+    	},
+    	
+    	//校验用户名
+    	_userNameCheck:function(){
+    		var flag = false;
+    		var userName = $("#userName").val();
+    		if(userName==""){
+    			$('#errorUserNameMsg').show();
+    			$("#errorUserNameFlag").val("0")
+    			flag = false;
+    		}else{
+    			var reg = /^[\u4e00-\u9fa5a-zA-Z0-9\-]{4,20}$/;
+    			if(userName.match(reg)){
+					$("#errorUserNameMsg").attr("style","display:none");
+					$("#errorUserNameFlag").val("1")
+					flag = true;
+				}else{
+					$("#errorUserNameMsg").show();
+					$("#errorUserNameFlag").val("0")
+					flag = false;
+				}
+    		}
+    		return flag;
+    	},
+    	//密码校验
+    	_passwordConfirmation:function(){
+    		var inputPassword = $("#inputPassword").val();
+    		var inputPasswordMd5 = "";
+    		if(inputPassword!=""){
+    			inputPasswordMd5 = hex_md5(inputPassword);
+    			$("#errorPassFlag").val("1");
+    		}else{
+    			$("#errorPasswordMsg").show();
+    			$("#errorPassFlag").val("0");
+    		}
+    		
+    		var confirmationPassword = $("#confirmationPassword").val();
+    		var confirmPasswordMd5 = "";
+    		if(confirmationPassword!=""){
+    			confirmPasswordMd5 = hex_md5(confirmationPassword);
+    			$("#errorConfirmFlag").val("1");
+    		}else{
+    			$("#showPasswordMsg").text("请输入确认密码");
+    			$("#errorConfirmFlag").val("0");
+    		}
+    		if(inputPasswordMd5!=confirmPasswordMd5){
+    			$("#errorPasswordMsg").show();
+    			$("#errorPassEqualsFlag").val("0");
+    			return false;
+    		}else{
+    			$("#errorPasswordMsg").hide();
+    			$("#errorPassEqualsFlag").val("1");
+    			return true;
+    		}
+    	},
     	_sumbit: function(){
     		var phoneFlag=$('#errorPhoneFlag').val();
-    		var picFlag=$('#errorPicFlag').val();
-    		var passFlag=$('#errorPassFlag').val();
-    		var smsFlag=$('#errorSMSFlag').val();
-    		if(phoneFlag!="0"&&picFlag!="0"&& passFlag!="0"&& smsFlag!="0"){
+    		var errorUserNameFlag=$('#errorUserNameFlag').val();
+    		var errorPassFlag=$('#errorPassFlag').val();
+    		var errorConfirmFlag=$('#errorConfirmFlag').val();
+    		var errorPassEqualsFlag = $("#errorPassEqualsFlag").val();
+    		if(phoneFlag!="0"&&errorUserNameFlag!="0"&& errorPassFlag!="0"&&errorConfirmFlag!="0"&&errorPassEqualsFlag!="0"){
     			var	param={
-    					phone:	$("#phone").val(),  
-    					accountPassword:$("#password").val(),		   
-    					phoneVerifyCode:$("#phoneVerifyCode").val(),   
-    					pictureVerifyCode:$("#pictureVitenfy").val()	
-    				   };
+    					request:"{ucUserParam:{" +
+	    								"userMp:"+$("#phone").val()+","+
+	    								"userLoginName:"+$("#userName").val()+","+
+	    								"userLoginPwd:"+$("#inputPassword").val()+
+    							   "}}" 
+    				  };
+    			
         		ajaxController.ajax({
     			        type: "post",
     			        processing: false,
     			        url: _base+"/reg/register",
     			        dataType: "json",
-    			        data: param,
+    			        data:param,
     			        message: "正在加载数据..",
     			        success: function (data) {
     			        	if(data.responseHeader.resultCode=="000002"){
@@ -291,7 +379,7 @@ define('app/register/register', function (require, exports, module) {
     			        	}else if(data.responseHeader.resultCode=="000000"){
     			        		$("#errorSmsMsg").attr("style","display:none");
     			        		var key = data.data;
-        			        	window.location.href=_base+"/reg/toRegisterEmail?accountIdKey="+key;
+        			        	window.location.href=_base+"/reg/toRegisterSuccess?accountIdKey="+key;
     			        	}
     			        	
     			        },

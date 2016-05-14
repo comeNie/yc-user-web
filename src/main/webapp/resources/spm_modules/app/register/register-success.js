@@ -42,15 +42,13 @@ define('app/register/register-success', function (require, exports, module) {
 			_this._login();
     	},
 		_login: function(){
-			var key = $("#accountIdKey").val();
-			/*
-			 var jumpTo = document.getElementById('jumpTo');
-			 jumpTo.innerHTML=secs;  
-			 if(--secs>0){     
-			     setTimeout("_login("+secs+",'"+surl+"')",1000);     
-			     }     
-			 else{ */      
-			     //location.href=_base+"/reg/login?accountIdKey="+key;     
+			 var key = $("#accountIdKey").val();
+			 var time = $("#time");
+			 var second = $("#time").html();
+			 time.html(--second);  
+			 if(second>0){     
+				 setInterval(this._login,1000);     
+			    }else{     
 			     ajaxController.ajax({
 						url :_base+"/reg/login?accountIdKey="+key,
 						processing: true,
@@ -65,10 +63,7 @@ define('app/register/register-success', function (require, exports, module) {
 							alert("连接服务器超时")
 						}
 					});
-			  //} 
-			
-			
-			
+			  } 
 		}
     });
     
