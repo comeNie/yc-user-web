@@ -108,6 +108,11 @@
 			return false;
 		}
 	}//end of validate
+	//根据用户类型跳转不同的注册页面
+	function jumpTo(){
+		var userType = $("#userType").val();
+		window.location.href = "${_base}/reg/toRegister?userType="+userType;
+	}
 </script>
 </head>
 
@@ -178,7 +183,7 @@
 									tabindex="5">
 							</p>
 							<p>记住密码</p></li>
-						<li class="right"><a href="#">忘记密码</a>|<a href="${_base}/reg/toRegister?userType=11">注册新账户</a></li>
+						<li class="right"><a href="#">忘记密码</a>|<a href="#" onclick="javascript:jumpTo()">注册新账户</a></li>
 					</ul>
 					<ul>
 						<div class="login-note">
