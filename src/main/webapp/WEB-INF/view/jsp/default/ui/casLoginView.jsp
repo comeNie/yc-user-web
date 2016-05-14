@@ -62,7 +62,6 @@
 
 	function dologin() {
 		if (validate()) {
-			alert(111);
 			var inputPassword = document.getElementById("password").value;
 			var onceCode = "AIOPT_SALT_KEY";
 			var passwordMd5 = hex_md5(onceCode + hex_md5(inputPassword));
