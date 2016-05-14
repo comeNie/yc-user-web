@@ -65,7 +65,7 @@
 			var inputPassword = document.getElementById("password").value;
 			var onceCode = "AIOPT_SALT_KEY";
 			var passwordMd5 = hex_md5(onceCode + hex_md5(inputPassword));
-			document.getElementById("password").value = passwordMd5;
+			//document.getElementById("password").value = passwordMd5;
 			document.getElementById("username").value = $.trim(document
 					.getElementById("username").value);
 			//提交表单
