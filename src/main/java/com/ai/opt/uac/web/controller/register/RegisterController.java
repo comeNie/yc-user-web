@@ -3,12 +3,16 @@ package com.ai.opt.uac.web.controller.register;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
@@ -34,7 +38,6 @@ import com.ai.opt.sso.client.filter.SSOClientUtil;
 import com.ai.opt.uac.api.account.interfaces.IAccountManageSV;
 import com.ai.opt.uac.api.account.param.AccountQueryRequest;
 import com.ai.opt.uac.api.account.param.AccountQueryResponse;
-import com.ai.opt.uac.api.register.interfaces.IRegisterSV;
 import com.ai.opt.uac.api.register.param.PhoneRegisterRequest;
 import com.ai.opt.uac.api.register.param.PhoneRegisterResponse;
 import com.ai.opt.uac.api.security.interfaces.IAccountSecurityManageSV;
@@ -61,6 +64,10 @@ import com.ai.runner.base.exception.CallerException;
 import com.ai.runner.center.mmp.api.manager.interfaces.SMSServices;
 import com.ai.runner.center.mmp.api.manager.param.SMData;
 import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
+import com.ai.slp.user.api.register.interfaces.IRegisterSV;
+import com.ai.slp.user.api.register.param.RegisterParamsRequest;
+import com.ai.slp.user.api.register.param.UcContactInfoParams;
+import com.ai.slp.user.api.register.param.UcUserParams;
 
 @RequestMapping("/reg")
 @Controller
@@ -68,9 +75,19 @@ public class RegisterController {
 	private static final Logger LOG = LoggerFactory.getLogger(RegisterController.class);
 
 	@RequestMapping("/toRegister")
-	public ModelAndView register(HttpServletRequest request) {
-
-		return new ModelAndView("jsp/register/register");
+	public ModelAndView register(String userType,HttpServletRequest request) {
+	    /**
+	     * 10 个人注册  11 企业用户  12代理商注册 13分销商注册
+	     */
+	    if("10".equals(userType)){
+	        return new ModelAndView("jsp/register/register");
+	    }else if("11".equals(userType)){
+	        return new ModelAndView("jsp/register/register");
+	    }else if("12".equals(userType)){
+	        return new ModelAndView("jsp/register/agentRegister");
+	    }else{
+	        return new ModelAndView("jsp/register/supplierRegister");
+	    }
 	}
 
 	@RequestMapping("/protocol")
@@ -99,18 +116,25 @@ public class RegisterController {
 	 */
 	@RequestMapping("/register")
 	@ResponseBody
-	public ResponseData<String> addAccount(PhoneRegisterRequest request, HttpSession session, HttpServletRequest req) {
+	public ResponseData<String> addAccount(String request, HttpSession session, HttpServletRequest req) {
 		ResponseData<String> responseData = null;
+		JSONObject conditionObject = JSONObject.fromObject(request);
+		Map <String,Class> mymap = new HashMap<String,Class>();
+        mymap.put("ucUserParam", UcUserParams.class);
+        mymap.put("ucContactInfoParams", UcContactInfoParams.class);
+        RegisterParamsRequest userParams = (RegisterParamsRequest)conditionObject.toBean(conditionObject,RegisterParamsRequest.class,mymap);
+        userParams.getUcUserParam().setTenantId("1");
+        userParams.getUcUserParam().setUserId("1");
+		
 		// MD5加密
-		String password = Md5Encoder.encodePassword(request.getAccountPassword());
-		request.setAccountPassword(password);
+		//String password = Md5Encoder.encodePassword(request.getUcUserParam().getUserLoginPwd());
 		try {
 
 			ICacheClient iCacheClient = MCSClientFactory.getCacheClient(Register.CACHE_NAMESPACE);
 			String pictureCode = iCacheClient.get(Register.CACHE_KEY_VERIFY_PICTURE + session.getId());
 			ResponseHeader header = new ResponseHeader();
 			header.setIsSuccess(true);
-			// 校验图片是否失效
+			/*// 校验图片是否失效
 			if (StringUtil.isBlank(pictureCode)) {
 				header.setResultCode(Register.REGISTER_PICTURE_OVERTIME_ERROR);
 				header.setResultMessage("图形验证码已失效");
@@ -153,12 +177,13 @@ public class RegisterController {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "短信验证码错误", null);
 				responseData.setResponseHeader(header);
 				return responseData;
-			}
+			}*/
 			IRegisterSV iRegisterSV = DubboConsumerFactory.getService("iRegisterSV");
-			PhoneRegisterResponse response = iRegisterSV.registerByPhone(request);
-			String code = response.getResponseHeader().getResultCode();
-			String accountId = Long.toString(response.getAccountId());
-			String message = response.getResponseHeader().getResultMessage();
+			BaseResponse response = iRegisterSV.insertUcUser(userParams);
+			//PhoneRegisterResponse response = iRegisterSV.registerByPhone(request);
+			String code ="000000";
+			String accountId = "1";
+			String message = "1";
 			if (Register.PHONE_NOTONE_ERROR.equals(code)) {
 				header.setResultCode(Register.PHONE_NOTONE_ERROR);
 				header.setResultMessage("手机已经注册");
@@ -186,17 +211,15 @@ public class RegisterController {
 
 	@RequestMapping("/checkPhone")
 	@ResponseBody
-	public ResponseData<String> checkPhone(PhoneRegisterRequest request, HttpSession session, HttpServletRequest req) {
+	public ResponseData<String> checkPhone(UcUserParams userParams, HttpSession session, HttpServletRequest req) {
 		ResponseData<String> responseData = null;
 		ResponseHeader header = new ResponseHeader();
 		header.setIsSuccess(true);
 		try {
-		    IAccountManageSV iAccountManageSV = DubboConsumerFactory.getService("iAccountManageSV");
-		    AccountQueryRequest accountReq = new AccountQueryRequest();
-		    accountReq.setPhone(request.getPhone());
-		    AccountQueryResponse accountQueryResponse = iAccountManageSV.queryByPhone(accountReq);
-			if (accountQueryResponse != null) {
-				if (accountQueryResponse.getResponseHeader().getResultCode().equals(ResultCodeConstants.SUCCESS_CODE)) {
+		    IRegisterSV iRegisterSV = DubboConsumerFactory.getService("iRegisterSV");
+		    BaseResponse searchResponse = iRegisterSV.searchUserInfo(userParams);
+			if (searchResponse != null) {
+				if (searchResponse.getResponseHeader()!=null&&searchResponse.getResponseHeader().getResultCode().equals("fail")) {
 					header.setResultCode(Register.PHONE_NOTONE_ERROR);
 					header.setResultMessage("手机已经注册");
 					responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "手机已经注册", null);
