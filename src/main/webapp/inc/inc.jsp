@@ -27,20 +27,14 @@ request.setAttribute("baas_pt_index_url",baas_pt_index_url );
 <script src="${_base}/resources/spm_modules/app/core/config.js"></script>
 
 <!-- UED style begin -->
- <link href="${_base}/theme/baas/css/bootstrap.css" rel="stylesheet" type="text/css">
- <link href="${_base}/theme/baas/css/font-awesome.css" rel="stylesheet" type="text/css">
- <link href="${_base}/theme/baas/css/frame.css" rel="stylesheet" type="text/css">
- <link href="${_base}/theme/baas/css/global.css" rel="stylesheet" type="text/css">
- <link href="${_base}/theme/baas/css/modular.css" rel="stylesheet" type="text/css">
- <link href="${_base}/theme/baas/css/login-regsiter.css" rel="stylesheet" type="text/css"> 
- <script type="text/javascript" src="${_base}/theme/baas/js/jquery-1.11.1.min.js" ></script>
- <script type="text/javascript" src="${_base}/theme/baas/js/bootstrap.js" ></script>
-  <script type="text/javascript" src="${_base}/theme/baas/js/jquery.fullPage.min.js" ></script>
- 
- <script type="text/javascript" src="${_base}/theme/baas/js/frame.js" ></script>
- <script type="text/javascript" src="${_base}/theme/baas/js/comp.js" ></script>
+ <link href="${_base}/theme/slp/styles/font-awesome.css" rel="stylesheet" type="text/css">
+ <link href="${_base}/theme/slp/styles/global.css" rel="stylesheet" type="text/css">
+ <link href="${_base}/theme/slp/styles/login-regsiter.css" rel="stylesheet" type="text/css"> 
+ <script type="text/javascript" src="${_base}/theme/slp/scripts/jquery-1.11.1.min.js" ></script>
+ <%-- <script type="text/javascript" src="${_base}/theme/slp/scripts/bootstrap.js" ></script>
+  <script type="text/javascript" src="${_base}/theme/slp/scripts/jquery.fullPage.min.js" ></script>
+  --%>
+ <script type="text/javascript" src="${_base}/theme/slp/scripts/frame.js" ></script>
+ <script type="text/javascript" src="${_base}/theme/slp/scripts/comp.js" ></script>
 <!-- UED style end -->
 
-
-<!-- opt-uac -->
-<link href="${_base}/theme/baas/css/opt-uac.css" rel="stylesheet" type="text/css">
