@@ -94,7 +94,7 @@ return;
         <div class="logo">
             <ul>
                 <li><a href="#"><img src="${_base}/theme/slp/images/login-logo.png"></a></li>
-                <li>用户注册</li>
+                <li>分销商注册</li>
             </ul>
         </div>
         
@@ -117,7 +117,7 @@ return;
                     <ul>
                         <li class="word"><span>*</span>用户名:</li>
                         <li><input type="text" class="int-medium" placeholder="设置用于登录的账户名" id="userName"></li>
-                        <li class="lable" id="errorUserNameMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-b.png"><span>4-20个字符，可用汉字、字母、数字、“-”及“_”的组合</span></li>
+                        <li class="lable" id="errorUserNameMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-c.png"><span>4-20个字符，可用汉字、字母、数字、“-”及“_”的组合</span></li>
                     </ul>
                      <ul>
                         <li class="word"><span>*</span>设置密码:</li>
@@ -153,6 +153,7 @@ return;
 				         	<input type="hidden" id="errorPassFlag"/>
 				         	<input type="hidden" id="errorConfirmFlag"/>
 				         	<input type="hidden" id="errorPassEqualsFlag"/>
+				         	<input type="hidden" id="userType" value="13"/>
                         </li>
                     </ul>
                 
