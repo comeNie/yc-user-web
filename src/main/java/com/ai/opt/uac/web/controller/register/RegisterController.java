@@ -82,7 +82,7 @@ public class RegisterController {
 	    if("10".equals(userType)){
 	        return new ModelAndView("jsp/register/register");
 	    }else if("11".equals(userType)){
-	        return new ModelAndView("jsp/register/register");
+	        return new ModelAndView("jsp/register/companyRegister");
 	    }else if("12".equals(userType)){
 	        return new ModelAndView("jsp/register/agentRegister");
 	    }else{
@@ -103,9 +103,20 @@ public class RegisterController {
 	}
 
 	@RequestMapping("/toRegisterSuccess")
-	public ModelAndView registerSuccess(@RequestParam(value = "key", required = false) String key, HttpServletRequest request) {
-		request.setAttribute("accountIdKey", key);
-		return new ModelAndView("jsp/register/register-success");
+	public ModelAndView registerSuccess(@RequestParam(value = "loginName", required = false) String loginName,@RequestParam(value = "userType", required = false) String userType, HttpServletRequest request) {
+		request.setAttribute("loginName", loginName);
+		 /**
+         * 10 个人注册  11 企业用户  12代理商注册 13分销商注册
+         */
+        if("10".equals(userType)){
+            return new ModelAndView("jsp/register/register-success");
+        }else if("11".equals(userType)){
+            return new ModelAndView("jsp/register/company-register-success");
+        }else if("12".equals(userType)){
+            return new ModelAndView("jsp/register/agent-register-success");
+        }else{
+            return new ModelAndView("jsp/register/supplierRegister-register-success");
+        }
 	}
 
 	/**
@@ -123,9 +134,6 @@ public class RegisterController {
         mymap.put("ucUserParam", UcUserParams.class);
         mymap.put("ucContactInfoParams", UcContactInfoParams.class);
         RegisterParamsRequest userParams = (RegisterParamsRequest)conditionObject.toBean(conditionObject,RegisterParamsRequest.class,mymap);
-        userParams.getUcUserParam().setTenantId("1");
-        userParams.getUcUserParam().setUserId("1");
-		
 		// MD5加密
 		//String password = Md5Encoder.encodePassword(request.getUcUserParam().getUserLoginPwd());
 		try {
@@ -194,9 +202,10 @@ public class RegisterController {
 				header.setResultCode(Register.REGISTER_SUCCESS_ID);
 				header.setResultMessage("注册成功");
 				String accountIdKey = UUIDUtil.genId32();
+				String loginName = userParams.getUcUserParam().getUserLoginName();
 				// 将账号id存到缓存中
 				iCacheClient.setex(accountIdKey, Register.CACHE_REGISTER_ACCOUNT_ID_TIME, accountId);
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "注册成功", accountIdKey);
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "注册成功", loginName);
 				responseData.setResponseHeader(header);
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, message, null);
@@ -205,7 +214,6 @@ public class RegisterController {
 			LOG.error("注册失败！", e);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "注册失败", null);
 		}
-
 		return responseData;
 	}
 
@@ -219,7 +227,7 @@ public class RegisterController {
 		    IRegisterSV iRegisterSV = DubboConsumerFactory.getService("iRegisterSV");
 		    BaseResponse searchResponse = iRegisterSV.searchUserInfo(userParams);
 			if (searchResponse != null) {
-				if (searchResponse.getResponseHeader()!=null&&searchResponse.getResponseHeader().getResultCode().equals("fail")) {
+				if (searchResponse.getResponseHeader()!=null&&searchResponse.getResponseHeader().getResultCode().equals(Register.USERNAME_NOTONE_ERROR)) {
 					header.setResultCode(Register.PHONE_NOTONE_ERROR);
 					header.setResultMessage("手机已经注册");
 					responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "手机已经注册", null);
@@ -239,6 +247,37 @@ public class RegisterController {
 		return responseData;
 	}
 
+	
+	@RequestMapping("/checkUserName")
+    @ResponseBody
+    public ResponseData<String> checkUserName(UcUserParams userParams, HttpSession session, HttpServletRequest req) {
+        ResponseData<String> responseData = null;
+        ResponseHeader header = new ResponseHeader();
+        header.setIsSuccess(true);
+        try {
+            IRegisterSV iRegisterSV = DubboConsumerFactory.getService("iRegisterSV");
+            BaseResponse searchResponse = iRegisterSV.searchUserInfo(userParams);
+            if (searchResponse != null) {
+                if (searchResponse.getResponseHeader()!=null&&searchResponse.getResponseHeader().getResultCode().equals(Register.USERNAME_NOTONE_ERROR)) {
+                    header.setResultCode(Register.USERNAME_NOTONE_ERROR);
+                    header.setResultMessage("用户名已经注册");
+                    responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "用户名已经注册", null);
+                    responseData.setResponseHeader(header);
+                } else {
+                    header.setResultCode(Register.REGISTER_SUCCESS_ID);
+                    header.setResultMessage("成功");
+                    String accountIdKey = UUIDUtil.genId32();
+                    responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "用户名校验成功", accountIdKey);
+                    responseData.setResponseHeader(header);
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("用户名校验失败！", e);
+            responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "用户名校验失败", null);
+        }
+        return responseData;
+    }
+	
 	@RequestMapping("/checkEmail")
 	@ResponseBody
 	public ResponseData<String> checkEmial(UpdateEmailReq request, HttpSession session) {
