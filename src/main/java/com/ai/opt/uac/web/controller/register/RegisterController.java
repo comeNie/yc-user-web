@@ -115,7 +115,7 @@ public class RegisterController {
         }else if("12".equals(userType)){
             return new ModelAndView("jsp/register/agent-register-success");
         }else{
-            return new ModelAndView("jsp/register/supplierRegister-register-success");
+            return new ModelAndView("jsp/register/supplier-register-success");
         }
 	}
 
@@ -134,7 +134,9 @@ public class RegisterController {
         mymap.put("ucUserParam", UcUserParams.class);
         mymap.put("ucContactInfoParams", UcContactInfoParams.class);
         RegisterParamsRequest userParams = (RegisterParamsRequest)conditionObject.toBean(conditionObject,RegisterParamsRequest.class,mymap);
-		// MD5加密
+        userParams.getUcUserParam().setTenantId("1");
+        userParams.getUcUserParam().setUserId("3");
+        // MD5加密
 		//String password = Md5Encoder.encodePassword(request.getUcUserParam().getUserLoginPwd());
 		try {
 
