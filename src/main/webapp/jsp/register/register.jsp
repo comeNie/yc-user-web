@@ -114,7 +114,7 @@ return;
                     <div class="center-table">
                        <ul>
                            <li><A href="#" class="current">个人用户</A></li>
-                           <li><A href="#">企业用户</A></li>
+                           <li><A href="${_base}/reg/toRegister?userType=11">企业用户</A></li>
                        </ul>
                     </div>
                     
@@ -185,7 +185,7 @@ return;
                         <li><input type="password" class="int-medium" placeholder="再次确认密码" id="confirmationPassword"></li>
                         <li class="lable" id="errorPasswordMsg" style="display: none"><img src="${_base}/theme/slp/images/icon-a.png"><span id="showPasswordMsg">两次输入的密码不一致</span></li>
                     </ul>
-                      <ul>
+                    <ul>
                         <li class="checx-word">
                         	<input type="button" class="slp-btn regsiter-btn" id="BTN_REGISTER" value="立即注册">
                         	<input type="hidden" id="errorPhoneFlag"/>
@@ -193,14 +193,11 @@ return;
 				         	<input type="hidden" id="errorPassFlag"/>
 				         	<input type="hidden" id="errorConfirmFlag"/>
 				         	<input type="hidden" id="errorPassEqualsFlag"/>
-                        	
+				         	<input type="hidden" id="userType" value="10"/>
                         </li>
-                       
                     </ul>
-                
                 </div>
                 </div>
-              
                 </div>
                 </div>
            <!--主体内容结束-->
