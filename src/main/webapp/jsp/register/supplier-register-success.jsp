@@ -22,7 +22,7 @@
         <div class="logo">
             <ul>
                 <li><a href="#"><img src="${_base}/theme/slp/images/login-logo.png"></a></li>
-                <li>用户注册</li>
+                <li>分销商注册</li>
             </ul>
         </div>
         
@@ -36,11 +36,13 @@
   <!--login－头部结束-->
   <div class="g-regsiter">
       <!--白色框架-->
+        <div class="regsiter-center">
+            <!--主体内容-->
                  <!--注册成功-->
                  <div class="regeiter-success">
                  <p><img src="${_base}/theme/slp/images/succ.png"/></p>
                  <p class="word">恭喜，您的账户 <%=request.getAttribute("loginName") %> 已经注册成功！</p>
-                 <p><span id="time">10</span>秒后，跳转至您的供应商中心。<A href="#">立即前往>></A></p>
+                 <p><span id="time">10</span>秒后，跳转至您的代理商中心。<A href="#">立即前往>></A></p>
                  </div>
                 </div>
                 </div>

@@ -7,12 +7,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" /> 
 <title>注册-成功</title>
  <script type="text/javascript">
-(function () {
-	seajs.use('app/register/company-register-success', function (RegisterSucessPager) {
-		var pager = new RegisterSucessPager();
-		pager.render();
-	});
-})(); 
+ (function () {
+		seajs.use('app/register/company-register-success', function (RegisterSucessPager) {
+			var pager = new RegisterSucessPager();
+			pager.render();
+		});
+	})(); 
 </script>
 </head>
 
@@ -41,8 +41,8 @@
                 <div class="center-main">
                     <div class="center-table">
                        <ul>
-                           <li><A href="#" class="current">个人用户</A></li>
-                           <li><A href="#">企业用户</A></li>
+                           <li><A href="${_base}/reg/toRegister?userType=10" >个人用户</A></li>
+                           <li><A href="${_base}/reg/toRegister?userType=11" class="current">企业用户</A></li>
                        </ul>
                     </div>
                     

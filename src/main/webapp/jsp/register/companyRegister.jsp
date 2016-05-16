@@ -127,7 +127,7 @@ return;
                     <ul>
                         <li class="word"><span>*</span>用户名:</li>
                         <li><input type="text" class="int-medium" placeholder="设置用于登录的账户名" id="userName"></li>
-                        <li class="lable" id="errorUserNameMsg" style="display: none"><img src="${_base}/theme/slp/images/icon-c.png"><span >4-20个字符，可用汉字、字母、数字、“-”及“_”的组合</span></li>
+                        <li class="lable" id="errorUserNameMsg" style="display: none"><img src="${_base}/theme/slp/images/icon-c.png"><span id="userNameErrorMsgShow">4-20个字符，可用汉字、字母、数字、“-”及“_”的组合</span></li>
                     </ul>
                      <ul>
                         <li class="word"><span>*</span>设置密码:</li>
