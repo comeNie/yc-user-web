@@ -131,6 +131,8 @@ public final class Constants {
         public static final String PHONE_NOTONE_ERROR = "10003";
         /** 邮箱已经注册ID */
         public static final String EMAIL_NOTONE_ERROR = "10004";
+        /** 用户名称已注册*/
+        public static final String USERNAME_NOTONE_ERROR = "10003";
         /**uuid失效 */
         public static final String UUID_INVIAL_ERROR = "1100";
         /** 账号ID的key */
