@@ -101,7 +101,7 @@ return;
         <div class="login-btn">
             <ul>
                 <li>已有账户，现在</li>
-                <li><input type="button" value="登录" class="slp-btn wih-btn" onclick="location.href='';"></li>
+                <li><input type="button" value="登录" class="slp-btn wih-btn" onclick="location.href='${_base}/login';"></li>
             </ul>
         </div>
     </div>
