@@ -70,7 +70,7 @@
                  <!--注册成功-->
                  <div class="regeiter-success">
                  <p><img src="${_base}/theme/slp/images/succ.png"/></p>
-                 <p class="word">恭喜，您的账户 edwinsun 已经注册成功！</p>
+                 <p class="word">恭喜，您的账户<%=request.getAttribute("loginName") %> 已经注册成功！</p>
                  <p><span id="time">10</span>秒后，跳转至您的用户中心。<A href="#">立即前往>></A></p>
                  </div>
                 </div>
