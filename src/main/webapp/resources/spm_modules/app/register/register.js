@@ -55,7 +55,7 @@ define('app/register/register', function (require, exports, module) {
     		$("#BTN_REGISTER").on("click",this._userNameCheck);
     		$("#BTN_REGISTER").on("click",this._passwordConfirmation);
     		$("#BTN_REGISTER").on("click",this._validServicePaw);
-    		$("#BTN_REGISTER").on("click",this._sumbit);
+    		$("#BTN_REGISTER").on("click",this._submit);
     		/*$("#PHONE_IDENTIFY").on("click",this._validServicePho);
     		$("#PHONE_IDENTIFY").on("click",this._getPhoneVitentify);*/
     	},
@@ -285,9 +285,37 @@ define('app/register/register', function (require, exports, module) {
     		}else{
     			var reg = /^[\u4e00-\u9fa5a-zA-Z0-9\-]{4,20}$/;
     			if(userName.match(reg)){
-					$("#errorUserNameMsg").attr("style","display:none");
-					$("#errorUserNameFlag").val("1")
-					flag = true;
+    				var	param={
+    						userLoginName:$("#userName").val()
+        				   };
+            		ajaxController.ajax({
+        			        type: "post",
+        			        processing: false,
+        			        url: _base+"/reg/checkUserName",
+        			        dataType: "json",
+        			        data: param,
+        			        message: "正在加载数据..",
+        			        success: function (data) {
+        			         if(data.responseHeader.resultCode=="10003"){
+        			        		$('#userNameErrorMsgShow').text("用户名已注册");
+        							$("#errorUserNameMsg").attr("style","display:");
+        							$('#errorPhoneFlag').val("0");
+        							return false;
+        			        	}else if(data.responseHeader.resultCode=="000000"){
+        			        		$('#errorUserNameFlag').val("1");
+        							$("#userNameErrorMsg").attr("style","display:none");
+        							return true;
+        			        	}
+        			        	
+        			        },
+        			        error: function(XMLHttpRequest, textStatus, errorThrown) {
+        						 alert(XMLHttpRequest.status);
+        						 alert(XMLHttpRequest.readyState);
+        						 alert(textStatus);
+        						}
+        			        
+        			    }); 
+					
 				}else{
 					$("#errorUserNameMsg").show();
 					$("#errorUserNameFlag").val("0")
@@ -299,9 +327,7 @@ define('app/register/register', function (require, exports, module) {
     	//密码校验
     	_passwordConfirmation:function(){
     		var inputPassword = $("#inputPassword").val();
-    		var inputPasswordMd5 = "";
     		if(inputPassword!=""){
-    			inputPasswordMd5 = hex_md5(inputPassword);
     			$("#errorPassFlag").val("1");
     		}else{
     			$("#errorPasswordMsg").show();
@@ -309,15 +335,13 @@ define('app/register/register', function (require, exports, module) {
     		}
     		
     		var confirmationPassword = $("#confirmationPassword").val();
-    		var confirmPasswordMd5 = "";
     		if(confirmationPassword!=""){
-    			confirmPasswordMd5 = hex_md5(confirmationPassword);
     			$("#errorConfirmFlag").val("1");
     		}else{
     			$("#showPasswordMsg").text("请输入确认密码");
     			$("#errorConfirmFlag").val("0");
     		}
-    		if(inputPasswordMd5!=confirmPasswordMd5){
+    		if(inputPassword!=confirmationPassword){
     			$("#errorPasswordMsg").show();
     			$("#errorPassEqualsFlag").val("0");
     			return false;
@@ -327,18 +351,19 @@ define('app/register/register', function (require, exports, module) {
     			return true;
     		}
     	},
-    	_sumbit: function(){
+    	_submit: function(){
     		var phoneFlag=$('#errorPhoneFlag').val();
     		var errorUserNameFlag=$('#errorUserNameFlag').val();
     		var errorPassFlag=$('#errorPassFlag').val();
     		var errorConfirmFlag=$('#errorConfirmFlag').val();
     		var errorPassEqualsFlag = $("#errorPassEqualsFlag").val();
+    		var userType = $("#userType").val();
     		if(phoneFlag!="0"&&errorUserNameFlag!="0"&& errorPassFlag!="0"&&errorConfirmFlag!="0"&&errorPassEqualsFlag!="0"){
     			var	param={
     					request:"{ucUserParam:{" +
 	    								"userMp:"+$("#phone").val()+","+
 	    								"userLoginName:"+$("#userName").val()+","+
-	    								"userLoginPwd:"+$("#inputPassword").val()+
+	    								"userLoginPwd:"+"'"+hex_md5($("#inputPassword").val())+"'"+
     							   "}}" 
     				  };
     			
@@ -378,8 +403,8 @@ define('app/register/register', function (require, exports, module) {
     							return false;
     			        	}else if(data.responseHeader.resultCode=="000000"){
     			        		$("#errorSmsMsg").attr("style","display:none");
-    			        		var key = data.data;
-        			        	window.location.href=_base+"/reg/toRegisterSuccess?accountIdKey="+key;
+    			        		var loginName = data.data;
+        			        	window.location.href=_base+"/reg/toRegisterSuccess?loginName="+loginName+"&userType="+userType;
     			        	}
     			        	
     			        },
