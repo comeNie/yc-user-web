@@ -6,13 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
- 
+
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
@@ -23,14 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.ccs.CCSClientFactory;
 import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
-import com.ai.opt.sdk.util.Md5Encoder;
 import com.ai.opt.sdk.util.RandomUtil;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.opt.sdk.util.UUIDUtil;
@@ -39,8 +35,6 @@ import com.ai.opt.sso.client.filter.SSOClientUtil;
 import com.ai.opt.uac.api.account.interfaces.IAccountManageSV;
 import com.ai.opt.uac.api.account.param.AccountQueryRequest;
 import com.ai.opt.uac.api.account.param.AccountQueryResponse;
-import com.ai.opt.uac.api.register.param.PhoneRegisterRequest;
-import com.ai.opt.uac.api.register.param.PhoneRegisterResponse;
 import com.ai.opt.uac.api.security.interfaces.IAccountSecurityManageSV;
 import com.ai.opt.uac.api.security.param.AccountEmailRequest;
 import com.ai.opt.uac.api.sso.interfaces.ILoginSV;
@@ -61,6 +55,7 @@ import com.ai.opt.uac.web.util.IPUtil;
 import com.ai.opt.uac.web.util.VerifyUtil;
 import com.ai.paas.ipaas.ccs.IConfigClient;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.runner.base.exception.CallerException;
 import com.ai.runner.center.mmp.api.manager.interfaces.SMSServices;
 import com.ai.runner.center.mmp.api.manager.param.SMData;
 import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
@@ -68,6 +63,8 @@ import com.ai.slp.user.api.register.interfaces.IRegisterSV;
 import com.ai.slp.user.api.register.param.RegisterParamsRequest;
 import com.ai.slp.user.api.register.param.UcContactInfoParams;
 import com.ai.slp.user.api.register.param.UcUserParams;
+
+import net.sf.json.JSONObject;
 
 @RequestMapping("/reg")
 @Controller
@@ -565,7 +562,7 @@ public class RegisterController {
 	@RequestMapping("/getImageVerifyCode")
 	public void getImageVerifyCode(HttpServletRequest request, HttpServletResponse response) {
 		String cacheKey = Register.CACHE_KEY_VERIFY_PICTURE + request.getSession().getId();
-		BufferedImage image = VerifyUtil.getImageVerifyCode(Register.CACHE_NAMESPACE, cacheKey, 100, 46);
+		BufferedImage image = VerifyUtil.getImageVerifyCode(Register.CACHE_NAMESPACE, cacheKey, 100, 38);
 		try {
 			ImageIO.write(image, "PNG", response.getOutputStream());
 		} catch (IOException e) {

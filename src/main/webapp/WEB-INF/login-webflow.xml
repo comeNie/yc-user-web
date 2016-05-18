@@ -89,6 +89,8 @@
             <binding property="userType" />
             <binding property="captchaCode" />
             <binding property="rememberMe" />
+            <binding property="sessionId" />
+            
         </binder>
         <on-entry>
             <set name="viewScope.commandName" value="'credential'" />
@@ -131,6 +133,7 @@
     <transition on="CredentialException" to="generateLoginTicket"/>
     <transition on="TenantIdIsNullException" to="generateLoginTicket"/>
     
+    <transition on="CaptchaErrorException" to="generateLoginTicket"/>
     <transition on="AccountNameNotExistException" to="generateLoginTicket"/>
     <transition on="EmailNotExistException" to="generateLoginTicket"/>
     <transition on="PasswordErrorException" to="generateLoginTicket"/>

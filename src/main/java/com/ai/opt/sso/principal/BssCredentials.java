@@ -28,6 +28,11 @@ public class BssCredentials extends RememberMeUsernamePasswordCredential {
      */
     private String captchaCode;
 
+    /**
+     * sessionId
+     */
+    private String sessionId;
+
     public String getTenantId() {
         return tenantId;
     }
@@ -52,6 +57,12 @@ public class BssCredentials extends RememberMeUsernamePasswordCredential {
         this.captchaCode = captchaCode;
     }
 
+    public String getSessionId() {
+        return sessionId;
+    }
 
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
 
 }

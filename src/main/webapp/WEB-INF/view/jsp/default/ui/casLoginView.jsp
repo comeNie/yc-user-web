@@ -25,97 +25,8 @@
 	type="text/css" />
 <script type="text/javascript" src="${_baasBase }/js/md5.js"></script>
 <script type="text/javascript" src="${_baasBase }/js/datacheck.js"></script>
-
-
-<script language="javascript" type="text/javascript">
-	$(function() {
-
-		var errors = $("div.login-note").html();
-		if (isNull(errors)) {
-			$("div.login-note").css("padding", "0px");
-		} else {
-			$("div.login-note").css("padding", "padding", "3px 10px");
-		}
-
-		$("#username").bind("blur", function() {
-			resetErrMsg();
-		});
-		$("#password").bind("blur", function() {
-			resetErrMsg();
-		});
-	});
-
-	function resetErrMsg() {
-		$("div.login-note").html("");
-		$("div.login-note").css("padding", "0px");
-	}
-
-	function encryptPwd(event) {
-		if (event.keyCode == 13) {//IE Chrome 回车键
-			dologin();
-		} else {
-			if (event.which == 13) {//Firefox 回车键
-				dologin();
-			}
-		}
-	}//end of encryPwd
-
-	function dologin() {
-		if (validate()) {
-			var inputPassword = document.getElementById("password").value;
-			var onceCode = "AIOPT_SALT_KEY";
-			var passwordMd5 = hex_md5(onceCode + hex_md5(inputPassword));
-			//document.getElementById("password").value = passwordMd5;
-			document.getElementById("username").value = $.trim(document
-					.getElementById("username").value);
-			//提交表单
-			document.getElementById('fm1').submit();
-			return true;
-		} else {
-			return false;
-		}
-
-	}//end of dologin
-
-	function validate() {
-		var username = document.getElementById("username").value;
-		var password = document.getElementById("password").value;
-		var captchaCode = document.getElementById("captchaCode").value;
-		try {
-			if (isNull(username)) {
-				$("div.login-note").html("请输入用户名/手机号码/邮箱");
-				$("div.login-note").css("padding", "3px 10px");
-				return false;
-			} else {
-				$("div.login-note").html("");
-			}
-			if (isNull(password)) {
-				$("div.login-note").html("请输入密码");
-				$("div.login-note").css("padding", "3px 10px");
-				return false;
-			} else {
-				$("div.login-note").html("");
-			}
-			if (isNull(captchaCode)) {
-				$("div.login-note").html("请输入验证码");
-				$("div.login-note").css("padding", "3px 10px");
-				return false;
-			} else {
-				$("div.login-note").html("");
-			}
-			return true;
-		} catch (ex) {
-			return false;
-		}
-	}//end of validate
-	//根据用户类型跳转不同的注册页面
-	function jumpTo(){
-		var userType = $("#userType").val();
-		window.location.href = "${_base}/reg/toRegister?userType="+userType;
-	}
-</script>
+<script language="javascript" src="${pageContext.request.contextPath}/resources/spm_modules/app/login/casLoginView.js"></script>  
 </head>
-
 <body class="logo-body">
 	<!--login－头部-->
 	<div class="login-head">
@@ -132,73 +43,63 @@
 			commandName="${commandName}" htmlEscape="true">
 			<div class="banner">
 				<!--登录框-->
+
 				<div class="login-main">
-					<ul>
-						<li><form:select class="select-login-small" id="userType"
-								path="userType" tabindex="1" name="userType">
-								<option value="10">个人用户</option>
-								<option value="11">企业用户</option>
-								<option value="12">代理商用户</option>
-								<option value="13">分销商用户</option>
-							</form:select></li>
-					</ul>
-					<ul>
-						<li class="user"><form:input cssClass="required int-xlarge"
-								cssErrorClass="error" id="username" tabindex="1"
-								accesskey="${userNameAccessKey}" path="username"
-								autocomplete="off" htmlEscape="true" placeholder="用户名/手机号/已验证邮箱" /></li>
-						<span><spring:message
-								code="screen.welcome.label.netid.accesskey"
-								var="userNameAccessKey" /></span>
-					</ul>
-					<ul> 
-						<%-- <li class="password"><form:password
-								
-								id="password" name="password"  size="25" tabindex="3" path="password"
-								accesskey="${passwordAccessKey}" htmlEscape="true"
-								autocomplete="off" placeholder="请输入密码"
-								onkeydown="encryptPwd(event)" /></li> --%>
-							<li><form:input type="password" cssClass="required int-xlarge"
-								cssErrorClass="error" path="password" placeholder="请输入密码" 
-								accesskey="${passwordAccessKey}" htmlEscape="true"
-								autocomplete="off" onkeydown="encryptPwd(event)"/></li>
-						<span><spring:message
-								code="screen.welcome.label.password.accesskey"
-								var="passwordAccessKey" /></span>
-					</ul>
-					<ul>
-						<li class="identifying"><input type="text"
-							class="int-xlarge-identifying" style="width: 176px;" size="25"
-							tabindex="4" name="captchaCode" path="captchaCode"
-							placeholder="请输入验证码" id="captchaCode"> <span><A><img
-									src="${_base}/reg/getImageVerifyCode" id="pictureVitenfy"></A></span>
-						</li>
-						<span><spring:message
-								code="screen.welcome.label.captchaCode.accesskey"
-								var="passwordAccessKey" /></span>
-					</ul>
-					<ul>
-						<li><p>
-								<input id="rememberMe" name="rememberMe" type="checkbox"
-									tabindex="5">
-							</p>
-							<p>记住密码</p></li>
-						<li class="right"><a href="#">忘记密码</a>|<a href="#" onclick="javascript:jumpTo()">注册新账户</a></li>
-					</ul>
-					<ul>
+				<ul>
+					<li>
 						<div class="login-note">
 							<form:errors path="*" id="msg" cssClass="errors" element="div"
 								htmlEscape="false" />
 						</div>
-					</ul>
-					<ul>
+					</li>
+				</ul>
+						<ul>
+							<li><form:select class="required int-xlarge" id="userType"
+									path="userType" name="userType">
+									<option value="10">个人用户</option>
+									<option value="11">企业用户</option>
+									<option value="12">代理商用户</option>
+									<option value="13">分销商用户</option>
+								</form:select></li>
+						</ul>
+						<ul>
+							<li class="user"><form:input cssClass="required int-xlarge"
+									cssErrorClass="error" id="username" tabindex="1"
+									path="username" autocomplete="off" htmlEscape="true"
+									placeholder="用户名/手机号/已验证邮箱" /></li>
+						</ul>
+						<ul>
+							<li><form:input type="password" id="password"
+									cssClass="required int-xlarge" cssErrorClass="error"
+									path="password" placeholder="请输入密码" tableindex="2"
+									htmlEscape="true" autocomplete="off"
+									onkeydown="encryptPwd(event)" /></li>
+						</ul>
+						<ul>
+							<li class="identifying"><input type="text"
+								class="int-xlarge-identifying" id="captchaCode"
+								style="border: 1px solid #e7e7e7; float: left; font-size: 14px; height: 40px; padding-left: 6px; width: 175px;"
+								tabindex="3" name="captchaCode" path="captchaCode" onkeydown="encryptCaptcha(event)"
+								placeholder="请输入验证码"> <span><A><img
+										src="${_base}/reg/getImageVerifyCode" id="pictureVitenfy"
+										onclick="reloadImage('${_base}/reg/getImageVerifyCode');"></A></span></li>
+						</ul>
+						<ul>
+							<li><p>
+									<input id="rememberMe" name="rememberMe" type="checkbox" value="true">
+								</p>
+								<p>记住密码</p></li>
+							<li class="right"><a href="#">忘记密码</a>|<a href="#"
+								onclick="javascript:jumpTo()">注册新账户</a></li>
+						</ul>
 						<li><input type="button" class="login-bigbtn" value="立即登录"
-							accesskey="l" tabindex="6" onclick="javascript:dologin();"></li>
+							accesskey="l" tabindex="4" onclick="javascript:dologin();"></li>
 					</ul>
 					<input type="hidden" name="lt" value="${loginTicket}" /> <input
 						type="hidden" name="execution" value="${flowExecutionKey}" /> <input
 						type="hidden" name="_eventId" value="submit" /> <input
-						type="hidden" name="tenantId" value="test111" />
+						type="hidden" name="tenantId" value="0" /><input
+						type="hidden" name="sessionId" value="<%=request.getSession().getId()%>"/>
 				</div>
 			</div>
 		</form:form>
