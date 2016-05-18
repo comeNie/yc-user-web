@@ -71,9 +71,8 @@
 						<ul>
 							<li><form:input type="password" id="password"
 									cssClass="required int-xlarge" cssErrorClass="error"
-									path="password" placeholder="请输入密码" tableindex="2"
-									htmlEscape="true" autocomplete="off"
-									onkeydown="encryptPwd(event)" /></li>
+									path="password" placeholder="请输入密码" tabindex="2"
+									htmlEscape="true" autocomplete="off" /></li>
 						</ul>
 						<ul>
 							<li class="identifying"><input type="text"
