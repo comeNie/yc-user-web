@@ -45,8 +45,8 @@ define('app/register/company-register-success', function (require, exports, modu
 			 var key = $("#accountIdKey").val();
 			 var time = $("#time");
 			 var second = $("#time").html();
-			 time.html(--second);  
 			 if(second>0){     
+				 time.html(--second);  
 				 setInterval(this._login,1000);     
 			    }else{     
 			     ajaxController.ajax({
