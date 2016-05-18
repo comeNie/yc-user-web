@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 
+import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.ccs.CCSClientFactory;
@@ -60,7 +61,6 @@ import com.ai.opt.uac.web.util.IPUtil;
 import com.ai.opt.uac.web.util.VerifyUtil;
 import com.ai.paas.ipaas.ccs.IConfigClient;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
-import com.ai.runner.base.exception.CallerException;
 import com.ai.runner.center.mmp.api.manager.interfaces.SMSServices;
 import com.ai.runner.center.mmp.api.manager.param.SMData;
 import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
@@ -134,14 +134,11 @@ public class RegisterController {
         mymap.put("ucUserParam", UcUserParams.class);
         mymap.put("ucContactInfoParams", UcContactInfoParams.class);
         RegisterParamsRequest userParams = (RegisterParamsRequest)conditionObject.toBean(conditionObject,RegisterParamsRequest.class,mymap);
-        userParams.getUcUserParam().setTenantId("1");
-        userParams.getUcUserParam().setUserId("3");
         // MD5加密
 		//String password = Md5Encoder.encodePassword(request.getUcUserParam().getUserLoginPwd());
 		try {
 
 			ICacheClient iCacheClient = MCSClientFactory.getCacheClient(Register.CACHE_NAMESPACE);
-			String pictureCode = iCacheClient.get(Register.CACHE_KEY_VERIFY_PICTURE + session.getId());
 			ResponseHeader header = new ResponseHeader();
 			header.setIsSuccess(true);
 			/*// 校验图片是否失效
@@ -159,14 +156,22 @@ public class RegisterController {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "图形验证码错误", null);
 				responseData.setResponseHeader(header);
 				return responseData;
-			}
+			}*/
 
 			// 校验短信验证码是否失效
 			String phoneAddIdenti = iCacheClient.get(Register.REGISTER_PHONE_KEY + session.getId());
+			if (StringUtil.isBlank(phoneAddIdenti)) {
+                header.setResultCode(Register.REGISTER_SSM_OVERTIME_ERROR);
+                header.setResultMessage("验证码已失效");
+                responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码已失效", null);
+                responseData.setResponseHeader(header);
+                return responseData;
+            }
 			String s[] = phoneAddIdenti.split(";");
 			String phone = s[0];
 			String vitify = s[1];
-			if (!request.getPhone().equals(phone)) {
+			
+			if (!userParams.getUcUserParam().getUserMp().equals(phone)) {
 				header.setResultCode(Register.REGISTER_SSM_DUMPHONE_ERROR);
 				header.setResultMessage("手机与发送短信手机不一致");
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "手机与发送短信手机不一致", null);
@@ -181,13 +186,13 @@ public class RegisterController {
 				return responseData;
 			}
 			// 校验短信验证码
-			if (!request.getPhoneVerifyCode().equals(vitify)) {
+			if (!userParams.getUcUserParam().getPhoneVerifyCode().equals(vitify)) {
 				header.setResultCode(Register.REGISTER_SSM_ERROR);
 				header.setResultMessage("短信验证码错误");
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "短信验证码错误", null);
 				responseData.setResponseHeader(header);
 				return responseData;
-			}*/
+			}
 			IRegisterSV iRegisterSV = DubboConsumerFactory.getService("iRegisterSV");
 			BaseResponse response = iRegisterSV.insertUcUser(userParams);
 			//PhoneRegisterResponse response = iRegisterSV.registerByPhone(request);
@@ -219,6 +224,59 @@ public class RegisterController {
 		return responseData;
 	}
 
+	
+	@RequestMapping("/checkPhoneVerifyCode")
+    @ResponseBody
+    public ResponseData<String> checkPhoneVerifyCode(UcUserParams userParams, HttpSession session, HttpServletRequest req) {
+	    ResponseData<String> responseData = null;
+
+        try{
+            ICacheClient iCacheClient = MCSClientFactory.getCacheClient(Register.CACHE_NAMESPACE);
+            ResponseHeader header = new ResponseHeader();
+            header.setIsSuccess(true);
+            // 校验短信验证码是否失效
+            String phoneAddIdenti = iCacheClient.get(Register.REGISTER_PHONE_KEY + session.getId());
+            if(StringUtil.isBlank(phoneAddIdenti)){
+                header.setResultCode(Register.REGISTER_SSM_OVERTIME_ERROR);
+                header.setResultMessage("验证码已失效");
+                responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码已失效", null);
+                responseData.setResponseHeader(header);
+                return responseData;
+            }
+            String s[] = phoneAddIdenti.split(";");
+            String phone = s[0];
+            String vitify = s[1];
+            if (!userParams.getUserMp().equals(phone)) {
+                header.setResultCode(Register.REGISTER_SSM_DUMPHONE_ERROR);
+                header.setResultMessage("手机与发送短信手机不一致");
+                responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "手机与发送短信手机不一致", null);
+                responseData.setResponseHeader(header);
+                return responseData;
+            }
+            if (StringUtil.isBlank(vitify)) {
+                header.setResultCode(Register.REGISTER_SSM_OVERTIME_ERROR);
+                header.setResultMessage("验证码已失效");
+                responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码已失效", null);
+                responseData.setResponseHeader(header);
+                return responseData;
+            }
+            // 校验短信验证码
+            if (!userParams.getPhoneVerifyCode().equals(vitify)) {
+                header.setResultCode(Register.REGISTER_SSM_ERROR);
+                header.setResultMessage("短信验证码错误");
+                responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "短信验证码错误", null);
+                responseData.setResponseHeader(header);
+                return responseData;
+            }
+        }catch(Exception e){
+            LOG.error("手机验证校验失败！", e);
+            responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "手机验证校验失败！", null);
+        }
+       
+	    return responseData;
+	}
+	
+	
 	@RequestMapping("/checkPhone")
 	@ResponseBody
 	public ResponseData<String> checkPhone(UcUserParams userParams, HttpSession session, HttpServletRequest req) {
@@ -526,7 +584,7 @@ public class RegisterController {
 	 */
 	@RequestMapping("/toSendPhone")
 	@ResponseBody
-	public ResponseData<String> sendPhone(GetSMDataReq sMDataReq, HttpServletRequest request) throws CallerException, Exception {
+	public ResponseData<String> sendPhone(GetSMDataReq sMDataReq, HttpServletRequest request) throws BusinessException, Exception {
 		ResponseData<String> responseData = null;
 		try {
 			// 检查ip发送次数
@@ -567,7 +625,7 @@ public class RegisterController {
 				smData.setDataList(dataList);
 				SMSServices sMSServices = DubboConsumerFactory.getService("sMSServices");
 				sMSServices.dataInput(smData);
-				// 存手機和验证码到缓存
+				// 存手机和验证码到缓存
 				String phoneAddIdentufy = sMDataReq.getPhone() + ";" + identifyCode;
 				String key = Register.REGISTER_PHONE_KEY + request.getSession().getId();
 				ICacheClient iCacheClient = MCSClientFactory.getCacheClient(Register.CACHE_NAMESPACE);

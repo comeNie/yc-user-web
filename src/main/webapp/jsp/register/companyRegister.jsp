@@ -133,7 +133,7 @@ return;
                         <li class="word"><span>*</span>设置密码:</li>
                         <li><input type="password" class="int-medium" placeholder="设置您的登录密码" id="inputPassword"></li>
                         <li class="lable" id="errorPawMsg"><img src="${_base}/theme/slp/images/icon-c.png"><span id="showPawMsg">6-20个字符，可用字母、数字及符号的组合</span></li>
-                        <label><img src="${_base}/theme/baas/images/pass-a.png"><img src="${_base}/theme/baas/images/pass-b.png"><img src="${_base}/theme/baas/images/pass-c.png">有被盗风险,建议使用字母、数字和符号两种及以上组合</label>
+                        <%-- <label><img src="${_base}/theme/baas/images/pass-a.png"><img src="${_base}/theme/baas/images/pass-b.png"><img src="${_base}/theme/baas/images/pass-c.png">有被盗风险,建议使用字母、数字和符号两种及以上组合</label> --%>
                     </ul>
                     <ul>
                         <li class="word"><span>*</span>确认密码:</li>
@@ -142,17 +142,17 @@ return;
                     </ul>
                     <ul>
                         <li class="word"><span>*</span>手机:</li>
-                        <li><input type="password" class="int-medium" placeholder="请输入您的有效手机号" id="phone"></li>
-                        <li class="lable" id="errorPhoneMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-d.png"><span>请输入正确有效的手机号</span></li>
+                        <li><input type="text" class="int-medium" placeholder="请输入您的有效手机号" id="phone"></li>
+                        <li class="lable" id="errorPhoneMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-d.png"><span class="red">请输入正确有效的手机号</span></li>
                     </ul>
                     <ul>
                         <li class="word"><span>*</span>短信验证码:</li>
-                        <li><input type="text" class="int-small" ></li>
-                        <li class="re-btn"><input type="button" class="int-btn" value="获取短信验证码"></li>
-                        <li class="lable" id="errorSmsMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-a.png"><span class="red">验证码错误</span></li>
+                        <li><input type="text" class="int-small" id="phoneVerifyCode"></li>
+                        <li class="re-btn"><input type="button" id="PHONE_IDENTIFY" class="int-btn" value="获取短信验证码"></li>
+                        <li class="lable" id="errorSmsMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-a.png"><span class="red" id="showSmsMsg">验证码错误</span></li>
                     </ul>
                      <ul>
-                        <li class="checx-word"><input type="checkbox" class="int-chec">我已阅读并同意<A href="#">《企业用户注册协议》</A></li>
+                        <li class="checx-word"><input type="checkbox" id="agreeChecbox" class="int-chec">我已阅读并同意<A href="#">《企业用户注册协议》</A></li>
                         <li class="lable" style="display: none" id="agreeProtocol"><img src="${_base}/theme/slp/images/icon-a.png"><span  class="red">您需要同意注册协议，才能进行注册</span></li>
                     </ul>
                     
@@ -164,6 +164,7 @@ return;
 				         	<input type="hidden" id="errorPassFlag"/>
 				         	<input type="hidden" id="errorConfirmFlag"/>
 				         	<input type="hidden" id="errorPassEqualsFlag"/>
+				         	<input type="hidden" id="errorSMSFlag"/>
 				         	<input type="hidden" id="userType" value="11"/>
                         </li>
                     </ul>

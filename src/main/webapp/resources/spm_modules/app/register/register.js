@@ -49,15 +49,18 @@ define('app/register/register', function (require, exports, module) {
     		$("#pictureVitenfy").on("focus",this._hidePicError);
     		$("#pictureVitenfy").on("blur",this._validServicePic);
     		$("#next").on("click",this._validServicePho);
+    		$("#next").on("click",this._validServiceSSM);
+    		$("#next").on("click",this._validPhoneVerifyCode);
     		$("#next").on("click",this._next);
     		$("#userName").on("blur",this._userNameCheck);
     		$("#userName").on("focus",this._hideUserNameError);
     		$("#BTN_REGISTER").on("click",this._userNameCheck);
     		$("#BTN_REGISTER").on("click",this._passwordConfirmation);
     		$("#BTN_REGISTER").on("click",this._validServicePaw);
+    		$("#BTN_REGISTER").on("click",this._validServiceSSM);
     		$("#BTN_REGISTER").on("click",this._submit);
-    		/*$("#PHONE_IDENTIFY").on("click",this._validServicePho);
-    		$("#PHONE_IDENTIFY").on("click",this._getPhoneVitentify);*/
+    		$("#PHONE_IDENTIFY").on("click",this._validServicePho);
+    		$("#PHONE_IDENTIFY").on("click",this._getPhoneVitentify);
     	},
     	_hideErroText: function(){
     		var _this = this;
@@ -67,7 +70,7 @@ define('app/register/register', function (require, exports, module) {
     	//获取短信验证码
     	_getPhoneVitentify: function(){
     		$("#errorSmsMsg").attr("style","display:none");
-    		var phoneFlag=$('#phone').val();
+    		var phoneFlag=$('#errorPhoneFlag').val();
     		var picFlag=$('#errorPicFlag').val();
     		var passFlag=$('#errorPassFlag').val();
     		var smsFlag=$('#errorSMSFlag').val();
@@ -239,9 +242,66 @@ define('app/register/register', function (require, exports, module) {
     			return true;
     		}
     	},
+    	_validPhoneVerifyCode:function(){
+    		$("#errorSmsMsg").attr("style","display:none");
+    		var phone = $("#phone").val();
+    		var smsCode = $('#phoneVerifyCode').val();
+    		if(phone==""){
+    			$("#errorPhoneMsg").show();
+    			return false;
+    		}
+    		if(smsCode==""){
+    			$('#showSmsMsg').text("请输入短信验证码 ");
+    			$("#errorSmsMsg").attr("style","display:");
+    			$('#errorSMSFlag').val("0");
+				return false;
+			}else{
+				var	param={
+						userMp:$("#phone").val,
+						phoneVerifyCode:$("#phoneVerifyCode").val()
+    				   };
+        		ajaxController.ajax({
+    			        type: "post",
+    			        processing: false,
+    			        url: _base+"/reg/checkPhoneVerifyCode",
+    			        dataType: "json",
+    			        data: param,
+    			        message: "正在加载数据..",
+    			        success: function (data) {
+    			         if(data.responseHeader.resultCode=="000007"){
+    			        		$('#showSmsMsg').text("手机与发送短信手机不一致");
+    							$("#errorPhoneMsg").attr("style","display:");
+    							$('#errorPhoneFlag').val("0");
+    							return false;
+    			        	}else if(data.responseHeader.resultCode="000004"){
+    			        		$('#showSmsMsg').text("验证码已失效");
+    			        		$("#errorSmsMsg").attr("style","display:");
+    							$('#errorSMSFlag').val("0");
+    							return false;
+    			        	}else if(data.responseHeader.resultCode="000003"){
+    			        		$('#showSmsMsg').text("短信验证码错误");
+    							$("#errorSmsMsg").attr("style","display:");
+    							$('#errorSMSFlag').val("0");
+    							return false;
+    			        	}else if(data.responseHeader.resultCode=="000000"){
+    			        		$('#errorSMSFlag').val("1");
+    							$("#errorSmsMsg").attr("style","display:none");
+    			        	}
+    			        	
+    			        },
+    			        error: function(XMLHttpRequest, textStatus, errorThrown) {
+    						 alert(XMLHttpRequest.status);
+    						 alert(XMLHttpRequest.readyState);
+    						 alert(textStatus);
+    						}
+    			        
+    			    }); 
+			}
+    	
+    	},
+    	
     	//短信验证码
     	_validServiceSSM: function(){
-    		$("#errorSmsMsg").attr("style","display:none");
     		var smsCode = $('#phoneVerifyCode').val();
     		if(smsCode==""){
     			$('#showSmsMsg').text("请输入短信验证码 ");
@@ -250,11 +310,14 @@ define('app/register/register', function (require, exports, module) {
 				return false;
     		}else{
     			$('#errorSMSFlag').val("1");
+    			$("#errorSmsMsg").attr("style","display:none");
     			return true;
     		}
     	},
     	//点击下一步用户信息显示
     	_next:function(){
+    		var phoneFlag=$('#errorPhoneFlag').val();
+    		var smsFlag = $('#errorSMSFlag').val();
     		var phone = $("#phone").val();
     		var checkbox = $("#agreeChecbox").is(':checked');
     		if(phone==""){
@@ -264,13 +327,17 @@ define('app/register/register', function (require, exports, module) {
     		if(!checkbox){
     			$("#agreeProtocol").show();
     			return false;
+    		}else{
+    			$("#agreeProtocol").hide();
+    		}
+    		if(phoneFlag!=0&&smsFlag!=0&&checkbox){
+        		$("#accountInfoBorder").removeClass().addClass("yellow-border");
+        		$("#accountInfoYuan").removeClass().addClass("yellow-yuan");
+        		$("#accountInfoWord").removeClass().addClass("yellow-word");
+        		$("#regeiter-date5").hide();
+        		$("#regeiter-date2").show();
     		}
     		
-    		$("#accountInfoBorder").removeClass().addClass("yellow-border");
-    		$("#accountInfoYuan").removeClass().addClass("yellow-yuan");
-    		$("#accountInfoWord").removeClass().addClass("yellow-word");
-    		$("#regeiter-date5").hide();
-    		$("#regeiter-date2").show();
     		
     	},
     	
@@ -358,12 +425,21 @@ define('app/register/register', function (require, exports, module) {
     		var errorConfirmFlag=$('#errorConfirmFlag').val();
     		var errorPassEqualsFlag = $("#errorPassEqualsFlag").val();
     		var userType = $("#userType").val();
+    		var checkbox = $("#agreeChecbox").is(':checked');
+    		if(!checkbox){
+    			$("#agreeProtocol").show();
+    			return false;
+    		}else{
+    			$("#agreeProtocol").hide();
+    		}
     		if(phoneFlag!="0"&&errorUserNameFlag!="0"&& errorPassFlag!="0"&&errorConfirmFlag!="0"&&errorPassEqualsFlag!="0"){
     			var	param={
     					request:"{ucUserParam:{" +
 	    								"userMp:"+$("#phone").val()+","+
 	    								"userLoginName:"+$("#userName").val()+","+
-	    								"userLoginPwd:"+"'"+hex_md5($("#inputPassword").val())+"'"+
+	    								"userLoginPwd:"+"'"+hex_md5($("#inputPassword").val())+"'"+","+
+	    								"userType:"+"'"+$("#userType").val()+"'"+","+
+	    								"phoneVerifyCode:"+"'"+$("#phoneVerifyCode").val()+"'"+
     							   "}}" 
     				  };
     			
