@@ -52,9 +52,9 @@ function dologin() {
 }// end of dologin
 
 function validate() {
-	var username = document.getElementById("username").value;
-	var password = document.getElementById("password").value;
-	var captchaCode = document.getElementById("captchaCode").value;
+	var username = document.getElementById("username").value.trim();
+	var password = document.getElementById("password").value.trim();
+	var captchaCode = document.getElementById("captchaCode").value.trim();
 	try {
 		if (isNull(username)) {
 			$("div.login-note").html("请输入用户名/手机号码/邮箱");
