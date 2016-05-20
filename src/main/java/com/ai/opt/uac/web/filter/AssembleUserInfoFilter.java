@@ -19,7 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ai.opt.sso.client.filter.SSOClientConstants;
-import com.ai.opt.sso.client.filter.SSOClientUser;
+import com.alibaba.fastjson.JSON;
+import com.ai.opt.sso.client.filter.SLPClientUser;
 
 
 public class AssembleUserInfoFilter implements Filter {
@@ -42,12 +43,12 @@ public class AssembleUserInfoFilter implements Filter {
             return;
         }
         HttpSession session = req.getSession();
-        SSOClientUser user = (SSOClientUser) session.getAttribute(SSOClientConstants.USER_SESSION_KEY);
+        SLPClientUser user = (SLPClientUser) session.getAttribute(SSOClientConstants.USER_SESSION_KEY);
         if (user == null) {
             user = assembleUser(req);
             session.setAttribute(SSOClientConstants.USER_SESSION_KEY, user);
             chain.doFilter(req, response);
-            LOG.info("已封装的用户信息为：" + user.toString());
+            LOG.error("已封装的用户信息为：" + JSON.toJSONString(user));
 
         } else {
             chain.doFilter(req, response);
@@ -65,15 +66,15 @@ public class AssembleUserInfoFilter implements Filter {
      * @param request
      * @return
      */
-    private SSOClientUser assembleUser(HttpServletRequest request) {
-    	SSOClientUser user = null;
+    private SLPClientUser assembleUser(HttpServletRequest request) {
+    	SLPClientUser user = null;
         try {
             Principal principal = request.getUserPrincipal();
             if (principal != null) {
-                user = new SSOClientUser();
+                user = new SLPClientUser();
                 AttributePrincipal attributePrincipal = (AttributePrincipal) principal;
                 Map<String, Object> attributes = attributePrincipal.getAttributes();
-                Field[] fields = SSOClientUser.class.getDeclaredFields();
+                Field[] fields = SLPClientUser.class.getDeclaredFields();
                 for (Field field : fields) {
                     String value = (String) attributes.get(field.getName());
                     if (value != null) {
@@ -86,6 +87,7 @@ public class AssembleUserInfoFilter implements Filter {
                     }
                 }
             }
+            
         } catch (Exception e) {
             LOG.error("封装用户信息失败", e);
         }

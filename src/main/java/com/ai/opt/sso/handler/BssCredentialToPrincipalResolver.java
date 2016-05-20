@@ -24,6 +24,7 @@ public class BssCredentialToPrincipalResolver implements PrincipalResolver {
 		attributes.put("tenantId", bssCredentials.getTenantId());
 		attributes.put("username", bssCredentials.getUsername());
         attributes.put("userType", bssCredentials.getUserType());
+        attributes.put("userNickname",bssCredentials.getUserNickname());
         
 		return new SimplePrincipal(principalId , attributes);
 	}
