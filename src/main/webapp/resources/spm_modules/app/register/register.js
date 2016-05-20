@@ -437,8 +437,8 @@ define('app/register/register', function (require, exports, module) {
     		if(phoneFlag!="0"&&errorUserNameFlag!="0"&& errorPassFlag!="0"&&errorConfirmFlag!="0"&&errorPassEqualsFlag!="0"){
     			var	param={
     					request:"{ucUserParam:{" +
-	    								"userMp:"+$("#phone").val()+","+
-	    								"userLoginName:"+$("#userName").val()+","+
+	    								"userMp:'"+$("#phone").val()+"',"+
+	    								"userLoginName:'"+$("#userName").val()+"',"+
 	    								"userLoginPwd:"+"'"+hex_md5($("#inputPassword").val())+"'"+","+
 	    								"userType:"+"'"+$("#userType").val()+"'"+","+
 	    								"phoneVerifyCode:"+"'"+$("#phoneVerifyCode").val()+"'"+
