@@ -48,6 +48,7 @@ define('app/register/register', function (require, exports, module) {
     		$("#confirmationPassword").on("blur",this._passwordConfirmation);
     		$("#pictureVitenfy").on("focus",this._hidePicError);
     		$("#pictureVitenfy").on("blur",this._validServicePic);
+    		$("#phoneVerifyCode").on("blur",this._validPhoneVerifyCode);
     		$("#next").on("click",this._validServicePho);
     		$("#next").on("click",this._validServiceSSM);
     		$("#next").on("click",this._validPhoneVerifyCode);
@@ -74,7 +75,7 @@ define('app/register/register', function (require, exports, module) {
     		var picFlag=$('#errorPicFlag').val();
     		var passFlag=$('#errorPassFlag').val();
     		var smsFlag=$('#errorSMSFlag').val();
-    		if(phoneFlag!="0"&&picFlag!="0"&& passFlag!="0"&& smsFlag!="0"){
+    		if(phoneFlag!="0"){
             	 var step = 59;
                  $('#PHONE_IDENTIFY').val('重新发送60');
                  $("#PHONE_IDENTIFY").attr("disabled", true);
@@ -257,7 +258,7 @@ define('app/register/register', function (require, exports, module) {
 				return false;
 			}else{
 				var	param={
-						userMp:$("#phone").val,
+						userMp:$("#phone").val(),
 						phoneVerifyCode:$("#phoneVerifyCode").val()
     				   };
         		ajaxController.ajax({
@@ -270,15 +271,15 @@ define('app/register/register', function (require, exports, module) {
     			        success: function (data) {
     			         if(data.responseHeader.resultCode=="000007"){
     			        		$('#showSmsMsg').text("手机与发送短信手机不一致");
-    							$("#errorPhoneMsg").attr("style","display:");
-    							$('#errorPhoneFlag').val("0");
+    							$("#errorSmsMsg").attr("style","display:");
+    							$('#errorSMSFlag').val("0");
     							return false;
-    			        	}else if(data.responseHeader.resultCode="000004"){
+    			        	}else if(data.responseHeader.resultCode=="000004"){
     			        		$('#showSmsMsg').text("验证码已失效");
     			        		$("#errorSmsMsg").attr("style","display:");
     							$('#errorSMSFlag').val("0");
     							return false;
-    			        	}else if(data.responseHeader.resultCode="000003"){
+    			        	}else if(data.responseHeader.resultCode=="000003"){
     			        		$('#showSmsMsg').text("短信验证码错误");
     							$("#errorSmsMsg").attr("style","display:");
     							$('#errorSMSFlag').val("0");
@@ -306,10 +307,10 @@ define('app/register/register', function (require, exports, module) {
     		if(smsCode==""){
     			$('#showSmsMsg').text("请输入短信验证码 ");
     			$("#errorSmsMsg").attr("style","display:");
-    			$('#errorSMSFlag').val("0");
+    			$('#errorSMSEmptyFlag').val("0");
 				return false;
     		}else{
-    			$('#errorSMSFlag').val("1");
+    			$('#errorSMSEmptyFlag').val("1");
     			$("#errorSmsMsg").attr("style","display:none");
     			return true;
     		}
@@ -318,6 +319,7 @@ define('app/register/register', function (require, exports, module) {
     	_next:function(){
     		var phoneFlag=$('#errorPhoneFlag').val();
     		var smsFlag = $('#errorSMSFlag').val();
+    		var smsEmptyFlag = $('#errorSMSEmptyFlag').val();
     		var phone = $("#phone").val();
     		var checkbox = $("#agreeChecbox").is(':checked');
     		if(phone==""){
@@ -330,7 +332,7 @@ define('app/register/register', function (require, exports, module) {
     		}else{
     			$("#agreeProtocol").hide();
     		}
-    		if(phoneFlag!=0&&smsFlag!=0&&checkbox){
+    		if(phoneFlag!=0&&smsFlag!=0&&checkbox&&smsEmptyFlag!=0){
         		$("#accountInfoBorder").removeClass().addClass("yellow-border");
         		$("#accountInfoYuan").removeClass().addClass("yellow-yuan");
         		$("#accountInfoWord").removeClass().addClass("yellow-word");

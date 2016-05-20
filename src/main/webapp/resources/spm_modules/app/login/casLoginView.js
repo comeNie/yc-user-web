@@ -85,7 +85,7 @@ function validate() {
 // 根据用户类型跳转不同的注册页面
 function jumpTo() {
 	var userType = $("#userType").val();
-	window.location.href = "${_base}/reg/toRegister?userType=" + userType;
+	window.location.href = _base+"/reg/toRegister?userType=" + userType;
 }
 
 // 刷新验证码

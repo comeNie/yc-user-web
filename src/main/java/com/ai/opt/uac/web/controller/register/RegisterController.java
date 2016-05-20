@@ -264,6 +264,12 @@ public class RegisterController {
                 responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "短信验证码错误", null);
                 responseData.setResponseHeader(header);
                 return responseData;
+            }else{
+                header.setResultCode(Register.REGISTER_SSM_SUCCESS);
+                header.setResultMessage("短信验证码验证成功");
+                responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "短信验证码错误", null);
+                responseData.setResponseHeader(header);
+                return responseData;
             }
         }catch(Exception e){
             LOG.error("手机验证校验失败！", e);

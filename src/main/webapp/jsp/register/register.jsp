@@ -194,6 +194,7 @@ return;
 				         	<input type="hidden" id="errorConfirmFlag"/>
 				         	<input type="hidden" id="errorPassEqualsFlag"/>
 				         	<input type="hidden" id="errorSMSFlag"/>
+				         	<input type="hidden" id="errorSMSEmptyFlag"/>
 				         	<input type="hidden" id="userType" value="10"/>
                         </li>
                     </ul>
