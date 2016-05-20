@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<h1>Welcom</h1>
+<h1>SLP账户体系</h1>
 <h1>Login Success</h1>
 
 </body>
