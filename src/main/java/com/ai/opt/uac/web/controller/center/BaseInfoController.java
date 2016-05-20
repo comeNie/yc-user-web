@@ -132,7 +132,7 @@ public class BaseInfoController {
             
             if((!StringUtil.isBlank(data.getTenantName())) && (!data.getIndustryCode().equals("00"))){
                 TenantInfoRequest tenant = new TenantInfoRequest();
-                tenant.setAccountId(data.getAccountId());
+                //tenant.setAccountId(data.getAccountId());
                 tenant.setIndustryCode(data.getIndustryCode());
                 tenant.setTenantName(data.getTenantName());
                 tenant.setUpdateAccountId(userClient.getAccountId());
