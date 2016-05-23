@@ -2,18 +2,17 @@
  $(function () {
     var st = 100;
     $('.city').mouseenter(function () {
-		$('.city a').addClass('b');
-		$('.city .city-hover').show(1);
+		$(this).children('a').addClass('b');
+		$(this).children('.city-hover').show(1);  
     })
-		$(".city .city-hover").click(function () {
-                $(this).hide(1);
-            });
-			
 		$('.city').mouseleave(function () {
-        $('.city .city-hover').hide(1);
-		 $('.city a').removeClass('b');
+		$(this).children('a').removeClass('b');
+		$(this).children('.city-hover').hide(1);  
+  
     });	
   });
+  
+
  
  //头部点击2 
  $(function () {
@@ -167,6 +166,35 @@ $('.plist-right-title-tow ul li a').click(function(){
 });
 //table切换结束  
 
+//商品详情
+$(function(){
+$(".parameter-right-tilit ul li").click(function () {
+                $(".parameter-right-tilit ul li").each(function () {
+                    $(this).removeClass("current");
+                });
+                $(this).addClass("current");
+            });
+$('.parameter-right-tilit ul li').click(function(){
+  var index=$('.parameter-right-tilit ul li').index(this);
+      if(index==0){
+     $('#date1').show();
+     $('#date2').hide();
+     $('#date3').hide();
+   }
+   if(index==1){
+   $('#date2').show();
+   $('#date1').hide();
+   $('#date3').hide();
+   }
+   if(index==2){
+   $('#date3').show();
+   $('#date2').hide();
+   $('#date1').shhideow();
+   }
+  }); 
+});
+//table切换结束  
+
 
 //table切换1
 $(function(){
@@ -196,3 +224,251 @@ $(document).ready(function(){
 	  $(".balance-title").toggleClass("reorder remove");
 	  });
 });
+
+//搜索结果点击展开
+$(document).ready(function(){
+  $(".search-main ul li .more").click(function () {
+	  $(".more-ctn").slideToggle(100);
+	  $(".search-main").toggleClass("reorder remove");
+	  });
+});
+
+
+$(document).ready(function(){
+$(".results-left-title ul .rise").click(function(){
+  $(".results-left-title ul .decline").show();
+  $(this).hide();
+});
+$(".results-left-title ul .decline").click(function(){
+  $(".results-left-title ul .rise").show();
+  $(this).hide();
+});
+
+})
+;
+
+//搜索已选中关闭
+$(function(){
+$(".payment-title .close a").click(function () {
+	$(this).parent('.close').hide();
+	});
+	});  
+ 
+//table 点击展开
+$(function () {
+    $(".information-table table .click span").click(function () {
+		$(this).children('i').toggleClass("icon-angle-down  icon-angle-up");
+		$(this).parents().parent().children('.zhank').slideToggle(100);
+    });
+});	
+//去掉table最后一个边框
+$(function () {
+$(".table-border-list tr:last").css("border-bottom","none");
+$(".order-list-table  li a:last").css("border-right","none");
+/**
+$(".account-table tr:last").css("border-bottom","none");
+$("#order-date1 tr:last").css("border-bottom","none");
+$("#order-date tr:last").css("border-bottom","none");
+$("#order-date2 tr:last").css("border-bottom","none");
+**/
+});
+
+//忘记密码 radio 点击切换
+$(function(){
+$(".radioa").click(function () {
+	$('.mail').hide();
+	$('.phone').show();
+});
+});
+
+$(function(){
+$(".radiob").click(function () {
+	$('.phone').hide();
+	$('.mail').show();
+});
+});
+
+//我的订单 table切换1
+$(function(){
+$(".order-list-table ul li a").click(function () {
+                $(".order-list-table ul li a").each(function () {
+                    $(this).removeClass("current");
+                });
+                $(this).addClass("current");
+            });
+$('.order-list-table ul li a').click(function(){
+  var index=$('.order-list-table ul li a').index(this);
+      if(index==0){
+     $('#order-date').show();
+  	  $('#order-date1').hide();
+	  $('#order-date2').hide();
+	  $('#order-date3').hide();
+	  $('#order-date4').hide();
+   }
+  if(index==1){
+     $('#order-date1').show();
+  	  $('#order-date').hide();
+	  $('#order-date2').hide();
+	  $('#order-date3').hide();
+	  $('#order-date4').hide();
+   }
+   if(index==2){
+     $('#order-date2').show();
+  	  $('#order-date').hide();
+	  $('#order-date1').hide();
+	  $('#order-date3').hide();
+	  $('#order-date4').hide();
+   }
+   if(index==3){
+     $('#order-date3').show();
+  	  $('#order-date').hide();
+	  $('#order-date1').hide();
+	  $('#order-date2').hide();
+	  $('#order-date4').hide();
+   }
+   if(index==4){
+     $('#order-date4').show();
+  	  $('#order-date').hide();
+	  $('#order-date1').hide();
+	  $('#order-date3').hide();
+	  $('#order-date2').hide();
+   }
+  }); 
+});
+//table切换结束
+
+
+//我的订单 点击展开
+$(function () {
+    $(".order-list-bj ul li .is").click(function () {
+		$(this).children('i').toggleClass("icon-angle-down  icon-angle-up");
+		$(this).parents().children('.open-gaoj').slideToggle(100);
+    });
+});	
+
+
+
+//我的订单  账户设置 点击展开
+ $(function () {
+    var st = 100;
+    $('.fsast-bav ul .shez a').mouseenter(function () {
+		$(this).children('i').toggleClass("icon-angle-down  icon-angle-up");
+		$('.setgs').show(1);
+    })
+		$(".fsast-bav .setgs").click(function () {
+                $(this).hide(1);
+            });
+		$('.fsast-bav ul .shez').mouseleave(function () {
+		$(this).children('i').toggleClass("icon-angle-up icon-angle-down");
+        $('.fsast-bav .setgs').hide(1);
+    });	
+  });
+ 
+//设置支付密码 关闭提示
+$(function(){
+$(".prompt-risk .img").click(function () {
+	$(this).parent('.prompt-risk').hide();
+	});
+	}); 
+	
+//通讯录详情 table 点击变换div
+$(document).ready(function(){
+$(".account-table .click").click(function(){
+  $(this).parent().parent().parent().children(".hover").show();
+  $(this).parent().parent(".current").hide();
+});
+
+$(".account-table .mail-btn").click(function(){
+  $(this).parent().parent().parent().children(".current").show();
+  $(this).parent().parent(".hover").hide();
+});
+
+})
+;	
+//通讯录详情 批量删除弹出	
+jQuery(document).ready(function($) {
+	$('.click-close').click(function(){
+	$('.eject-mask').fadeIn(100);
+	$('.eject-samll').slideDown(200);
+	})
+	$('.eject-samll-title .img').click(function(){
+	$('.eject-mask').fadeOut(100);
+	$('.eject-samll').slideUp(150);
+	})
+	$('.eject-samll-confirm .close-btn').click(function(){
+	$('.eject-mask').fadeOut(100);
+	$('.eject-samll').slideUp(150);
+	})
+})
+//通讯录详情 批量导入弹出
+jQuery(document).ready(function($) {
+	$('.batch').click(function(){
+	$('.eject-mask').fadeIn(100);
+	$('.eject-medium').slideDown(200);
+	})
+	$('.eject-medium-title .img').click(function(){
+	$('.eject-mask').fadeOut(100);
+	$('.eject-medium').slideUp(150);
+	})
+})	
+//通讯录详情 添加弹出弹出
+jQuery(document).ready(function($) {
+	$('.add').click(function(){
+	$('.eject-mask').fadeIn(100);
+	$('.eject-large').slideDown(200);
+	})
+	$('.eject-large-title .img').click(function(){
+	$('.eject-mask').fadeOut(100);
+	$('.eject-large').slideUp(150);
+	})
+})	
+jQuery(document).ready(function($) {
+	$('.multi-line').click(function(){
+	$('.eject-mask1').fadeIn(100);
+	$('#samll-block').slideDown(200);
+	})
+	$('.samll-block-title .img').click(function(){
+	$('.eject-mask1').fadeOut(100);
+	$('#samll-block').slideUp(150);
+	})
+	$('.eject-samll-confirm .close-btn1').click(function(){
+	$('#samll-block').slideUp(150);
+	})
+})	
+//通讯录管理 删除弹出	
+jQuery(document).ready(function($) {
+	$('.trash-close').click(function(){
+	$('.eject-mask').fadeIn(100);
+	$('.eject-samll').slideDown(200);
+	})
+	$('.eject-samll-title .img').click(function(){
+	$('.eject-mask').fadeOut(100);
+	$('.eject-samll').slideUp(150);
+	})
+	$('.eject-samll-confirm .close-btn').click(function(){
+	$('.eject-mask').fadeOut(100);
+	$('.eject-samll').slideUp(150);
+	})
+})
+//通讯录管理 充流量弹出
+jQuery(document).ready(function($) {
+	$('.charge-flow').click(function(){
+	$('.eject-mask').fadeIn(100);
+	$('.eject-large').slideDown(200);
+	})
+	$('.eject-large-title .img').click(function(){
+	$('.eject-mask').fadeOut(100);
+	$('.eject-large').slideUp(150);
+	})
+})	
+//通讯录管理 充话费弹出
+jQuery(document).ready(function($) {
+	$('.charge-phone').click(function(){
+	$('.eject-mask').fadeIn(100);
+	$('#eject-iphone').slideDown(200);
+	})
+	$('.eject-large-title .img').click(function(){
+	$('.eject-mask').fadeOut(100);
+	$('#eject-iphone').slideUp(150);
+	})
+})

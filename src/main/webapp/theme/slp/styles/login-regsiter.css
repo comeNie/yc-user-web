@@ -88,6 +88,7 @@
 .regeiter-success{width:1000px; float:left; margin-top:60px;}
 .regeiter-success p{text-align:center; color:#666; margin-bottom:20px; }
 .regeiter-success p a{ color:#005aa0;}
+.regeiter-success p a:hover{ color:#f4792c;}
 .regeiter-success .word{ font-size:18px; margin-bottom:4px;}
 
 /**下拉 btn text**/
@@ -101,5 +102,14 @@
 .slp-btn{background:#f4792c; color:#fff; font-size:14px;}
 .slp-btn:hover{  background:#fc721c}
 
-
-
+/**忘记密码**/
+.steps-four{ width: 640px;}
+.select-medium{ width:230px; float:left; border:1px solid #e7e7e7; height:30px; padding-left:4px; font-size:12px;}
+.select-medium:hover{ border:1px solid #fc721c}
+.list-int .yazm img{ height: 30px;}
+.yazm a{line-height: 30px; color: #005aa0;}
+.yazm a:hover{color: #f4792c;}
+.checkbox-box span{ margin-right: 20px;}
+.checkbox-box span input{ margin-right: 3px;}
+.success-box a{ margin: 0 20px;}
+.success-box{ margin-top:50px;}

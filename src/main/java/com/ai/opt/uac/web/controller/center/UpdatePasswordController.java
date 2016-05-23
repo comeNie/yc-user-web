@@ -29,6 +29,7 @@ import com.ai.opt.sdk.util.RandomUtil;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.opt.sdk.util.UUIDUtil;
 import com.ai.opt.sdk.web.model.ResponseData;
+import com.ai.opt.sso.client.filter.SLPClientUser;
 import com.ai.opt.sso.client.filter.SSOClientConstants;
 import com.ai.opt.sso.client.filter.SSOClientUser;
 import com.ai.opt.uac.api.security.interfaces.IAccountSecurityManageSV;
@@ -59,16 +60,16 @@ public class UpdatePasswordController {
 
 	@RequestMapping("/confirminfo")
 	public ModelAndView UpdatePasswordStart(HttpServletRequest request) {
-		SSOClientUser userClient = (SSOClientUser) request.getSession().getAttribute(SSOClientConstants.USER_SESSION_KEY);
+		SLPClientUser userClient = (SLPClientUser) request.getSession().getAttribute(SSOClientConstants.USER_SESSION_KEY);
 		if (userClient != null) {
 			Map<String, AccountData> model = new HashMap<String, AccountData>();
-			String phone = userClient.getPhone();
-			String email = userClient.getEmail();
+			String phone = userClient.getUserMp();
+			String email = userClient.getUserEmail();
 			AccountData confirmInfo = new AccountData(phone, email);
 			model.put("confirmInfo", confirmInfo);
-			return new ModelAndView("jsp/center/update-password-start", model);
+			return new ModelAndView("jsp/register/register", model);
 		} else {
-			return new ModelAndView("jsp/center/update-password-start");
+			return new ModelAndView("jsp/register/register");
 		}
 	}
 
