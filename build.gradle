@@ -31,9 +31,10 @@ ext {
     ipaasVersion="1.0-SNAPSHOT"
     versionSuffix="0.1.ibss-SNAPSHOT"
 }
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
+configurations.all { 
+	    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+	    resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
+ 	}
     
 
 dependencies {
@@ -68,9 +69,8 @@ dependencies {
     compile 'org.javassist:javassist:3.19.0-GA'
     
     
-    //dubbo鎺ュ彛 绯荤粺绠＄悊
+    //dubbo
     
-    compile 'com.ai.opt.uac:sso:2.0-SNAPSHOT'
     compile 'com.ai.opt.xss.filter:opt-xss-firewall:1.0-SNAPSHOT'
     compile 'com.ai.opt.uni.session:opt-uni-session:2.0-SNAPSHOT'
     compile 'com.ai.opt.sso.client:opt-sso-client:1.0.2-SNAPSHOT'
@@ -78,6 +78,8 @@ dependencies {
     compile 'com.ai.slp.user:login:1.0-SNAPSHOT'
     compile 'com.ai.slp.user:register:1.0-SNAPSHOT'
     
+    //
+    compile 'com.ai.opt.uac:sso:2.0-SNAPSHOT'
     compile 'com.ai.opt.uac:account:2.0-SNAPSHOT'
     compile 'com.ai.opt.uac:register:2.0-SNAPSHOT'
     compile 'com.ai.opt.uac:security:2.0-SNAPSHOT'
