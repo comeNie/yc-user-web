@@ -114,26 +114,26 @@ return;
                 <div class="center-table-list-none">
 
                 <div class="list-int">
-                    <ul>
+                     <ul>
                         <li class="word"><span>*</span>用户名:</li>
                         <li><input type="text" class="int-medium" placeholder="设置用于登录的账户名" id="userName"></li>
-                        <li class="lable" id="errorUserNameMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-c.png"><span id="userNameErrorMsgShow">4-20个字符，可用汉字、字母、数字、“-”及“_”的组合</span></li>
+                        <li class="lable" id="errorUserNameMsg" style="display: none"><img id="userNameImage" src="${_base}/theme/slp/images/icon-c.png"><span id="userNameErrorMsgShow">4-20个字符，可用汉字、字母、数字、“-”及“_”的组合</span></li>
                     </ul>
                      <ul>
                         <li class="word"><span>*</span>设置密码:</li>
                         <li><input type="password" class="int-medium" placeholder="设置您的登录密码" id="inputPassword"></li>
-                        <li class="lable" id="errorPawMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-c.png"><span id="showPawMsg">6-20个字符，可用字母、数字及符号的组合</span></li>
-                        <%-- <label><img src="${_base}/theme/slp/images/pass-a.png"><img src="${_base}/theme/slp/images/pass-b.png"><img src="${_base}/theme/slp/images/pass-c.png">有被盗风险,建议使用字母、数字和符号两种及以上组合</label> --%>
+                        <li class="lable" id="errorPawMsg"><img id="passwordImage" src="${_base}/theme/slp/images/icon-c.png"><span id="showPawMsg">6-20个字符，可用字母、数字及符号的组合</span></li>
+                        <%-- <label><img src="${_base}/theme/baas/images/pass-a.png"><img src="${_base}/theme/baas/images/pass-b.png"><img src="${_base}/theme/baas/images/pass-c.png">有被盗风险,建议使用字母、数字和符号两种及以上组合</label> --%>
                     </ul>
                     <ul>
                         <li class="word"><span>*</span>确认密码:</li>
                         <li><input type="password" class="int-medium" placeholder="再次确认密码" id="confirmationPassword"></li>
-                        <li class="lable" id="errorPasswordMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-a.png"><span id="showPasswordMsg">两次输入的密码不一致</span></li>
+                        <li class="lable" id="errorPasswordMsg" style="display: none"><img id="confirmationPasswordImage" src="${_base}/theme/slp/images/icon-a.png"><span id="showPasswordMsg">两次输入的密码不一致</span></li>
                     </ul>
-                     <ul>
+                   <ul>
                         <li class="word"><span>*</span>手机:</li>
                         <li><input type="text" class="int-medium" placeholder="请输入您的有效手机号" id="phone"></li>
-                        <li class="lable" id="errorPhoneMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-d.png"><span id="showPhoneMsg">请输入正确有效的手机号</span></li>
+                        <li class="lable" id="errorPhoneMsg" style="display: none;"><img id="phoneImage" src="${_base}/theme/slp/images/icon-d.png"><span class="red" id="phoneText">请输入正确有效的手机号</span></li>
                     </ul>
                     <ul>
                         <li class="word"><span>*</span>短信验证码:</li>
@@ -142,7 +142,7 @@ return;
                         <li class="lable" id="errorSmsMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-a.png"><span class="red" id="showSmsMsg">验证码错误</span></li>
                     </ul>
                     <ul>
-                        <li class="checx-word"><input type="checkbox" id="agreeChecbox" class="int-chec">我已阅读并同意<A href="#">《企业用户注册协议》</A></li>
+                        <li class="checx-word"><input type="checkbox" id="agreeChecbox" class="int-chec">我已阅读并同意<A href="#">《代理商用户注册协议》</A></li>
                         <li class="lable" style="display: none" id="agreeProtocol"><img src="${_base}/theme/slp/images/icon-a.png"><span  class="red">您需要同意注册协议，才能进行注册</span></li>
                     </ul>
                       <ul>

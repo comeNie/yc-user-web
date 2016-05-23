@@ -45,7 +45,7 @@
 		interface="com.ai.opt.uac.api.security.interfaces.IAccountSecurityManageSV"/>
 		
 	<dubbo:reference id="iCreateSeqSV"
-		interface="com.ai.opt.uac.api.seq.interfaces.ICreateSeqSV"/>
+		interface="com.ai.slp.user.api.seq.interfaces.ICreateSeqSV"/>
 		
 		<dubbo:reference id="iIndustryManageSV"
 		interface="com.ai.opt.uac.api.account.interfaces.IIndustryManageSV"/>

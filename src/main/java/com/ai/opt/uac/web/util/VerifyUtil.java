@@ -21,8 +21,6 @@ import com.ai.opt.sdk.web.model.ResponseData;
 import com.ai.opt.uac.api.account.interfaces.IAccountManageSV;
 import com.ai.opt.uac.api.account.param.AccountQueryRequest;
 import com.ai.opt.uac.api.account.param.AccountQueryResponse;
-import com.ai.opt.uac.api.seq.interfaces.ICreateSeqSV;
-import com.ai.opt.uac.api.seq.param.PhoneMsgSeqResponse;
 import com.ai.opt.uac.web.constants.Constants;
 import com.ai.opt.uac.web.constants.VerifyConstants;
 import com.ai.opt.uac.web.constants.VerifyConstants.PictureVerifyConstants;
@@ -32,6 +30,8 @@ import com.ai.paas.ipaas.ccs.IConfigClient;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.runner.center.mmp.api.manager.interfaces.SMSServices;
 import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
+import com.ai.slp.user.api.seq.interfaces.ICreateSeqSV;
+import com.ai.slp.user.api.seq.param.PhoneMsgSeqResponse;
 
 public class VerifyUtil {
 	private static final Logger LOGGER = LoggerFactory.getLogger(VerifyUtil.class);

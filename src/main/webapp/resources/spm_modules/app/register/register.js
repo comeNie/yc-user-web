@@ -46,6 +46,7 @@ define('app/register/register', function (require, exports, module) {
     		$("#inputPassword").on("blur",this._validServicePaw);
     		$("#confirmationPassword").on("focus",this._passwordConfirmationShow);
     		$("#confirmationPassword").on("blur",this._passwordConfirmation);
+    		$("#confirmationPassword").on("blur",this._checkConfirmPassword);
     		$("#pictureVitenfy").on("focus",this._hidePicError);
     		$("#pictureVitenfy").on("blur",this._validServicePic);
     		$("#phoneVerifyCode").on("blur",this._validPhoneVerifyCode);
@@ -149,8 +150,9 @@ define('app/register/register', function (require, exports, module) {
     			$('#showPhoneMsg').text("请输入手机号码");
     			$("#errorPhoneMsg").attr("style","display:");
     			$('#errorPhoneFlag').val("0");
+    			$('#phoneImage').attr('src',_base+'/theme/slp/images/icon-c.png');
 				return false;
-			}else if( /^1\d{10}$/.test(phone)){
+			}else if( /^0?1[3|4|5|8][0-9]\d{8}$/.test(phone)){
 				var	param={
     					userMp:$("#phone").val()
     				   };
@@ -163,13 +165,17 @@ define('app/register/register', function (require, exports, module) {
     			        message: "正在加载数据..",
     			        success: function (data) {
     			         if(data.responseHeader.resultCode=="10003"){
+    			        	 	$("#phoneText").show();
     			        		$('#showPhoneMsg').text("手机号码已注册");
+    			        		$('#phoneImage').attr('src',_base+'/theme/slp/images/icon-c.png');
     							$("#errorPhoneMsg").attr("style","display:");
     							$('#errorPhoneFlag').val("0");
     							return false;
     			        	}else if(data.responseHeader.resultCode=="000000"){
+    			        		$("#errorPhoneMsg").show();
+    			        		$("#phoneText").hide();
     			        		$('#errorPhoneFlag').val("1");
-    							$("#errorPhoneMsg").attr("style","display:none");
+    			        		$('#phoneImage').attr('src',_base+'/theme/slp/images/icon-b.png');
     			        	}
     			        	
     			        },
@@ -181,7 +187,7 @@ define('app/register/register', function (require, exports, module) {
     			        
     			    }); 
 			}else{
-				$('#showPhoneMsg').text("手机号码格式不正确");
+				$('#showPhoneMsg').text("请输入正确有效的手机号码");
 				$("#errorPhoneMsg").attr("style","display:");
 				$('#errorPhoneFlag').val("0");
 				return false;
@@ -199,15 +205,18 @@ define('app/register/register', function (require, exports, module) {
     		$("#errorPawMsg").attr("style","display:none");
     		var password = $('#inputPassword').val();
     		if(password==""){
+    			$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-c.png');
     			$('#showPawMsg').text("请输入密码");
-    			
     			$("#errorPawMsg").show();
 				return false;
     		}else if(/[\x01-\xFF]*/.test(password)){
     				if(/^\S*$/.test(password)){
     					if(/^[\x21-\x7E]{6,14}$/.test(password)){
-    						$("#errorPawMsg").attr("style","display:none");
+    						$("#errorPawMsg").show();
+    						$("#showPawMsg").hide();
     						$('#errorPassFlag').val("1");
+    						$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-b.png');
+    						
     					}else{
     						$('#showPawMsg').text("长度为6-14个字符 ");
     		    			$("#errorPawMsg").attr("style","display:");
@@ -348,11 +357,13 @@ define('app/register/register', function (require, exports, module) {
     		var flag = false;
     		var userName = $("#userName").val();
     		if(userName==""){
+    			$('#userNameImage').attr('src',_base+'/theme/slp/images/icon-c.png');
+    			$('#userNameErrorMsgShow').show();
     			$('#errorUserNameMsg').show();
     			$("#errorUserNameFlag").val("0")
     			flag = false;
     		}else{
-    			var reg = /^[\u4e00-\u9fa5a-zA-Z0-9\-]{4,20}$/;
+    			var reg = /^[\u4e00-\u9fa5a-zA-Z0-9\-\_]{4,20}$/;
     			if(userName.match(reg)){
     				var	param={
     						userLoginName:$("#userName").val()
@@ -367,12 +378,14 @@ define('app/register/register', function (require, exports, module) {
         			        success: function (data) {
         			         if(data.responseHeader.resultCode=="10003"){
         			        		$('#userNameErrorMsgShow').text("用户名已注册");
-        							$("#errorUserNameMsg").attr("style","display:");
+        			        		$("#errorUserNameMsg").show();
         							$('#errorPhoneFlag').val("0");
         							return false;
         			        	}else if(data.responseHeader.resultCode=="000000"){
+        			        		$('#userNameImage').attr('src',_base+'/theme/slp/images/icon-b.png');
+        			        		$("#errorUserNameMsg").show();
+        			        		$('#userNameErrorMsgShow').hide();
         			        		$('#errorUserNameFlag').val("1");
-        							$("#userNameErrorMsg").attr("style","display:none");
         							return true;
         			        	}
         			        	
@@ -393,16 +406,8 @@ define('app/register/register', function (require, exports, module) {
     		}
     		return flag;
     	},
-    	//密码校验
-    	_passwordConfirmation:function(){
-    		var inputPassword = $("#inputPassword").val();
-    		if(inputPassword!=""){
-    			$("#errorPassFlag").val("1");
-    		}else{
-    			$("#errorPasswordMsg").show();
-    			$("#errorPassFlag").val("0");
-    		}
-    		
+    	
+    	_checkConfirmPassword:function(){
     		var confirmationPassword = $("#confirmationPassword").val();
     		if(confirmationPassword!=""){
     			$("#errorConfirmFlag").val("1");
@@ -410,13 +415,21 @@ define('app/register/register', function (require, exports, module) {
     			$("#showPasswordMsg").text("请输入确认密码");
     			$("#errorConfirmFlag").val("0");
     		}
+    	},
+    	
+    	//密码校验
+    	_passwordConfirmation:function(){
     		if(inputPassword!=confirmationPassword){
+    			$("#confirmationPasswordImage").attr('src',_base+'/theme/slp/images/icon-a.png');
     			$("#errorPasswordMsg").show();
+    			$("#showPasswordMsg").show();
     			$("#errorPassEqualsFlag").val("0");
     			return false;
     		}else{
-    			$("#errorPasswordMsg").hide();
+    			$("#errorPasswordMsg").show();
+    			$("#showPasswordMsg").hide();
     			$("#errorPassEqualsFlag").val("1");
+    			$("#confirmationPasswordImage").attr('src',_base+'/theme/slp/images/icon-b.png');
     			return true;
     		}
     	},

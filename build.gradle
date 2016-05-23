@@ -77,7 +77,7 @@ dependencies {
     
     compile 'com.ai.slp.user:login:1.0-SNAPSHOT'
     compile 'com.ai.slp.user:register:1.0-SNAPSHOT'
-    
+    compile 'com.ai.slp.user:seq:2.0-SNAPSHOT'
     //
     compile 'com.ai.opt.uac:sso:2.0-SNAPSHOT'
     compile 'com.ai.opt.uac:account:2.0-SNAPSHOT'
