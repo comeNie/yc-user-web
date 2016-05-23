@@ -26,7 +26,7 @@
 		address="${uac.dubbo.registry.address}" />
 	<dubbo:protocol name="${dubbo.protocol}" port="${dubbo.protocol.port}" />
 	<dubbo:consumer timeout="${dubbo.provider.timeout}" />
-	<dubbo:monitor protocol="registry" />
+	<!-- <dubbo:monitor protocol="registry" /> -->
 	
 	<!-- 账号登录服务 -->		
 	<dubbo:reference id="iLoginSV"
