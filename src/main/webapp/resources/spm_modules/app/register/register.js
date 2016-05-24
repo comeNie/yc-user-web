@@ -399,7 +399,9 @@ define('app/register/register', function (require, exports, module) {
         			    }); 
 					
 				}else{
-					$("#errorUserNameMsg").show();
+					$('#userNameImage').attr('src',_base+'/theme/slp/images/icon-c.png');
+					$('#userNameErrorMsgShow').show();
+	    			$('#errorUserNameMsg').show();
 					$("#errorUserNameFlag").val("0")
 					flag = false;
 				}
