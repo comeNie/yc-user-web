@@ -196,7 +196,7 @@ define('app/register/register', function (require, exports, module) {
     	_passShow: function(){
     		$("#errorPawMsg").attr("style","display:none");
     	},
-    	_passwordConfirmationShow(){
+    	_passwordConfirmationShow:function(){
     		$("#errorPasswordMsg").attr("style","display:none");
     	},
     	//校验密码
