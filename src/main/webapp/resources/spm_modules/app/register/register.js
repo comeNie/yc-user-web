@@ -419,6 +419,8 @@ define('app/register/register', function (require, exports, module) {
     	
     	//密码校验
     	_passwordConfirmation:function(){
+    		var inputPassword = $("#inputPassword").val();
+    		var confirmationPassword = $("#confirmationPassword").val();
     		if(inputPassword!=confirmationPassword){
     			$("#confirmationPasswordImage").attr('src',_base+'/theme/slp/images/icon-a.png');
     			$("#errorPasswordMsg").show();
