@@ -33,10 +33,6 @@ import com.ai.opt.sdk.util.UUIDUtil;
 import com.ai.opt.sdk.web.model.ResponseData;
 import com.ai.opt.sso.client.filter.SSOClientUser;
 import com.ai.opt.sso.client.filter.SSOClientUtil;
-import com.ai.opt.uac.api.security.interfaces.IAccountSecurityManageSV;
-import com.ai.opt.uac.api.security.param.AccountPasswordRequest;
-import com.ai.opt.uac.api.sso.interfaces.ILoginSV;
-import com.ai.opt.uac.api.sso.param.UserLoginResponse;
 import com.ai.opt.uac.web.constants.Constants;
 import com.ai.opt.uac.web.constants.Constants.ResultCode;
 import com.ai.opt.uac.web.constants.Constants.RetakePassword;
@@ -55,6 +51,11 @@ import com.ai.paas.ipaas.ccs.IConfigClient;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.runner.center.mmp.api.manager.param.SMData;
 import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
+import com.ai.slp.user.api.login.interfaces.ILoginSV;
+import com.ai.slp.user.api.login.param.LoginRequest;
+import com.ai.slp.user.api.login.param.LoginResponse;
+import com.ai.slp.user.api.ucUserSecurity.interfaces.IUcUserSecurityManageSV;
+import com.ai.slp.user.api.ucUserSecurity.param.UcUserPasswordRequest;
 
 @RequestMapping("/retakePassword")
 @Controller
@@ -123,7 +124,9 @@ public class RetakePasswordController {
 		ResponseHeader responseHeader = null;
 		// 获取账户信息
 		ILoginSV loginService = DubboConsumerFactory.getService("iLoginSV");
-		UserLoginResponse userLoginResponse = loginService.queryAccountByUserName(username);
+		LoginRequest request = new LoginRequest();
+		request.setUserLoginName(username);
+		LoginResponse userLoginResponse = loginService.login(request);
 		if (userLoginResponse != null && Constants.ResultCode.SUCCESS_CODE.equals(userLoginResponse.getResponseHeader().getResultCode())) {
 			SSOClientUser ssoClientUser = new SSOClientUser();
 			BeanUtils.copyProperties(ssoClientUser, userLoginResponse);
@@ -475,8 +478,8 @@ public class RetakePasswordController {
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "认证身份失效", "/retakePassword/userinfo");
 			responseHeader = new ResponseHeader(false, VerifyConstants.ResultCodeConstants.USER_INFO_NULL, "认证身份失效");
 		} else {
-			IAccountSecurityManageSV accountManageSV = DubboConsumerFactory.getService("iAccountSecurityManageSV");
-			AccountPasswordRequest passwordRequest = new AccountPasswordRequest();
+		    IUcUserSecurityManageSV accountManageSV = DubboConsumerFactory.getService("iUcUserSecurityManageSV");
+		    UcUserPasswordRequest passwordRequest = new UcUserPasswordRequest();
 			passwordRequest.setAccountId(userClient.getAccountId());
 			String encodePassword = Md5Encoder.encodePassword(password);
 			passwordRequest.setAccountPassword(encodePassword);
@@ -530,9 +533,11 @@ public class RetakePasswordController {
 	        }
 	        CacheUtil.deletCache(uuid, Constants.RetakePassword.CACHE_NAMESPACE);
 	        ILoginSV iloginSV = DubboConsumerFactory.getService("iLoginSV");
-	        UserLoginResponse account = iloginSV.queryAccountByUserName(userClient.getPhone());
-	        String phone = account.getPhone();
-	        String accountPassword = account.getAccountPassword();
+	        LoginRequest loginRequest = new LoginRequest();
+	        loginRequest.setUserMp(userClient.getPhone());
+	        LoginResponse user = iloginSV.login(loginRequest);
+	        String phone = user.getUserMp();
+	        String accountPassword = user.getUserLoginPwd();
 	        LoginUser loginUser = new LoginUser(phone, accountPassword);
 	        String newuuid = UUIDUtil.genId32();
 	        CacheUtil.setValue(newuuid, Constants.UUID.OVERTIME, loginUser, Constants.LoginConstant.CACHE_NAMESPACE);
