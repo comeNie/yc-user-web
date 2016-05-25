@@ -25,7 +25,7 @@ public class AccountInfoData implements Serializable{
     /**
      * 账号ID
      */
-    private Long accountId;
+    private String accountId;
 
     /**
      * 租户ID
@@ -64,11 +64,13 @@ public class AccountInfoData implements Serializable{
         this.industryCode = industryCode;
     }
 
-    public Long getAccountId() {
+   
+
+    public String getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(Long accountId) {
+    public void setAccountId(String accountId) {
         this.accountId = accountId;
     }
 
