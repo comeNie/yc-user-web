@@ -45,8 +45,8 @@ define('app/register/register', function (require, exports, module) {
     		$("#inputPassword").on("focus",this._passShow);
     		$("#inputPassword").on("blur",this._validServicePaw);
     		$("#confirmationPassword").on("focus",this._passwordConfirmationShow);
-    		$("#confirmationPassword").on("blur",this._passwordConfirmation);
     		$("#confirmationPassword").on("blur",this._checkConfirmPassword);
+    		$("#confirmationPassword").on("blur",this._passwordConfirmation);
     		$("#pictureVitenfy").on("focus",this._hidePicError);
     		$("#pictureVitenfy").on("blur",this._validServicePic);
     		$("#phoneVerifyCode").on("blur",this._validPhoneVerifyCode);
@@ -56,13 +56,16 @@ define('app/register/register', function (require, exports, module) {
     		$("#next").on("click",this._next);
     		$("#userName").on("blur",this._userNameCheck);
     		$("#userName").on("focus",this._hideUserNameError);
+    		$("#PHONE_IDENTIFY").on("click",this._validServicePho);
+    		$("#PHONE_IDENTIFY").on("click",this._getPhoneVitentify);
     		$("#BTN_REGISTER").on("click",this._userNameCheck);
     		$("#BTN_REGISTER").on("click",this._passwordConfirmation);
     		$("#BTN_REGISTER").on("click",this._validServicePaw);
     		$("#BTN_REGISTER").on("click",this._validServiceSSM);
+    		$("#BTN_REGISTER").on("click",this._checkConfirmPassword);
+    		$("#BTN_REGISTER").on("click",this._validServicePho);
     		$("#BTN_REGISTER").on("click",this._submit);
-    		$("#PHONE_IDENTIFY").on("click",this._validServicePho);
-    		$("#PHONE_IDENTIFY").on("click",this._getPhoneVitentify);
+    		
     	},
     	_hideErroText: function(){
     		var _this = this;
@@ -210,6 +213,7 @@ define('app/register/register', function (require, exports, module) {
     		if(password==""){
     			$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-c.png');
     			$('#showPawMsg').text("请输入密码");
+    			$("#showPawMsg").show();
     			$("#errorPawMsg").show();
 				return false;
     		}else if(/[\x01-\xFF]*/.test(password)){
@@ -413,11 +417,18 @@ define('app/register/register', function (require, exports, module) {
     	},
     	
     	_checkConfirmPassword:function(){
+    		
     		var confirmationPassword = $("#confirmationPassword").val();
+    		var inputPassword = $("#inputPassword").val();
+    		
     		if(confirmationPassword!=""){
+    			$("#confirmationPasswordImage").attr('src',_base+'/theme/slp/images/icon-b.png');
     			$("#errorConfirmFlag").val("1");
-    		}else{
+    			$("#errorPasswordMsg").hide();
+    		}else if(confirmationPassword==""){
+    			$("#confirmationPasswordImage").attr('src',_base+'/theme/slp/images/icon-a.png');
     			$("#showPasswordMsg").text("请输入确认密码");
+    			$("#errorPasswordMsg").show();
     			$("#errorConfirmFlag").val("0");
     		}
     	},
@@ -425,9 +436,22 @@ define('app/register/register', function (require, exports, module) {
     	//密码校验
     	_passwordConfirmation:function(){
     		var inputPassword = $("#inputPassword").val();
+    		if(inputPassword==""){
+    			$("#errorPawMsg").show();
+    			$("#showPawMsg").text("请输入密码");
+    			return false;
+    		}
     		var confirmationPassword = $("#confirmationPassword").val();
+    		if(inputPassword!=""&&confirmationPassword==""){
+    			$("#errorPasswordMsg").show();
+    			$("#showPasswordMsg").text("请输入确认密码");
+    			return false;
+    		}else{
+    			$("#errorPasswordMsg").hide();
+    		}
     		if(inputPassword!=confirmationPassword){
     			$("#confirmationPasswordImage").attr('src',_base+'/theme/slp/images/icon-a.png');
+    			$("#showPasswordMsg").text("两次输入的密码不一致");
     			$("#errorPasswordMsg").show();
     			$("#showPasswordMsg").show();
     			$("#errorPassEqualsFlag").val("0");
