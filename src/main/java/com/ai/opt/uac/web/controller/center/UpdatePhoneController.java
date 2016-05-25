@@ -31,8 +31,6 @@ import com.ai.opt.sdk.util.UUIDUtil;
 import com.ai.opt.sdk.web.model.ResponseData;
 import com.ai.opt.sso.client.filter.SSOClientConstants;
 import com.ai.opt.sso.client.filter.SSOClientUser;
-import com.ai.opt.uac.api.security.interfaces.IAccountSecurityManageSV;
-import com.ai.opt.uac.api.security.param.AccountPhoneRequest;
 import com.ai.opt.uac.web.constants.Constants;
 import com.ai.opt.uac.web.constants.Constants.ResultCode;
 import com.ai.opt.uac.web.constants.Constants.UpdatePhone;
@@ -50,6 +48,8 @@ import com.ai.paas.ipaas.ccs.IConfigClient;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.runner.center.mmp.api.manager.param.SMData;
 import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
+import com.ai.slp.user.api.ucUserSecurity.interfaces.IUcUserSecurityManageSV;
+import com.ai.slp.user.api.ucUserSecurity.param.UcUserPhoneRequest;
 
 @RequestMapping("/center/phone")
 @Controller
@@ -535,8 +535,8 @@ public class UpdatePhoneController {
 				responseData = checkVerifyCode;
 			} else {
 				// 更新手机
-				IAccountSecurityManageSV accountSecurityManageSV = DubboConsumerFactory.getService("iAccountSecurityManageSV");
-				AccountPhoneRequest accountPhoneRequest = new AccountPhoneRequest();
+			    IUcUserSecurityManageSV accountSecurityManageSV = DubboConsumerFactory.getService("iUcUserSecurityManageSV");
+			    UcUserPhoneRequest accountPhoneRequest = new UcUserPhoneRequest();
 				accountPhoneRequest.setAccountId(userClient.getAccountId());
 				accountPhoneRequest.setPhone(phone);
 				accountPhoneRequest.setUpdateAccountId(userClient.getAccountId());

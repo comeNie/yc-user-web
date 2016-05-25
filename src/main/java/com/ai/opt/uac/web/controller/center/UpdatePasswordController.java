@@ -32,8 +32,6 @@ import com.ai.opt.sdk.web.model.ResponseData;
 import com.ai.opt.sso.client.filter.SLPClientUser;
 import com.ai.opt.sso.client.filter.SSOClientConstants;
 import com.ai.opt.sso.client.filter.SSOClientUser;
-import com.ai.opt.uac.api.security.interfaces.IAccountSecurityManageSV;
-import com.ai.opt.uac.api.security.param.AccountPasswordRequest;
 import com.ai.opt.uac.web.constants.Constants;
 import com.ai.opt.uac.web.constants.Constants.ResultCode;
 import com.ai.opt.uac.web.constants.Constants.UpdatePassword;
@@ -51,6 +49,8 @@ import com.ai.paas.ipaas.ccs.IConfigClient;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.runner.center.mmp.api.manager.param.SMData;
 import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
+import com.ai.slp.user.api.ucUserSecurity.interfaces.IUcUserSecurityManageSV;
+import com.ai.slp.user.api.ucUserSecurity.param.UcUserPasswordRequest;
 
 @RequestMapping("/center/password")
 @Controller
@@ -387,8 +387,8 @@ public class UpdatePasswordController {
 				return responseData;
 			}*/
 			// 更新密码
-			IAccountSecurityManageSV accountSecurityManageSV = DubboConsumerFactory.getService("iAccountSecurityManageSV");
-			AccountPasswordRequest accountPasswordRequest = new AccountPasswordRequest();
+			IUcUserSecurityManageSV accountSecurityManageSV = DubboConsumerFactory.getService("iUcUserSecurityManageSV");
+			UcUserPasswordRequest accountPasswordRequest = new UcUserPasswordRequest();
 			accountPasswordRequest.setAccountId(userClient.getAccountId());
 			accountPasswordRequest.setAccountPassword(encodePassword);
 			accountPasswordRequest.setUpdateAccountId(userClient.getAccountId());

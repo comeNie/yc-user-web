@@ -21,18 +21,18 @@ import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.web.model.ResponseData;
 import com.ai.opt.sso.client.filter.SSOClientConstants;
 import com.ai.opt.sso.client.filter.SSOClientUser;
-import com.ai.opt.uac.api.account.interfaces.IAccountManageSV;
-import com.ai.opt.uac.api.account.interfaces.IIndustryManageSV;
-import com.ai.opt.uac.api.account.interfaces.ITenantManageSV;
-import com.ai.opt.uac.api.account.param.AccountBaseModifyRequest;
-import com.ai.opt.uac.api.account.param.AccountQueryRequest;
-import com.ai.opt.uac.api.account.param.AccountQueryResponse;
-import com.ai.opt.uac.api.account.param.IndustryQueryResponse;
-import com.ai.opt.uac.api.account.param.TenantInfoRequest;
-import com.ai.opt.uac.api.account.param.TenantInsertResponse;
-import com.ai.opt.uac.api.account.param.TenantQueryResponse;
 import com.ai.opt.uac.web.constants.Constants.ResultCode;
 import com.ai.opt.uac.web.model.baseinfo.AccountInfoData;
+import com.ai.slp.user.api.ucuser.intefaces.IIndustryManageSV;
+import com.ai.slp.user.api.ucuser.intefaces.ITenantManageSV;
+import com.ai.slp.user.api.ucuser.intefaces.IUcUserSV;
+import com.ai.slp.user.api.ucuser.param.AccountBaseModifyRequest;
+import com.ai.slp.user.api.ucuser.param.IndustryQueryResponse;
+import com.ai.slp.user.api.ucuser.param.SearchUserRequest;
+import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
+import com.ai.slp.user.api.ucuser.param.TenantInfoRequest;
+import com.ai.slp.user.api.ucuser.param.TenantInsertResponse;
+import com.ai.slp.user.api.ucuser.param.TenantQueryResponse;
 
 @RequestMapping("/center/baseInfo")
 @Controller
@@ -59,21 +59,21 @@ public class BaseInfoController {
     public ModelAndView checkUserInfo(HttpServletRequest request) {
         // 获取账户信息
         SSOClientUser userClient = (SSOClientUser) request.getSession().getAttribute(SSOClientConstants.USER_SESSION_KEY);
-        IAccountManageSV iAccountManageSV = DubboConsumerFactory.getService("iAccountManageSV");
+        IUcUserSV iAccountManageSV = DubboConsumerFactory.getService("iUcUserSV");
         ITenantManageSV iTenantManageSV = DubboConsumerFactory.getService("iTenantManageSV");
         IIndustryManageSV iIndustryManageSV=DubboConsumerFactory.getService("iIndustryManageSV");
-        AccountQueryRequest accountRequest = new AccountQueryRequest();
-        accountRequest.setAccountId(userClient.getAccountId());
-        AccountQueryResponse acc = iAccountManageSV.queryBaseInfo(accountRequest);
+        SearchUserRequest accountRequest = new SearchUserRequest();
+        accountRequest.setUserId(String.valueOf(userClient.getAccountId()));
+        SearchUserResponse acc = iAccountManageSV.queryBaseInfo(accountRequest);
         BaseInfo req = new BaseInfo();
         req.setTenantId(acc.getTenantId());
         TenantQueryResponse ten = iTenantManageSV.queryTenantInfo(req);
         Map<String,AccountInfoData> model = new HashMap<String,AccountInfoData>();
         AccountInfoData accountInfo = new AccountInfoData();
-        accountInfo.setAccountId(acc.getAccountId());
-        accountInfo.setEmail(acc.getEmail());
+        accountInfo.setAccountId(acc.getUserId());
+        accountInfo.setEmail(acc.getUserEmail());
         accountInfo.setNickName(acc.getNickName());
-        accountInfo.setPhone(acc.getPhone());
+        accountInfo.setPhone(acc.getUserMp());
         accountInfo.setTenantName(ten.getTenantName());
         //翻译企业类型
         if(!StringUtil.isBlank(ten.getIndustryCode())){
@@ -106,13 +106,13 @@ public class BaseInfoController {
             SSOClientUser userClient = (SSOClientUser) request.getSession().getAttribute(SSOClientConstants.USER_SESSION_KEY);
             ResponseHeader header = new ResponseHeader();
             header.setIsSuccess(true);
-            IAccountManageSV iAccountManageSV = DubboConsumerFactory.getService("iAccountManageSV");
+            IUcUserSV iAccountManageSV = DubboConsumerFactory.getService("iUcUserSV");
             ITenantManageSV iTenantManageSV = DubboConsumerFactory.getService("iTenantManageSV");
-            AccountBaseModifyRequest accountBase =new AccountBaseModifyRequest();
+            SearchUserRequest accountBase =new SearchUserRequest();
             if(!StringUtil.isBlank(data.getNickName())){
-                accountBase.setNickName(data.getNickName());
-                accountBase.setUpdateAccountId(data.getAccountId());
-                accountBase.setAccountId(data.getAccountId());
+               /* accountBase.setNickName(data.getNickName());
+                accountBase.setUpdateAccountId(Long.parseLong(data.getAccountId()));*/
+                accountBase.setUserId(data.getAccountId());
                 BaseResponse base =  iAccountManageSV.updateBaseInfo(accountBase);
                 if(base.getResponseHeader().getResultCode().equals(ResultCode.SUCCESS_CODE)){
                   //修改客户端存储的昵称

@@ -30,8 +30,6 @@ import com.ai.opt.sdk.util.UUIDUtil;
 import com.ai.opt.sdk.web.model.ResponseData;
 import com.ai.opt.sso.client.filter.SSOClientConstants;
 import com.ai.opt.sso.client.filter.SSOClientUser;
-import com.ai.opt.uac.api.security.interfaces.IAccountSecurityManageSV;
-import com.ai.opt.uac.api.security.param.AccountEmailRequest;
 import com.ai.opt.uac.web.constants.Constants;
 import com.ai.opt.uac.web.constants.Constants.ResultCode;
 import com.ai.opt.uac.web.constants.Constants.UpdateEmail;
@@ -49,6 +47,8 @@ import com.ai.paas.ipaas.ccs.IConfigClient;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.runner.center.mmp.api.manager.param.SMData;
 import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
+import com.ai.slp.user.api.ucUserSecurity.interfaces.IUcUserSecurityManageSV;
+import com.ai.slp.user.api.ucUserSecurity.param.UcUserEmailRequest;
 
 @RequestMapping("/center/email")
 @Controller
@@ -537,8 +537,8 @@ public class UpdateEmialController {
 			return checkVerifyCode;
 		}
 		// 更新邮箱
-		IAccountSecurityManageSV accountSecurityManageSV = DubboConsumerFactory.getService("iAccountSecurityManageSV");
-		AccountEmailRequest accountEmailRequest = new AccountEmailRequest();
+		IUcUserSecurityManageSV accountSecurityManageSV = DubboConsumerFactory.getService("iUcUserSecurityManageSV");
+		UcUserEmailRequest accountEmailRequest = new UcUserEmailRequest();
 		accountEmailRequest.setAccountId(userClient.getAccountId());
 		accountEmailRequest.setEmail(email);
 		accountEmailRequest.setUpdateAccountId(userClient.getAccountId());
