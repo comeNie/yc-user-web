@@ -203,6 +203,13 @@ define('app/register/register', function (require, exports, module) {
     		$("#errorPawMsg").attr("style","display:none");
     	},
     	_passwordConfirmationShow:function(){
+    		var password = $('#inputPassword').val();
+    		if(password==""){
+    			$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-c.png');
+    			$('#showPawMsg').text("请输入密码");
+    			$("#showPawMsg").show();
+    			$("#errorPawMsg").show();
+    		}
     		$("#errorPasswordMsg").attr("style","display:none");
     	},
     	//校验密码
@@ -444,10 +451,12 @@ define('app/register/register', function (require, exports, module) {
     		var confirmationPassword = $("#confirmationPassword").val();
     		if(inputPassword!=""&&confirmationPassword==""){
     			$("#errorPasswordMsg").show();
+    			$("#showPasswordMsg").show();
     			$("#showPasswordMsg").text("请输入确认密码");
     			return false;
     		}else{
     			$("#errorPasswordMsg").hide();
+    			$("#showPasswordMsg").hide();
     		}
     		if(inputPassword!=confirmationPassword){
     			$("#confirmationPasswordImage").attr('src',_base+'/theme/slp/images/icon-a.png');
