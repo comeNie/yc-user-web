@@ -147,6 +147,7 @@ define('app/register/register', function (require, exports, module) {
     		$("#errorPhoneMsg").attr("style","display:none");
     		var phone = $('#phone').val();
     		if (phone==""){
+    			$("#phoneText").show();
     			$('#showPhoneMsg').text("请输入手机号码");
     			$("#errorPhoneMsg").attr("style","display:");
     			$('#errorPhoneFlag').val("0");
@@ -187,8 +188,10 @@ define('app/register/register', function (require, exports, module) {
     			        
     			    }); 
 			}else{
-				$('#showPhoneMsg').text("请输入正确有效的手机号码");
 				$("#errorPhoneMsg").attr("style","display:");
+				$("#phoneText").show();
+				$('#phoneImage').attr('src',_base+'/theme/slp/images/icon-c.png');
+				$('#showPhoneMsg').text("请输入正确有效的手机号码");
 				$('#errorPhoneFlag').val("0");
 				return false;
 			}
