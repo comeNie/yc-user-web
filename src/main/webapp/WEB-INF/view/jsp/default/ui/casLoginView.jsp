@@ -58,8 +58,8 @@
 									path="userType" name="userType">
 									<option value="10">个人用户</option>
 									<option value="11">企业用户</option>
-									<option value="12">代理商用户</option>
-									<option value="13">分销商用户</option>
+									<option value="12">代理商</option>
+									<option value="13">供货商</option>
 								</form:select></li>
 						</ul>
 						<ul>
