@@ -18,9 +18,6 @@ import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.RandomUtil;
 import com.ai.opt.sdk.web.model.ResponseData;
-import com.ai.opt.uac.api.account.interfaces.IAccountManageSV;
-import com.ai.opt.uac.api.account.param.AccountQueryRequest;
-import com.ai.opt.uac.api.account.param.AccountQueryResponse;
 import com.ai.opt.uac.web.constants.Constants;
 import com.ai.opt.uac.web.constants.VerifyConstants;
 import com.ai.opt.uac.web.constants.VerifyConstants.PictureVerifyConstants;
@@ -32,6 +29,9 @@ import com.ai.runner.center.mmp.api.manager.interfaces.SMSServices;
 import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
 import com.ai.slp.user.api.seq.interfaces.ICreateSeqSV;
 import com.ai.slp.user.api.seq.param.PhoneMsgSeqResponse;
+import com.ai.slp.user.api.ucuser.intefaces.IUcUserSV;
+import com.ai.slp.user.api.ucuser.param.SearchUserRequest;
+import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
 
 public class VerifyUtil {
 	private static final Logger LOGGER = LoggerFactory.getLogger(VerifyUtil.class);
@@ -228,10 +228,10 @@ public class VerifyUtil {
 		ResponseData<String> responseData = null;
 		ResponseHeader header = null;
 		try {
-		    IAccountManageSV iAccountManageSV = DubboConsumerFactory.getService("iAccountManageSV");
-            AccountQueryRequest accountReq = new AccountQueryRequest();
-            accountReq.setPhone(phone);
-            AccountQueryResponse accountQueryResponse = iAccountManageSV.queryByPhone(accountReq);
+		    IUcUserSV iAccountManageSV = DubboConsumerFactory.getService("iUcUserSV");
+            SearchUserRequest accountReq = new SearchUserRequest();
+            accountReq.setUserMp(phone);
+            SearchUserResponse accountQueryResponse = iAccountManageSV.queryByPhone(accountReq);
 			if (accountQueryResponse != null) {
 				String resultCode = accountQueryResponse.getResponseHeader().getResultCode();
 				if (resultCode.equals(ResultCodeConstants.SUCCESS_CODE)) {
@@ -260,10 +260,10 @@ public class VerifyUtil {
 		ResponseData<String> responseData = null;
 		ResponseHeader header = null;
 		try {
-		    IAccountManageSV iAccountManageSV = DubboConsumerFactory.getService("iAccountManageSV");
-            AccountQueryRequest accountReq = new AccountQueryRequest();
-            accountReq.setEmail(email);
-            AccountQueryResponse accountQueryResponse = iAccountManageSV.queryByEmail(accountReq);
+		    IUcUserSV iAccountManageSV = DubboConsumerFactory.getService("iUcUserSV");
+		    SearchUserRequest accountReq = new SearchUserRequest();
+            accountReq.setUserEmail(email);
+            SearchUserResponse accountQueryResponse = iAccountManageSV.queryByEmail(accountReq);
 			if (accountQueryResponse != null) {
 				String resultCode = accountQueryResponse.getResponseHeader().getResultCode();
 				if (resultCode.equals(ResultCodeConstants.SUCCESS_CODE)) {
