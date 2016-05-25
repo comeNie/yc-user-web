@@ -232,7 +232,7 @@ define('app/register/register', function (require, exports, module) {
     						$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-b.png');
     						
     					}else{
-    						$('#showPawMsg').text("长度为6-14个字符 ");
+    						$('#showPawMsg').text("6-20个字符，可用字母、数字及符号的组合 ");
     		    			$("#errorPawMsg").attr("style","display:");
     		    			$('#errorPassFlag').val("0");
     						return false;
