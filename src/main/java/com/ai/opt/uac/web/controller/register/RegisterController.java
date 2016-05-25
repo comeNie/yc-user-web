@@ -32,13 +32,6 @@ import com.ai.opt.sdk.util.StringUtil;
 import com.ai.opt.sdk.util.UUIDUtil;
 import com.ai.opt.sdk.web.model.ResponseData;
 import com.ai.opt.sso.client.filter.SSOClientUtil;
-import com.ai.opt.uac.api.account.interfaces.IAccountManageSV;
-import com.ai.opt.uac.api.account.param.AccountQueryRequest;
-import com.ai.opt.uac.api.account.param.AccountQueryResponse;
-import com.ai.opt.uac.api.security.interfaces.IAccountSecurityManageSV;
-import com.ai.opt.uac.api.security.param.AccountEmailRequest;
-import com.ai.opt.uac.api.sso.interfaces.ILoginSV;
-import com.ai.opt.uac.api.sso.param.UserLoginResponse;
 import com.ai.opt.uac.web.constants.Constants;
 import com.ai.opt.uac.web.constants.Constants.Register;
 import com.ai.opt.uac.web.constants.Constants.ResultCode;
@@ -47,10 +40,8 @@ import com.ai.opt.uac.web.constants.VerifyConstants.EmailVerifyConstants;
 import com.ai.opt.uac.web.constants.VerifyConstants.PhoneVerifyConstants;
 import com.ai.opt.uac.web.constants.VerifyConstants.ResultCodeConstants;
 import com.ai.opt.uac.web.model.email.SendEmailRequest;
-import com.ai.opt.uac.web.model.login.LoginUser;
 import com.ai.opt.uac.web.model.register.GetSMDataReq;
 import com.ai.opt.uac.web.model.register.UpdateEmailReq;
-import com.ai.opt.uac.web.util.CacheUtil;
 import com.ai.opt.uac.web.util.IPUtil;
 import com.ai.opt.uac.web.util.VerifyUtil;
 import com.ai.paas.ipaas.ccs.IConfigClient;
@@ -61,9 +52,14 @@ import com.ai.runner.center.mmp.api.manager.param.SMData;
 import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
 import com.ai.slp.user.api.register.interfaces.IRegisterSV;
 import com.ai.slp.user.api.register.param.RegisterParamsRequest;
+import com.ai.slp.user.api.register.param.RegisterResponse;
 import com.ai.slp.user.api.register.param.UcContactInfoParams;
 import com.ai.slp.user.api.register.param.UcUserParams;
-
+import com.ai.slp.user.api.ucUserSecurity.interfaces.IUcUserSecurityManageSV;
+import com.ai.slp.user.api.ucUserSecurity.param.UcUserEmailRequest;
+import com.ai.slp.user.api.ucuser.intefaces.IUcUserSV;
+import com.ai.slp.user.api.ucuser.param.SearchUserRequest;
+import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
 import net.sf.json.JSONObject;
 
 @RequestMapping("/reg")
@@ -191,15 +187,15 @@ public class RegisterController {
 				return responseData;
 			}
 			IRegisterSV iRegisterSV = DubboConsumerFactory.getService("iRegisterSV");
-			BaseResponse response = iRegisterSV.insertUcUser(userParams);
+			RegisterResponse response = iRegisterSV.insertUcUser(userParams);
 			//PhoneRegisterResponse response = iRegisterSV.registerByPhone(request);
-			String code ="000000";
-			String accountId = "1";
+			String code =response.getResponseCode();
+			String userId = response.getUserId();
 			String message = "1";
 			if (Register.PHONE_NOTONE_ERROR.equals(code)) {
 				header.setResultCode(Register.PHONE_NOTONE_ERROR);
 				header.setResultMessage("手机已经注册");
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "手机已经注册", accountId);
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "手机已经注册", userId);
 				responseData.setResponseHeader(header);
 				return responseData;
 			} else if (ResultCode.SUCCESS_CODE.equals(code)) {
@@ -208,7 +204,7 @@ public class RegisterController {
 				String accountIdKey = UUIDUtil.genId32();
 				String loginName = userParams.getUcUserParam().getUserLoginName();
 				// 将账号id存到缓存中
-				iCacheClient.setex(accountIdKey, Register.CACHE_REGISTER_ACCOUNT_ID_TIME, accountId);
+				iCacheClient.setex(accountIdKey, Register.CACHE_REGISTER_ACCOUNT_ID_TIME, userId);
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "注册成功", loginName);
 				responseData.setResponseHeader(header);
 			} else {
@@ -343,15 +339,15 @@ public class RegisterController {
 	
 	@RequestMapping("/checkEmail")
 	@ResponseBody
-	public ResponseData<String> checkEmial(UpdateEmailReq request, HttpSession session) {
+	public ResponseData<String> checkEmail(SearchUserRequest request, HttpSession session) {
 		ResponseData<String> responseData = null;
 		ResponseHeader header = new ResponseHeader();
 		header.setIsSuccess(true);
 		try {
-		    IAccountManageSV iAccountManageSV = DubboConsumerFactory.getService("iAccountManageSV");
-            AccountQueryRequest accountReq = new AccountQueryRequest();
-            accountReq.setEmail(request.getEmail());
-            AccountQueryResponse accountQueryResponse = iAccountManageSV.queryByEmail(accountReq);
+		    IUcUserSV iAccountManageSV = DubboConsumerFactory.getService("iUcUserSV");
+            SearchUserRequest accountReq = new SearchUserRequest();
+            accountReq.setUserEmail(request.getUserEmail());
+            SearchUserResponse accountQueryResponse = iAccountManageSV.queryByEmail(accountReq);
 			if (accountQueryResponse != null) {
 				if (accountQueryResponse.getResponseHeader().getResultCode().equals(ResultCodeConstants.SUCCESS_CODE)) {
 					header.setResultCode(Register.EMAIL_NOTONE_ERROR);
@@ -430,8 +426,8 @@ public class RegisterController {
 	            }
 			}
 			
-			IAccountSecurityManageSV iAccountSecurityManageSV = DubboConsumerFactory.getService("iAccountSecurityManageSV");
-			AccountEmailRequest req = new AccountEmailRequest();
+			IUcUserSecurityManageSV iUcUserSecurityManageSV = DubboConsumerFactory.getService("iUcUserSecurityManageSV");
+			UcUserEmailRequest req = new UcUserEmailRequest();
 			// 从缓存获取账号ID
 			String id = iCacheClient.get(request.getAccountIdKey());
 
@@ -447,7 +443,7 @@ public class RegisterController {
 				req.setAccountId(accountId);
 				req.setEmail(request.getEmail());
 				req.setUpdateAccountId(accountId);
-				BaseResponse baseInfo = iAccountSecurityManageSV.setEmailData(req);
+				BaseResponse baseInfo = iUcUserSecurityManageSV.setEmailData(req);
 				String resultCode = baseInfo.getResponseHeader().getResultCode();
 				String resultMessage = baseInfo.getResponseHeader().getResultMessage();
 				if (Register.EMAIL_NOTONE_ERROR.equals(resultCode)) {
@@ -482,16 +478,16 @@ public class RegisterController {
 	 */
 	@RequestMapping("/toSendEmail")
 	@ResponseBody
-	public ResponseData<String> sendEmail(UpdateEmailReq emailReq, HttpServletRequest request) {
+	public ResponseData<String> sendEmail(SearchUserRequest userRequest, HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
 			ICacheClient iCacheClient = MCSClientFactory.getCacheClient(Register.CACHE_NAMESPACE);
 			IConfigClient defaultConfigClient = CCSClientFactory.getDefaultConfigClient();
-			IAccountManageSV iAccountManageSV = DubboConsumerFactory.getService("iAccountManageSV");
-			AccountQueryRequest req = new AccountQueryRequest();
-			String email = emailReq.getEmail();
+			IUcUserSV iUserSV = DubboConsumerFactory.getService("iUcUserSV");
+			SearchUserRequest req = new SearchUserRequest();
+			String email = userRequest.getUserEmail();
 			// 获取账号key
-			String accountid = iCacheClient.get(emailReq.getAccountIdKey());
+			String accountid = iCacheClient.get(userRequest.getUserId());
 			if (StringUtil.isBlank(accountid)) {
 				// 跳转到注册页面
 				ResponseHeader header = new ResponseHeader();
@@ -510,11 +506,11 @@ public class RegisterController {
 				}
 				// 获取短信发送次数
 				String emailtimes = "1";
-				String emailskey = Register.SEND_EMAIL_TIMES_KEY + emailReq.getEmail() + request.getSession().getId();
+				String emailskey = Register.SEND_EMAIL_TIMES_KEY + userRequest.getUserEmail() + request.getSession().getId();
 				String times = iCacheClient.get(emailskey);
 				if (StringUtil.isBlank(times)) {
-					req.setAccountId(Long.valueOf(accountid));
-					AccountQueryResponse response = iAccountManageSV.queryBaseInfo(req);
+					req.setUserId(accountid);
+					SearchUserResponse response = iUserSV.queryBaseInfo(req);
 					String nickName = Constants.Register.REGISTER_EMAIL_NICK + response.getNickName();
 					String identifyCode = RandomUtil.randomNum(EmailVerifyConstants.VERIFY_SIZE);
 					String[] tomails = new String[] { email };
@@ -529,7 +525,7 @@ public class RegisterController {
 					emailRequest.setData(data);
 					VerifyUtil.sendEmail(emailRequest);
 					// 存邮箱和验证码到缓存
-					String emailAddIdentify = emailReq.getEmail() + ";" + identifyCode;
+					String emailAddIdentify = userRequest.getUserEmail() + ";" + identifyCode;
 					String key = Register.REGISTER_EMAIL_KEY + request.getSession().getId();
 					iCacheClient.setex(key, Integer.valueOf(overTimeStr), emailAddIdentify);
 					// 存发送次数到缓存
@@ -701,8 +697,8 @@ public class RegisterController {
 	            // 跳转到登录页面
 	            service_url = SSOClientUtil.getCasServerLoginUrlRuntime(request);
 	        } else {
-	            IAccountManageSV iAccountManageSV = DubboConsumerFactory.getService("iAccountManageSV");
-	            AccountQueryRequest accountRequest = new AccountQueryRequest();
+	           /* IAccountManageSV iAccountManageSV = DubboConsumerFactory.getService("iAccountManageSV");
+	            LoginRequest accountRequest = new LoginRequest();
 	            accountRequest.setAccountId(Long.valueOf(accountId));
 	            AccountQueryResponse account = iAccountManageSV.queryBaseInfo(accountRequest);
 	            ILoginSV iloginSV = DubboConsumerFactory.getService("iLoginSV");
@@ -717,7 +713,7 @@ public class RegisterController {
 	            CacheUtil.setValue(newuuid, Constants.UUID.OVERTIME, loginUser, Constants.LoginConstant.CACHE_NAMESPACE);
 	            // localhost:8080/uac/registerLogin?k=UUID&service=URL
 	            // 从配置中心读取跳转地址
-	            service_url = defaultConfigClient.get(Constants.URLConstant.INDEX_URL_KEY);
+	            service_url = defaultConfigClient.get(Constants.URLConstant.INDEX_URL_KEY);*/
 	        }
 	        String url = "/registerLogin?" + Constants.UUID.KEY_NAME + "=" + newuuid + "&service=" + service_url;
 	         responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "成功，跳转", url);
