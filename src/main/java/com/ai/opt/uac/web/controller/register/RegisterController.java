@@ -2,6 +2,7 @@ package com.ai.opt.uac.web.controller.register;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +98,15 @@ public class RegisterController {
 
 	@RequestMapping("/toRegisterSuccess")
 	public ModelAndView registerSuccess(@RequestParam(value = "loginName", required = false) String loginName,@RequestParam(value = "userType", required = false) String userType, HttpServletRequest request) {
-		request.setAttribute("loginName", loginName);
+		
+	    String loginNameStr = request.getParameter("loginName");
+	    try {
+            loginNameStr = new String(loginNameStr.getBytes("iso8859-1"),"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+	    
+	    request.setAttribute("loginName", loginNameStr);
 		 /**
          * 10 个人注册  11 企业用户  12代理商注册 13分销商注册
          */
