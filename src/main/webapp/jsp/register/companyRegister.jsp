@@ -143,17 +143,17 @@ return;
                    <ul>
                         <li class="word"><span>*</span>手机:</li>
                         <li><input type="text" class="int-medium" placeholder="请输入您的有效手机号" id="phone"></li>
-                        <li class="lable" id="errorPhoneMsg" style="display: none;"><img id="phoneImage" src="${_base}/theme/slp/images/icon-d.png"><span class="red" id="phoneText">请输入正确有效的手机号</span></li>
+                        <li class="lable" id="errorPhoneMsg" style="display: none;"><img id="phoneImage" src="${_base}/theme/slp/images/icon-d.png"><span id="phoneText">请输入正确有效的手机号</span></li>
                     </ul>
                     <ul>
                         <li class="word"><span>*</span>短信验证码:</li>
                         <li><input type="text" class="int-small" id="phoneVerifyCode"></li>
                         <li class="re-btn"><input type="button" id="PHONE_IDENTIFY" class="int-btn" value="获取短信验证码"></li>
-                        <li class="lable" id="errorSmsMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-a.png"><span class="red" id="showSmsMsg">验证码错误</span></li>
+                        <li class="lable" id="errorSmsMsg" style="display: none;"><img src="${_base}/theme/slp/images/icon-a.png"><span  id="showSmsMsg">验证码错误</span></li>
                     </ul>
                      <ul>
                         <li class="checx-word"><input type="checkbox" id="agreeChecbox" class="int-chec">我已阅读并同意<A href="#">《企业用户注册协议》</A></li>
-                        <li class="lable" style="display: none" id="agreeProtocol"><img src="${_base}/theme/slp/images/icon-a.png"><span  class="red">您需要同意注册协议，才能进行注册</span></li>
+                        <li class="lable" style="display: none" id="agreeProtocol"><img src="${_base}/theme/slp/images/icon-a.png"><span >您需要同意注册协议，才能进行注册</span></li>
                     </ul>
                     
                     <ul>
