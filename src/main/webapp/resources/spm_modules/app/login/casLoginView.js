@@ -33,6 +33,11 @@ function encryptCaptcha(event) {
 }// end of encryPwd
 
 function dologin() {
+	var count=0;
+	if(count>=3){
+		$("div.login-note").html("是不是忘记密码了,请点击找回密码");
+		$("div.login-note").css("padding", "3px 10px");
+	}
 	if (validate()) {
 		var inputPassword = document.getElementById("password").value;
 		var onceCode = "AIOPT_SALT_KEY";
@@ -47,6 +52,7 @@ function dologin() {
 		return true;
 	} else {
 		return false;
+		count++;
 	}
 
 }// end of dologin
@@ -57,7 +63,7 @@ function validate() {
 	var captchaCode = document.getElementById("captchaCode").value.trim();
 	try {
 		if (isNull(username)) {
-			$("div.login-note").html("请输入用户名/手机号码/邮箱");
+			$("div.login-note").html("请输入用户名");
 			$("div.login-note").css("padding", "3px 10px");
 			return false;
 		} else {
@@ -88,6 +94,9 @@ function jumpTo() {
 	window.location.href = _base+"/reg/toRegister?userType=" + userType;
 }
 
+function jumpToFind(){
+	window.location.href = _base+"/center/password/confirminfo";
+}
 // 刷新验证码
 function reloadImage(url) {
 	document.getElementById('pictureVitenfy').src = url+"?id=" + Math.random();

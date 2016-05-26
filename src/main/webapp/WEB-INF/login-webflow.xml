@@ -83,12 +83,12 @@
 	
 	<view-state id="viewLoginForm" view="casLoginView" model="credential">
         <binder>
+            <binding property="userType" />
+            <binding property="rememberMe" />
             <binding property="username" />
             <binding property="password" />
             <binding property="tenantId" />
-            <binding property="userType" />
             <binding property="captchaCode" />
-            <binding property="rememberMe" />
             <binding property="sessionId" />
             
         </binder>
@@ -125,6 +125,7 @@
     <transition on="InvalidLoginLocationException" to="casBadWorkstationView"/>
     <transition on="InvalidLoginTimeException" to="casBadHoursView"/>
     <transition on="FailedLoginException" to="generateLoginTicket"/>
+    <transition on="DefaultLoginException" to="generateLoginTicket"/>
     <transition on="AccountNotFoundException" to="generateLoginTicket"/>
     <transition on="UNKNOWN" to="generateLoginTicket"/>
     <transition on="UsernameIsNullException" to="generateLoginTicket"/>

@@ -134,7 +134,7 @@
     </bean>
   	<bean id="primaryPrincipalResolver"
           class="org.jasig.cas.authentication.principal.PersonDirectoryPrincipalResolver" >
-        <property name="attributeRepository" ref="attributeRepository" />
+        <property name="attributeRepository" ref="attributeRepository"/>
     </bean>
     <!--
     Bean that defines the attributes that a service may return.  This example uses the Stub/Mock version.  A real implementation
@@ -179,18 +179,11 @@
             <property name="evaluationOrder" value="0" />
             <property name="allowedAttributes">
             	<list>
-            		<value>username</value>
-            		<value>accountId</value>
             		<value>tenantId</value>
-            		<value>accountName</value>
-            		<value>nickName</value>
-            		<value>phone</value>
-            		<value>email</value>
-            		<value>accountType</value>
-            		<value>accountLevel</value>
-            		<value>weixin</value>
-            		<value>weibo</value>
-            		<value>qq</value>
+            		<value>userId</value>
+            		<value>userType</value>
+            		<value>username</value>
+            		<value>userNickname</value>
             	</list>
             </property>
         </bean>

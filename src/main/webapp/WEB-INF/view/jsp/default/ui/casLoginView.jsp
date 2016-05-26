@@ -88,7 +88,7 @@
 									<input id="rememberMe" name="rememberMe" type="checkbox" value="true">
 								</p>
 								<p>记住密码</p></li>
-							<li class="right"><a href="#">忘记密码</a>|<a href="#"
+							<li class="right"><a href="#" onclick="jumpToFind();">忘记密码</a>|<a href="#"
 								onclick="javascript:jumpTo()">注册新账户</a></li>
 						</ul>
 						<li><input type="button" class="login-bigbtn" value="立即登录"

@@ -41,6 +41,7 @@ public class CustomAuthenticationExceptionHandler{
         DEFAULT_ERROR_LIST.add(com.ai.opt.sso.exception.PasswordIsNullException.class);
         DEFAULT_ERROR_LIST.add(com.ai.opt.sso.exception.TenantIdIsNullException.class);
         DEFAULT_ERROR_LIST.add(com.ai.opt.sso.exception.CaptchaIsNullException.class);
+        DEFAULT_ERROR_LIST.add(com.ai.opt.sso.exception.DefaultLoginException.class);
         
         DEFAULT_ERROR_LIST.add(com.ai.opt.sso.exception.AccountNameNotExistException.class);
         DEFAULT_ERROR_LIST.add(com.ai.opt.sso.exception.EmailNotExistException.class);

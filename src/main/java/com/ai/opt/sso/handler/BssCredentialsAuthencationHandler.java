@@ -2,6 +2,7 @@ package com.ai.opt.sso.handler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.security.GeneralSecurityException;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -25,6 +26,7 @@ import org.springframework.util.StringUtils;
 
 import com.ai.opt.base.exception.RPCSystemException;
 import com.ai.opt.sdk.components.mcs.MCSClientFactory;
+import com.ai.opt.sdk.util.DateUtil;
 import com.ai.opt.sdk.util.Md5Encoder;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.opt.sso.constants.SSOConstants;
@@ -32,10 +34,12 @@ import com.ai.opt.sso.constants.UserLoginErrorCode;
 import com.ai.opt.sso.exception.CaptchaErrorException;
 import com.ai.opt.sso.exception.CaptchaIsNullException;
 import com.ai.opt.sso.exception.CaptchaOutTimeException;
+import com.ai.opt.sso.exception.DefaultLoginException;
 import com.ai.opt.sso.exception.EmailNotExistException;
 import com.ai.opt.sso.exception.PasswordErrorException;
 import com.ai.opt.sso.exception.PasswordIsNullException;
 import com.ai.opt.sso.exception.PhoneNotExistException;
+import com.ai.opt.sso.exception.SystemBusyException;
 import com.ai.opt.sso.exception.UsernameIsNullException;
 import com.ai.opt.sso.exception.UsernameNotExistException;
 import com.ai.opt.sso.principal.BssCredentials;
@@ -48,6 +52,11 @@ import com.ai.slp.user.api.login.param.LoginResponse;
 
 public final class BssCredentialsAuthencationHandler
         extends AbstractPreAndPostProcessingAuthenticationHandler {
+
+    //登录密码实现计数
+    int count = 0;
+    //时间限定
+    Date expireDate = new Date();
 
     @Resource
     private LoadAccountService loadAccountService;
@@ -74,6 +83,7 @@ public final class BssCredentialsAuthencationHandler
     @Override
     protected HandlerResult doAuthentication(final Credential credentials)
             throws GeneralSecurityException, PreventedException {
+
         // credentials.
         logger.debug("开始认证用户凭证credentials");
         if (credentials == null) {
@@ -82,7 +92,7 @@ public final class BssCredentialsAuthencationHandler
         }
 
         BssCredentials bssCredentials = (BssCredentials) credentials;
-        final String username = bssCredentials.getUsername();
+        final String username = bssCredentials.getUsername().toLowerCase();
         final String pwdFromPage = bssCredentials.getPassword();
         final String captchaCode = bssCredentials.getCaptchaCode().toLowerCase();
         final String sessionId = bssCredentials.getSessionId();
@@ -94,12 +104,12 @@ public final class BssCredentialsAuthencationHandler
         }
         // 密码非空校验
         if (!StringUtils.hasText(pwdFromPage)) {
-            logger.error("密码为空！");
+            logger.error("请输入密码");
             throw new PasswordIsNullException();
         }
         // 验证码非空校验
         if (!StringUtils.hasText(captchaCode)) {
-            logger.error("验证码为空！");
+            logger.error("请输入验证码");
             throw new CaptchaIsNullException();
         }
 
@@ -145,11 +155,22 @@ public final class BssCredentialsAuthencationHandler
             logger.info("【dbPwd】=" + dbPwd);
             String encryDbPwd = Md5Encoder.encodePassword(SSOConstants.AIOPT_SALT_KEY + dbPwd);
             // logger.info("【encryDbPwd】=" + encryDbPwd);
-            
+
+            if (count >= 2 && expireDate.getTime() > DateUtil.getCurrentTimeMillis()) {
+                throw new DefaultLoginException();
+            }
             logger.info("【pwdFromPage】=" + pwdFromPage);
             if (!encryDbPwd.equals(pwdFromPage)) {
                 // 密码不对
                 logger.error("密码错误！");
+                if (count == 0) {
+                    expireDate.setTime(DateUtil.getCurrentTimeMillis() + 3 * 60 * 1000);
+                    count++;
+                } else {
+                    if (DateUtil.getCurrentTimeMillis() >= expireDate.getTime())
+                        expireDate.setTime(DateUtil.getCurrentTimeMillis() + 3 * 60 * 1000);
+                    count++;
+                }
                 // throw new BusinessException(UserLoginErrorCode.USER_ERR_006, "密码错误");
                 throw new PasswordErrorException();
             }

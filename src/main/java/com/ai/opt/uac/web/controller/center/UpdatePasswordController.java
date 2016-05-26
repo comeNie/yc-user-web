@@ -29,7 +29,6 @@ import com.ai.opt.sdk.util.RandomUtil;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.opt.sdk.util.UUIDUtil;
 import com.ai.opt.sdk.web.model.ResponseData;
-import com.ai.opt.sso.client.filter.SLPClientUser;
 import com.ai.opt.sso.client.filter.SSOClientConstants;
 import com.ai.opt.sso.client.filter.SSOClientUser;
 import com.ai.opt.uac.web.constants.Constants;
@@ -40,7 +39,6 @@ import com.ai.opt.uac.web.constants.VerifyConstants.EmailVerifyConstants;
 import com.ai.opt.uac.web.constants.VerifyConstants.PhoneVerifyConstants;
 import com.ai.opt.uac.web.constants.VerifyConstants.ResultCodeConstants;
 import com.ai.opt.uac.web.model.email.SendEmailRequest;
-import com.ai.opt.uac.web.model.retakepassword.AccountData;
 import com.ai.opt.uac.web.model.retakepassword.SafetyConfirmData;
 import com.ai.opt.uac.web.util.CacheUtil;
 import com.ai.opt.uac.web.util.IPUtil;
@@ -60,17 +58,8 @@ public class UpdatePasswordController {
 
 	@RequestMapping("/confirminfo")
 	public ModelAndView UpdatePasswordStart(HttpServletRequest request) {
-		SLPClientUser userClient = (SLPClientUser) request.getSession().getAttribute(SSOClientConstants.USER_SESSION_KEY);
-		if (userClient != null) {
-			Map<String, AccountData> model = new HashMap<String, AccountData>();
-			String phone = userClient.getUserMp();
-			String email = userClient.getUserEmail();
-			AccountData confirmInfo = new AccountData(phone, email);
-			model.put("confirmInfo", confirmInfo);
-			return new ModelAndView("jsp/register/register", model);
-		} else {
-			return new ModelAndView("jsp/register/register");
-		}
+	    
+	    return new ModelAndView("jsp/center/update-password-start");
 	}
 
 	@RequestMapping("/getImageVerifyCode")
