@@ -41,19 +41,25 @@ define('app/register/register', function (require, exports, module) {
     		$("#randomImg").on("click",this._refrashVitentify);
     		$("#refresh").on("click",this._refrashVitentify);
     		$("#phone").on("focus",this._hidePhoneError);
+    		$("#phone").on("keyup",this._validServicePho);
     		$("#phone").on("blur",this._validServicePho);
     		$("#inputPassword").on("focus",this._passShow);
+    		$("#inputPassword").on("keyup",this._validServicePaw);
     		$("#inputPassword").on("blur",this._validServicePaw);
     		$("#confirmationPassword").on("focus",this._passwordConfirmationShow);
+    		$("#confirmationPassword").on("keyup",this._checkConfirmPassword);
+    		$("#confirmationPassword").on("keyup",this._passwordConfirmation);
     		$("#confirmationPassword").on("blur",this._checkConfirmPassword);
     		$("#confirmationPassword").on("blur",this._passwordConfirmation);
     		$("#pictureVitenfy").on("focus",this._hidePicError);
     		$("#pictureVitenfy").on("blur",this._validServicePic);
+    		$("#phoneVerifyCode").on("keyup",this._validPhoneVerifyCode);
     		$("#phoneVerifyCode").on("blur",this._validPhoneVerifyCode);
     		$("#next").on("click",this._validServicePho);
     		$("#next").on("click",this._validServiceSSM);
     		$("#next").on("click",this._validPhoneVerifyCode);
     		$("#next").on("click",this._next);
+    		$("#userName").on("keyup",this._userNameCheck);
     		$("#userName").on("blur",this._userNameCheck);
     		$("#userName").on("focus",this._hideUserNameError);
     		$("#PHONE_IDENTIFY").on("click",this._validServicePho);
@@ -143,7 +149,10 @@ define('app/register/register', function (require, exports, module) {
     		$("#errorPicMsg").attr("style","display:none");
     	},
     	_hideUserNameError:function(){
-    		$("#errorUserNameMsg").attr("style","display:none");
+    		$("#errorUserNameMsg").show();
+    		$("#userNameImage").show();
+    		$("#userNameErrorMsgShow").text("4-20个字符，可用汉字、字母、数字、“-”及“_”的组合");
+    		$('#userNameImage').attr('src',_base+'/theme/slp/images/icon-d.png');
     	},
     	//校验手机
     	_validServicePho: function(){
@@ -154,7 +163,7 @@ define('app/register/register', function (require, exports, module) {
     			$('#showPhoneMsg').text("请输入手机号码");
     			$("#errorPhoneMsg").attr("style","display:");
     			$('#errorPhoneFlag').val("0");
-    			$('#phoneImage').attr('src',_base+'/theme/slp/images/icon-c.png');
+    			$('#phoneImage').attr('src',_base+'/theme/slp/images/icon-a.png');
 				return false;
 			}else if( /^0?1[3|4|5|8][0-9]\d{8}$/.test(phone)){
 				var	param={
@@ -171,7 +180,7 @@ define('app/register/register', function (require, exports, module) {
     			         if(data.responseHeader.resultCode=="10003"){
     			        	 	$("#phoneText").show();
     			        		$('#showPhoneMsg').text("手机号码已注册");
-    			        		$('#phoneImage').attr('src',_base+'/theme/slp/images/icon-c.png');
+    			        		$('#phoneImage').attr('src',_base+'/theme/slp/images/icon-a.png');
     							$("#errorPhoneMsg").attr("style","display:");
     							$('#errorPhoneFlag').val("0");
     							return false;
@@ -193,19 +202,23 @@ define('app/register/register', function (require, exports, module) {
 			}else{
 				$("#errorPhoneMsg").attr("style","display:");
 				$("#phoneText").show();
-				$('#phoneImage').attr('src',_base+'/theme/slp/images/icon-c.png');
+				$('#phoneImage').attr('src',_base+'/theme/slp/images/icon-a.png');
 				$('#showPhoneMsg').text("请输入正确有效的手机号码");
 				$('#errorPhoneFlag').val("0");
 				return false;
 			}
     	},
     	_passShow: function(){
-    		$("#errorPawMsg").attr("style","display:none");
+    		$("#errorPawMsg").show();
+    		$("#passwordImage").show();
+    		$("#showPawMsg").show();
+    		$("#showPawMsg").text("6-20个字符，可用字母、数字及符号的组合");
+    		$("#passwordImage").attr("src",_base+"/theme/slp/images/icon-d.png")
     	},
     	_passwordConfirmationShow:function(){
     		var password = $('#inputPassword').val();
     		if(password==""){
-    			$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-c.png');
+    			$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-a.png');
     			$('#showPawMsg').text("请输入密码");
     			$("#showPawMsg").show();
     			$("#errorPawMsg").show();
@@ -218,7 +231,7 @@ define('app/register/register', function (require, exports, module) {
     		$("#errorPawMsg").attr("style","display:none");
     		var password = $('#inputPassword').val();
     		if(password==""){
-    			$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-c.png');
+    			$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-a.png');
     			$('#showPawMsg').text("请输入密码");
     			$("#showPawMsg").show();
     			$("#errorPawMsg").show();
@@ -371,7 +384,7 @@ define('app/register/register', function (require, exports, module) {
     		var flag = false;
     		var userName = $("#userName").val();
     		if(userName==""){
-    			$('#userNameImage').attr('src',_base+'/theme/slp/images/icon-c.png');
+    			$('#userNameImage').attr('src',_base+'/theme/slp/images/icon-a.png');
     			$('#userNameErrorMsgShow').show();
     			$('#errorUserNameMsg').show();
     			$("#errorUserNameFlag").val("0")
@@ -413,7 +426,7 @@ define('app/register/register', function (require, exports, module) {
         			    }); 
 					
 				}else{
-					$('#userNameImage').attr('src',_base+'/theme/slp/images/icon-c.png');
+					$('#userNameImage').attr('src',_base+'/theme/slp/images/icon-a.png');
 					$('#userNameErrorMsgShow').show();
 	    			$('#errorUserNameMsg').show();
 					$("#errorUserNameFlag").val("0")
