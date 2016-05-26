@@ -395,6 +395,18 @@ define('app/register/register', function (require, exports, module) {
     			flag = false;
     		}else{
     			var reg = /^[\u4e00-\u9fa5a-zA-Z0-9\-\_]{4,20}$/;
+    			var patrn=/^[0-9]{1,20}$/; 
+    			
+    			if(userName.match(patrn)){
+    				$('#userNameErrorMsgShow').show();
+	    			$('#errorUserNameMsg').show();
+    				$('#userNameImage').attr('src',_base+'/theme/slp/images/icon-a.png');
+	    			$("#userNameErrorMsgShow").text("用户名不能是纯数字，请重新输入！");
+					$("#errorUserNameFlag").val("0");
+					flag = false;
+					return false;
+    			}
+    			
     			if(userName.match(reg)){
     				var	param={
     						userLoginName:$("#userName").val(),
