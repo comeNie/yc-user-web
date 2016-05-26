@@ -242,15 +242,18 @@ define('app/register/register', function (require, exports, module) {
 				return false;
     		}else if(/[\x01-\xFF]*/.test(password)){
     				if(/^\S*$/.test(password)){
-    					if(/^[\x21-\x7E]{6,14}$/.test(password)){
+    					if(/^[\x21-\x7E]{6,20}$/.test(password)){
     						$("#errorPawMsg").show();
     						$("#showPawMsg").hide();
     						$('#errorPassFlag').val("1");
     						$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-b.png');
     						
     					}else{
+    						$("#errorPawMsg").show();
+    						$("#passwordImage").show();
+    						$('#showPawMsg').show();
+    						$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-a.png');
     						$('#showPawMsg').text("6-20个字符，可用字母、数字及符号的组合 ");
-    		    			$("#errorPawMsg").attr("style","display:");
     		    			$('#errorPassFlag').val("0");
     						return false;
     					}
