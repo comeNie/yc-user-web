@@ -150,6 +150,7 @@ define('app/register/register', function (require, exports, module) {
     	},
     	_hideUserNameError:function(){
     		$("#errorUserNameMsg").show();
+    		$("#userNameErrorMsgShow").show();
     		$("#userNameImage").show();
     		$("#userNameErrorMsgShow").text("4-20个字符，可用汉字、字母、数字、“-”及“_”的组合");
     		$('#userNameImage').attr('src',_base+'/theme/slp/images/icon-d.png');
@@ -167,7 +168,8 @@ define('app/register/register', function (require, exports, module) {
 				return false;
 			}else if( /^0?1[3|4|5|8][0-9]\d{8}$/.test(phone)){
 				var	param={
-    					userMp:$("#phone").val()
+    					userMp:$("#phone").val(),
+    					userType:$("#userType").val()
     				   };
         		ajaxController.ajax({
     			        type: "post",
@@ -178,10 +180,12 @@ define('app/register/register', function (require, exports, module) {
     			        message: "正在加载数据..",
     			        success: function (data) {
     			         if(data.responseHeader.resultCode=="10003"){
+    			        	    $("#errorPhoneMsg").show();
     			        	 	$("#phoneText").show();
-    			        		$('#showPhoneMsg').text("手机号码已注册");
+    			        	 	$("#showPhoneMsg").show();
+    			        	 	$("#phoneImage").show();
+    			        		$('#phoneText').text("手机号码已注册");
     			        		$('#phoneImage').attr('src',_base+'/theme/slp/images/icon-a.png');
-    							$("#errorPhoneMsg").attr("style","display:");
     							$('#errorPhoneFlag').val("0");
     							return false;
     			        	}else if(data.responseHeader.resultCode=="000000"){
@@ -393,7 +397,8 @@ define('app/register/register', function (require, exports, module) {
     			var reg = /^[\u4e00-\u9fa5a-zA-Z0-9\-\_]{4,20}$/;
     			if(userName.match(reg)){
     				var	param={
-    						userLoginName:$("#userName").val()
+    						userLoginName:$("#userName").val(),
+    						userType:$("#userType").val()
         				   };
             		ajaxController.ajax({
         			        type: "post",
@@ -404,6 +409,7 @@ define('app/register/register', function (require, exports, module) {
         			        message: "正在加载数据..",
         			        success: function (data) {
         			         if(data.responseHeader.resultCode=="10003"){
+        			        	   $('#userNameImage').attr('src',_base+'/theme/slp/images/icon-a.png');
         			        		$('#userNameErrorMsgShow').text("用户名已注册");
         			        		$("#errorUserNameMsg").show();
         							$('#errorPhoneFlag').val("0");
