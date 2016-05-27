@@ -32,12 +32,6 @@
 	<dubbo:reference id="iLoginSV"
 		interface="com.ai.slp.user.api.login.interfaces.ILoginSV" />	
 		
-	<dubbo:reference id="iAccountManageSV"
-		interface="com.ai.opt.uac.api.account.interfaces.IAccountManageSV"/>
-		
-	<dubbo:reference id="iTenantManageSV"
-		interface="com.ai.opt.uac.api.account.interfaces.ITenantManageSV"/>
-		
 	<dubbo:reference id="iRegisterSV"
 		interface="com.ai.slp.user.api.register.interfaces.IRegisterSV"/>
 		 
@@ -46,9 +40,6 @@
 		
 	<dubbo:reference id="iCreateSeqSV"
 		interface="com.ai.slp.user.api.seq.interfaces.ICreateSeqSV"/>
-		
-		<dubbo:reference id="iIndustryManageSV"
-		interface="com.ai.opt.uac.api.account.interfaces.IIndustryManageSV"/>
 		
 	<dubbo:reference id="sMSServices"
 		interface="com.ai.runner.center.mmp.api.manager.interfaces.SMSServices"/>
