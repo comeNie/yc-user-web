@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ai.opt.base.exception.RPCSystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.ccs.CCSClientFactory;
@@ -31,6 +32,9 @@ import com.ai.opt.sdk.util.UUIDUtil;
 import com.ai.opt.sdk.web.model.ResponseData;
 import com.ai.opt.sso.client.filter.SSOClientConstants;
 import com.ai.opt.sso.client.filter.SSOClientUser;
+import com.ai.opt.sso.constants.UserLoginErrorCode;
+import com.ai.opt.sso.service.LoadAccountService;
+import com.ai.opt.sso.util.RegexUtils;
 import com.ai.opt.uac.web.constants.Constants;
 import com.ai.opt.uac.web.constants.Constants.ResultCode;
 import com.ai.opt.uac.web.constants.Constants.UpdatePassword;
@@ -47,8 +51,11 @@ import com.ai.paas.ipaas.ccs.IConfigClient;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.runner.center.mmp.api.manager.param.SMData;
 import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
+import com.ai.slp.user.api.login.param.LoginRequest;
+import com.ai.slp.user.api.login.param.LoginResponse;
 import com.ai.slp.user.api.ucUserSecurity.interfaces.IUcUserSecurityManageSV;
 import com.ai.slp.user.api.ucUserSecurity.param.UcUserPasswordRequest;
+import com.esotericsoftware.minlog.Log;
 
 @RequestMapping("/center/password")
 @Controller
@@ -62,6 +69,56 @@ public class UpdatePasswordController {
 	    return new ModelAndView("jsp/center/update-password-start");
 	}
 
+	@RequestMapping("/validateUserName")
+	@ResponseBody
+	public ResponseData<String> validateUsername(HttpServletRequest request, HttpServletResponse response){
+        ResponseData<String> responseData = new ResponseData<String>("success", "success", null);
+        ResponseHeader responseHeader = new ResponseHeader(true,"success","查询成功");
+        String sessionId = request.getSession().getId();
+        ICacheClient cacheClient = MCSClientFactory.getCacheClient(UpdatePassword.CACHE_NAMESPACE);
+        // 检查图片验证码
+        String pictureVerifyCodeCache = cacheClient.get(UpdatePassword.CACHE_KEY_VERIFY_PICTURE + sessionId).toLowerCase();
+        String captcha = request.getParameter("captcha").toLowerCase();
+        String userType = request.getParameter("userType");
+        String userName = request.getParameter("userName");
+        String tenantId = request.getParameter("tenantId");
+        Log.info("++++++++++++++++++++++++"+pictureVerifyCodeCache+"++++++++++++++++++++++++++++");
+        LoginRequest loginRequest = new LoginRequest();
+        LoginResponse loginResponse = new LoginResponse();
+        loginRequest.setTenantId(tenantId);
+        loginRequest.setUserType(userType);
+        //判断登录类型
+        if (RegexUtils.checkIsPhone(userName)) {
+            loginRequest.setUserMp(userName);
+        } else if (RegexUtils.checkIsEmail(userName)) {
+            loginRequest.setUserEmail(userName);
+        } else {
+            loginRequest.setUserLoginName(userName);
+        }
+        if(!pictureVerifyCodeCache.equals(captcha)){
+            responseHeader.setIsSuccess(true);
+            responseHeader.setResultCode("10012");
+            responseData = new ResponseData<String>("10012", "验证码错误", null);
+        }else{
+            //调dubbo服务
+            LoadAccountService loadService = new LoadAccountService();
+            try {
+                loginResponse = loadService.login(loginRequest);
+            } catch (RPCSystemException e) {
+                //查询错误
+                responseHeader.setIsSuccess(true);
+                responseData = new ResponseData<String>("10014", "系统错误", null);
+            }
+            if(loginResponse.getResponseHeader().getResultCode().equals(UserLoginErrorCode.USER_ERR_001)){
+                responseHeader.setIsSuccess(true);
+                responseHeader.setResultCode("10013");
+                responseData = new ResponseData<String>("10013", "用户名不存在", null);
+            }
+        }
+        responseData.setResponseHeader(responseHeader);
+        return responseData;
+	}
+	
 	@RequestMapping("/getImageVerifyCode")
 	@ResponseBody
 	public void getImageVerifyCode(HttpServletRequest request, HttpServletResponse response) {

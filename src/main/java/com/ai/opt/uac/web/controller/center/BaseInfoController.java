@@ -26,7 +26,6 @@ import com.ai.opt.uac.web.model.baseinfo.AccountInfoData;
 import com.ai.slp.user.api.ucuser.intefaces.IIndustryManageSV;
 import com.ai.slp.user.api.ucuser.intefaces.ITenantManageSV;
 import com.ai.slp.user.api.ucuser.intefaces.IUcUserSV;
-import com.ai.slp.user.api.ucuser.param.AccountBaseModifyRequest;
 import com.ai.slp.user.api.ucuser.param.IndustryQueryResponse;
 import com.ai.slp.user.api.ucuser.param.SearchUserRequest;
 import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
@@ -72,7 +71,7 @@ public class BaseInfoController {
         AccountInfoData accountInfo = new AccountInfoData();
         accountInfo.setAccountId(acc.getUserId());
         accountInfo.setEmail(acc.getUserEmail());
-        accountInfo.setNickName(acc.getNickName());
+        accountInfo.setNickName(acc.getUserNickname());
         accountInfo.setPhone(acc.getUserMp());
         accountInfo.setTenantName(ten.getTenantName());
         //翻译企业类型

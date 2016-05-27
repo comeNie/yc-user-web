@@ -11,71 +11,84 @@ import org.jasig.cas.authentication.RememberMeUsernamePasswordCredential;
  * @author gucl
  */
 public class BssCredentials extends RememberMeUsernamePasswordCredential {
-	private static final long serialVersionUID = -8147635836938729264L;
+    private static final long serialVersionUID = -8147635836938729264L;
 
-	/**
-	 * 租户Id
-	 */
-	private String tenantId;
+    /**
+     * 租户Id
+     */
+    private String tenantId;
 
-	/**
-	 * 用户类型
-	 */
-	private String userType;
+    /**
+     * 用户Id
+     */
+    private String userId;
 
-	/**
-	 * 验证码
-	 */
-	private String captchaCode;
+    /**
+     * 用户类型
+     */
+    private String userType;
 
-	/**
-	 * sessionId
-	 */
-	private String sessionId;
+    /**
+     * 验证码
+     */
+    private String captchaCode;
 
-	/**
-	 * 用户昵称
-	 */
-	private String userNickname;
+    /**
+     * sessionId
+     */
+    private String sessionId;
 
-	public String getTenantId() {
-		return tenantId;
-	}
+    /**
+     * 用户昵称
+     */
+    private String userNickname;
 
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
+    public String getTenantId() {
+        return tenantId;
+    }
 
-	public String getUserType() {
-		return userType;
-	}
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 
-	public void setUserType(String userType) {
-		this.userType = userType;
-	}
+    public String getUserType() {
+        return userType;
+    }
 
-	public String getCaptchaCode() {
-		return captchaCode;
-	}
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
 
-	public void setCaptchaCode(String captchaCode) {
-		this.captchaCode = captchaCode;
-	}
+    public String getCaptchaCode() {
+        return captchaCode;
+    }
 
-	public String getSessionId() {
-		return sessionId;
-	}
+    public void setCaptchaCode(String captchaCode) {
+        this.captchaCode = captchaCode;
+    }
 
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
-	}
+    public String getSessionId() {
+        return sessionId;
+    }
 
-	public String getUserNickname() {
-		return userNickname;
-	}
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
 
-	public void setUserNickname(String userNickname) {
-		this.userNickname = userNickname;
-	}
+    public String getUserNickname() {
+        return userNickname;
+    }
+
+    public void setUserNickname(String userNickname) {
+        this.userNickname = userNickname;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
 }

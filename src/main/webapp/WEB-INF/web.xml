@@ -32,8 +32,12 @@
   </filter>
   <filter-mapping>
   	<filter-name>ssoProxyFilter</filter-name>
-  	<url-pattern>/ac/*</url-pattern>
+  	<url-pattern>/demo/*</url-pattern>
   </filter-mapping>
+  <!-- <filter-mapping>
+  	<filter-name>ssoProxyFilter</filter-name>
+  	<url-pattern>/inc/*</url-pattern>
+  </filter-mapping> -->
  <!--  <filter-mapping>
   	<filter-name>ssoProxyFilter</filter-name>
   	<url-pattern>/center/*</url-pattern>
@@ -49,7 +53,7 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>assembleUserInfoFilter</filter-name>
-		<url-pattern>/ac/*</url-pattern>
+		<url-pattern>/demo/*</url-pattern>
 	</filter-mapping>
 	<!-- <filter-mapping>
 		<filter-name>assembleUserInfoFilter</filter-name>

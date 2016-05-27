@@ -96,6 +96,7 @@ public final class BssCredentialsAuthencationHandler
         final String pwdFromPage = bssCredentials.getPassword();
         final String captchaCode = bssCredentials.getCaptchaCode().toLowerCase();
         final String sessionId = bssCredentials.getSessionId();
+        final String userType = bssCredentials.getUserType();
 
         // 用户名非空校验
         if (!StringUtils.hasText(username)) {
@@ -130,7 +131,7 @@ public final class BssCredentialsAuthencationHandler
         LoginRequest request = new LoginRequest();
         LoginResponse response = null;
         request.setTenantId(bssCredentials.getTenantId());
-        request.setUserType(bssCredentials.getUserType());
+        request.setUserType(userType);
         if (RegexUtils.checkIsPhone(bssCredentials.getUsername())) {
             request.setUserMp(bssCredentials.getUsername());
         } else if (RegexUtils.checkIsEmail(bssCredentials.getUsername())) {
@@ -184,13 +185,14 @@ public final class BssCredentialsAuthencationHandler
          * throw new CredentialException("账号已失效"); }
          */
 
-        try {
-            BeanUtils.copyProperties(bssCredentials, response);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+            bssCredentials.setUserType(userType);
+            bssCredentials.setUserNickname(response.getUserNickname());
+            bssCredentials.setTenantId(response.getTenantId());
+            bssCredentials.setUserId(response.getUserId());
+            
         logger.info("用户 [" + username + "] 认证成功。");
-        return creatHandlerResult(bssCredentials, new SimplePrincipal(response.getUserId()), null);
+        logger.info(bssCredentials.toString());
+        return creatHandlerResult(bssCredentials, new SimplePrincipal(username), null);
     }
 
     private HandlerResult creatHandlerResult(BssCredentials bssCredentials,

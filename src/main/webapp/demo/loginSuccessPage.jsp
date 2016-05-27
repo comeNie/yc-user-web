@@ -7,10 +7,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 <title>登录-成功</title>
 <script type="text/javascript">
-	var principal = request.getPrincipal();
-	var attributes = principal.getAttributes();
-	var email = attributes.get("userId");
-	alert(email);
 </script>
 </head>
 

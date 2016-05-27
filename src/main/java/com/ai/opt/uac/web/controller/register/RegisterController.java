@@ -61,6 +61,7 @@ import com.ai.slp.user.api.ucUserSecurity.param.UcUserEmailRequest;
 import com.ai.slp.user.api.ucuser.intefaces.IUcUserSV;
 import com.ai.slp.user.api.ucuser.param.SearchUserRequest;
 import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
+
 import net.sf.json.JSONObject;
 
 @RequestMapping("/reg")
@@ -520,7 +521,7 @@ public class RegisterController {
 				if (StringUtil.isBlank(times)) {
 					req.setUserId(accountid);
 					SearchUserResponse response = iUserSV.queryBaseInfo(req);
-					String nickName = Constants.Register.REGISTER_EMAIL_NICK + response.getNickName();
+					String nickName = Constants.Register.REGISTER_EMAIL_NICK + response.getUserNickname();
 					String identifyCode = RandomUtil.randomNum(EmailVerifyConstants.VERIFY_SIZE);
 					String[] tomails = new String[] { email };
 					// 超时时间

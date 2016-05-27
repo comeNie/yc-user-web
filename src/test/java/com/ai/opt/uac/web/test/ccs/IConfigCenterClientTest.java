@@ -116,7 +116,7 @@ public class IConfigCenterClientTest {
      @Test
      public void addUrlConfig() throws ConfigException{
     	 System.out.println("url config ... start");
-    	 String indexUrl = "http://10.1.235.245:14101/baas-pt";
+    	 String indexUrl = "http://10.1.245.8:14105/slp-mall";
     	 if (!client.exists(Constants.URLConstant.INDEX_URL_KEY)) {
              client.add(Constants.URLConstant.INDEX_URL_KEY, indexUrl);
          } else {

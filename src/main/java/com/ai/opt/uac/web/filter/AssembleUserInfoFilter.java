@@ -18,10 +18,9 @@ import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ai.opt.sso.client.filter.SLPClientUser;
 import com.ai.opt.sso.client.filter.SSOClientConstants;
 import com.alibaba.fastjson.JSON;
-import com.ai.opt.sso.client.filter.SLPClientUser;
-
 
 public class AssembleUserInfoFilter implements Filter {
     private String[] ignor_suffix = {};
@@ -46,9 +45,11 @@ public class AssembleUserInfoFilter implements Filter {
         SLPClientUser user = (SLPClientUser) session.getAttribute(SSOClientConstants.USER_SESSION_KEY);
         if (user == null) {
             user = assembleUser(req);
-            session.setAttribute(SSOClientConstants.USER_SESSION_KEY, user);
+            if(user!=null){
+                session.setAttribute(SSOClientConstants.USER_SESSION_KEY, user);
+                LOG.error("已封装的用户信息为：" + JSON.toJSONString(user));
+            }
             chain.doFilter(req, response);
-            LOG.error("已封装的用户信息为：" + JSON.toJSONString(user));
 
         } else {
             chain.doFilter(req, response);
