@@ -34,7 +34,7 @@ public class IConfigCenterClientTest {
     }
     @Test
     public void addServiceIdPwdMap() throws ConfigException {
-        String cachesnsConfig = "{\"MCS005\":\"" + "123456"     
+        String cachesnsConfig = "{\"MCS007\":\"" + "123456"     
                 + "\"}";
         
         // paas serviceid password 映射配置
@@ -51,7 +51,7 @@ public class IConfigCenterClientTest {
     @Test
     public void addMcsConfig() throws ConfigException {
         // 缓存服务主机
-        String uacRedisHost = "MCS005";
+        String uacRedisHost = "MCS007";
         // 缓存空间
         String cachesnsConfig = "{\"com.ai.opt.uac.sso.unicache\":\"" + uacRedisHost
                 + "\",\"com.ai.opt.uac.register.cache\":\"" + uacRedisHost
@@ -63,34 +63,6 @@ public class IConfigCenterClientTest {
                 + "\",\""+Constants.BandEmail.CACHE_NAMESPACE+"\":\"" + uacRedisHost
                 + "\",\"com.ai.opt.uni.session.sessionclient.uacweb\":\"" + uacRedisHost + "\"}";
         
-      /*  StringBuilder bu=new StringBuilder();
-        bu.append("{								");
-        bu.append("  \"uacRedisHost\":                     ");
-        bu.append("  {                                      ");
-        bu.append("		  \"mcsHost\":\"10.1.130.84:16379\",     ");
-        //bu.append("		  \"mcsHost\":\"localhost:6379\",     ");
-        bu.append("	  	\"mcsMaxtotal\":\"200\",            ");
-        bu.append("		  \"mcsMaxIdle\":\"10\",              ");
-        bu.append("		  \"mcsMinIdle\":\"5\",               ");
-        bu.append("		  \"mcsTestOnBorrow\":\"true\",       ");
-        bu.append("		  \"mcsPassword\":\"\"          ");
-        bu.append("  }                                     ");
-        bu.append("}                                        ");*/
-        
-        
-        
-       /* // 缓存服务主机和密码设置
-        if (!client.exists(
-                SDKConstants.PAAS_CACHE_REDIS_CLUSTER_MAPPED_PATH)) {
-            client.add(
-                    SDKConstants.PAAS_CACHE_REDIS_CLUSTER_MAPPED_PATH,
-                    bu.toString());
-        } else {
-            client.modify(
-                    SDKConstants.PAAS_CACHE_REDIS_CLUSTER_MAPPED_PATH,
-                    bu.toString());
-        }
-*/
         // 缓存空间配置
         if (!client.exists(SDKConstants.PAAS_CACHENS_MCS_MAPPED_PATH))
             client.add(SDKConstants.PAAS_CACHENS_MCS_MAPPED_PATH,
@@ -100,17 +72,6 @@ public class IConfigCenterClientTest {
                     cachesnsConfig);
         }
     }
-   /* //@Ignore
-    @Test
-    public void readMcsConfig() {
-    	
-    	String cachesns=client.get(SDKConstants.PAAS_CACHENS_MCS_MAPPED_PATH);
-    	String redisconf=client.get(SDKConstants.PAAS_CACHE_REDIS_CLUSTER_MAPPED_PATH);
-    	
-    	System.out.println("cachesns:"+cachesns);
-    	System.out.println("redisconf:"+redisconf);
-    	
-    }*/
 
     
      @Test
