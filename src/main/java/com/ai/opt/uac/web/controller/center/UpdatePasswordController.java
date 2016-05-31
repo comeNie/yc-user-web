@@ -55,6 +55,7 @@ import com.ai.slp.user.api.login.param.LoginRequest;
 import com.ai.slp.user.api.login.param.LoginResponse;
 import com.ai.slp.user.api.ucUserSecurity.interfaces.IUcUserSecurityManageSV;
 import com.ai.slp.user.api.ucUserSecurity.param.UcUserPasswordRequest;
+import com.ai.slp.user.api.ucUserSecurity.param.UpdatePasswordRequest;
 import com.esotericsoftware.minlog.Log;
 
 @RequestMapping("/center/password")
@@ -132,6 +133,52 @@ public class UpdatePasswordController {
 		}
 	}
 
+	@RequestMapping("/updatePassword")
+    @ResponseBody
+	public ResponseData<String> submit(HttpServletRequest request, HttpServletResponse response){
+	    String tenantId = request.getParameter("tenantId");
+	    String userType=request.getParameter("userType");
+	    String userName=request.getParameter("userLoginName");
+	    String newPassowrd=request.getParameter("userLoginPwd");
+	    
+	    UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
+	    updatePasswordRequest.setTenantId(tenantId);
+	    updatePasswordRequest.setUserType(userType);
+	    updatePasswordRequest.setUserLoginPwd(newPassowrd);
+	    //判断登录类型
+        if (RegexUtils.checkIsPhone(userName)) {
+            updatePasswordRequest.setUserMp(userName);
+        } else if (RegexUtils.checkIsEmail(userName)) {
+            updatePasswordRequest.setUserEmail(userName);
+        } else {
+            updatePasswordRequest.setUserLoginName(userName);
+        }
+        
+        //调用dubbo服务
+        IUcUserSecurityManageSV iUcUserSecurityManageSV = DubboConsumerFactory.getService("iUcUserSecurityManageSV");
+        ResponseData<String> responseData = null;
+        ResponseHeader responseHeader = null;
+        try{
+            iUcUserSecurityManageSV.updatePassword(updatePasswordRequest);
+            Log.info("更新成功");
+            responseData = new ResponseData<String>("success", "success", null);
+            responseHeader = new ResponseHeader(true,"success",null);
+        }catch(Exception e){
+            responseData = new ResponseData<String>("fail", "fail", null);
+            responseHeader = new ResponseHeader(false,"fail",null);
+        }
+        responseData.setResponseHeader(responseHeader);
+	    return responseData;
+	}
+	
+	
+	@RequestMapping("/toSuccessPage")
+    public ModelAndView toSuccessPage(){
+	    
+	     return new ModelAndView("jsp/center/update-password-success");
+	}
+	
+	
 	/**
 	 * 发送验证码
 	 * 

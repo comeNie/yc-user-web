@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
 	(function() {
-		seajs.use('app/center/password/update-password-start', function(
+		seajs.use('app/center/password/update-password', function(
 				UpdatePasswordPager) {
 			var pager = new UpdatePasswordPager();
 			pager.render();
@@ -134,8 +134,9 @@
 							<li class="yellow-word" id="PasswordVerificationWord">设置新密码</li>
 						</ul>
 						<ul>
-							<li class="ash-border"></li>
-							<li class="ash-yuan"><i class="icon-ok"></i></li>
+							<li class="ash-border" id="FinishPasswordBorder"></li>
+							<li class="ash-yuan" id="FinishPasswordYuan">
+							<i class="icon-ok" id="FinishPasswordWord"></i></li>
 							<li>注册成功</li>
 						</ul>
 						</div>
@@ -195,7 +196,7 @@
 								<li class="word">短信验证码:</li>
 								<li><input type="text" class="int-small" id="phoneVerifyCode" placeholder="请输入短信验证码"></li>
 								<li class="re-btn"><input type="button" class="int-btn"
-									value="获取短信验证码"></li>
+									value="获取短信验证码" id="PHONE_IDENTIFY"></li>
 								<li class="lable" style="display: none;" id="phoneVerifyCodeErrMsg"><img
 									src="${_base}/theme/slp/images/icon-a.png"><span
 									class="red" id="phoneVerifyCodeErrMsgShow">验证码错误</span></li>
@@ -228,7 +229,7 @@
 						<ul>
 					<li class="word">新密码:</li>
 					<li><input type="password" class="int-medium"
-						placeholder="请输入密码" id="password"></li>
+						placeholder="请输入密码" id="newPassword"></li>
 					<li class="lable" style="display: none;" id="passwordErrMsg"><img
 						src="${_base}/theme/slp/images/icon-c.png"><span id="passwordErrMsgShow">6-20个字符，可用字母、数字及符号的组合</span></li>
 					<%-- <label style="display: none;"><img src="${_base}/theme/slp/images/pass-a.png"><img
@@ -238,33 +239,46 @@
 				<ul>
 					<li class="word">确认新密码:</li>
 					<li><input type="password" class="int-medium"
-						placeholder="再次确认密码" id="newPassword"></li>
+						placeholder="再次确认密码" id="newPasswordConfirm"></li>
 					<li class="lable" style="display: none;" id="newPasswordErrMsg"><img
 						src="${_base}/theme/slp/images/icon-a.png"><span id="newPasswordErrMsgShow">两次输入的密码不一致</span></li>
 				</ul>
 				<ul>
 					<li class="checx-word">
 					<input type="button" class="slp-btn regsiter-btn" id="BTN_PASSWORD" value="确认提交">
-					<input type="hidden" id="errorUserNameFlag" value='error'/>
-					<input type="hidden" id="userNameEmptyFlag" value='error'/>
-					<input type="hidden" id="captchaEmptyFlag" value='error'/>
-					<input type="hidden" id="captchaErrFlag" value='error'/>
-					<input type="hidden" id="phoneEmptyFlag" value='error'/>
-					<input type="hidden" id="phoneErrFlag" value='error'/>
-					<input type="hidden" id="phoneVerifyCodeEmptyFlag" value='error'/>
-					<input type="hidden" id="passwordEmptyFlag" value='error'/>
-					<input type="hidden" id="newPasswordEmptyFlag" value='error'/>
-					<input type="hidden" id="emailEmptyFlag" value='error'/>
-		         	<input type="hidden" id="errorPassFlag" value='error'/>
-		         	<input type="hidden" id="errorPassEqualsFlag" value='error'/>
-		         	<input type="hidden" id="errorSMSFlag" value='error'/>
-		         	<input type="hidden" id="errorSMSEmptyFlag" value='error'/>
+					</li>
+				</ul>
+			</div>
+			</div>
+			
+			<div class="regeiter-success" id="password-date4" style="display: none;">
+                 <p><img src="${_base}/theme/slp/images/succ.png"></p>
+                 <p class="word">新密码已经设置成功!</p>
+                 <p>请牢记您的密码哦!</p>
+                 <p class="success-box"><a href="#">网站首页</a><a href="#">账户中心</a></p>
+                 </div>
+			<ul>
+					<li class="checx-word">
+					<input type="text" id="errorUserNameFlag"/>
+					<input type="text" id="userNameEmptyFlag"/>
+					<input type="text" id="captchaEmptyFlag"/>
+					<input type="text" id="captchaErrFlag"/>
+					<input type="hidden" id="phoneEmptyFlag"/>
+					<input type="hidden" id="phoneErrFlag"/>
+					<input type="hidden" id="phoneVerifyCodeEmptyFlag"/>
+					<input type="hidden" id="phoneVerifyCodeErrFlag"/>
+					<input type="hidden" id="passwordEmptyFlag"/>
+					<input type="hidden" id="newPasswordEmptyFlag"/>
+					<input type="hidden" id="emailEmptyFlag"/>
+					<input type="hidden" id="emailErrFlag"/>
+		         	<input type="hidden" id="passwordErrFlag"/>
+		         	<input type="hidden" id="newPasswordErrFlag"/>
+		         	<input type="hidden" id="passwordNotEqualFlag"/>
 		         	<input type="hidden" id="tenantId" value="0"/>
 		         	</li>
 				</ul>
 				<!--主体内容结束-->
-			</div>
-			</div>
+			
 			</div>
 			</div>
 			</div>
