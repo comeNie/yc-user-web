@@ -105,9 +105,7 @@ define(
 									success : function(data) {
 										if (data.responseHeader.resultCode == "9999") {
 											$('#showSmsMsg').text("1分钟后可重复发送 ");
-											$("#errorSmsMsg")
-													.attr("style",
-															"display:");
+											$("#errorSmsMsg").attr("style","display:");
 											$("#phoneVerifyCode").val("");
 											return false;
 										} else if (data.responseHeader.resultCode == "100002") {

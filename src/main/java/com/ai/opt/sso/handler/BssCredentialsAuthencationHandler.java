@@ -1,6 +1,5 @@
 package com.ai.opt.sso.handler;
 
-import java.lang.reflect.InvocationTargetException;
 import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +8,6 @@ import javax.annotation.Resource;
 import javax.security.auth.login.LoginException;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.jasig.cas.Message;
 import org.jasig.cas.authentication.BasicCredentialMetaData;
 import org.jasig.cas.authentication.Credential;
@@ -39,7 +37,6 @@ import com.ai.opt.sso.exception.EmailNotExistException;
 import com.ai.opt.sso.exception.PasswordErrorException;
 import com.ai.opt.sso.exception.PasswordIsNullException;
 import com.ai.opt.sso.exception.PhoneNotExistException;
-import com.ai.opt.sso.exception.SystemBusyException;
 import com.ai.opt.sso.exception.UsernameIsNullException;
 import com.ai.opt.sso.exception.UsernameNotExistException;
 import com.ai.opt.sso.principal.BssCredentials;
@@ -134,10 +131,10 @@ public final class BssCredentialsAuthencationHandler
         request.setUserType(userType);
         if (RegexUtils.checkIsPhone(bssCredentials.getUsername())) {
             request.setUserMp(bssCredentials.getUsername());
-        } else if (RegexUtils.checkIsEmail(bssCredentials.getUsername())) {
+        } else if (RegexUtils.checkIsEmail(bssCredentials.getUsername().toLowerCase())) {
             request.setUserEmail(bssCredentials.getUsername());
         } else {
-            request.setUserLoginName(bssCredentials.getUsername());
+            request.setUserLoginName(bssCredentials.getUsername().toLowerCase());
         }
         try {
             response = loadAccountService.login(request);

@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
 	(function() {
-		seajs.use('app/center/password/update-password', function(
+		seajs.use('app/center/changePassword/update-password', function(
 				UpdatePasswordPager) {
 			var pager = new UpdatePasswordPager();
 			pager.render();
@@ -259,10 +259,10 @@
                  </div>
 			<ul>
 					<li class="checx-word">
-					<input type="text" id="errorUserNameFlag"/>
-					<input type="text" id="userNameEmptyFlag"/>
-					<input type="text" id="captchaEmptyFlag"/>
-					<input type="text" id="captchaErrFlag"/>
+					<input type="hidden" id="errorUserNameFlag"/>
+					<input type="hidden" id="userNameEmptyFlag"/>
+					<input type="hidden" id="captchaEmptyFlag"/>
+					<input type="hidden" id="captchaErrFlag"/>
 					<input type="hidden" id="phoneEmptyFlag"/>
 					<input type="hidden" id="phoneErrFlag"/>
 					<input type="hidden" id="phoneVerifyCodeEmptyFlag"/>
