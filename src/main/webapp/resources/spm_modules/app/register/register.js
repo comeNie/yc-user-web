@@ -247,7 +247,6 @@ define('app/register/register', function (require, exports, module) {
     						$("#showPawMsg").hide();
     						$('#errorPassFlag').val("1");
     						$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-b.png');
-    						
     					}else{
     						$("#errorPawMsg").show();
     						$("#passwordImage").show();
@@ -257,10 +256,12 @@ define('app/register/register', function (require, exports, module) {
     		    			$('#errorPassFlag').val("0");
     						return false;
     					}
-    					
     				}else{
+    					$("#errorPawMsg").show();
+						$("#passwordImage").show();
+						$('#showPawMsg').show();
+						$('#passwordImage').attr('src',_base+'/theme/slp/images/icon-a.png');
     					$('#showPawMsg').text("不允许有空格 ");
-            			$("#errorPawMsg").attr("style","display:");
             			$('#errorPassFlag').val("0");
         				return false;
     				}
