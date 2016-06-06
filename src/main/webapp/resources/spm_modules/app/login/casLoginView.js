@@ -95,7 +95,7 @@ function jumpTo() {
 }
 
 function jumpToFind(){
-	window.location.href = _base+"/center/password/confirminfo";
+	window.location.href = _base+"/center/password/toValidatePage";
 }
 // 刷新验证码
 function reloadImage(url) {

@@ -3,8 +3,6 @@ package com.ai.opt.uac.web.controller.center;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -14,33 +12,30 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ai.opt.base.exception.RPCSystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.ccs.CCSClientFactory;
 import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.Md5Encoder;
-import com.ai.opt.sdk.util.RandomUtil;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.opt.sdk.util.UUIDUtil;
 import com.ai.opt.sdk.web.model.ResponseData;
+import com.ai.opt.sso.client.filter.SLPClientUser;
 import com.ai.opt.sso.client.filter.SSOClientConstants;
 import com.ai.opt.sso.client.filter.SSOClientUser;
-import com.ai.opt.sso.constants.UserLoginErrorCode;
-import com.ai.opt.sso.service.LoadAccountService;
 import com.ai.opt.sso.util.RegexUtils;
 import com.ai.opt.uac.web.constants.Constants;
 import com.ai.opt.uac.web.constants.Constants.ResultCode;
 import com.ai.opt.uac.web.constants.Constants.UpdatePassword;
 import com.ai.opt.uac.web.constants.VerifyConstants;
 import com.ai.opt.uac.web.constants.VerifyConstants.EmailVerifyConstants;
-import com.ai.opt.uac.web.constants.VerifyConstants.PhoneVerifyConstants;
 import com.ai.opt.uac.web.constants.VerifyConstants.ResultCodeConstants;
 import com.ai.opt.uac.web.model.email.SendEmailRequest;
 import com.ai.opt.uac.web.model.retakepassword.SafetyConfirmData;
@@ -49,13 +44,11 @@ import com.ai.opt.uac.web.util.IPUtil;
 import com.ai.opt.uac.web.util.VerifyUtil;
 import com.ai.paas.ipaas.ccs.IConfigClient;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
-import com.ai.runner.center.mmp.api.manager.param.SMData;
-import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
-import com.ai.slp.user.api.login.param.LoginRequest;
-import com.ai.slp.user.api.login.param.LoginResponse;
 import com.ai.slp.user.api.ucUserSecurity.interfaces.IUcUserSecurityManageSV;
 import com.ai.slp.user.api.ucUserSecurity.param.UcUserPasswordRequest;
-import com.ai.slp.user.api.ucUserSecurity.param.UpdatePasswordRequest;
+import com.ai.slp.user.api.ucuser.intefaces.IUcUserSV;
+import com.ai.slp.user.api.ucuser.param.QueryBaseInfoRequest;
+import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
 import com.esotericsoftware.minlog.Log;
 
 @RequestMapping("/center/password")
@@ -64,18 +57,50 @@ public class UpdatePasswordController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UpdatePasswordController.class);
 
-	@RequestMapping("/confirminfo")
-	public ModelAndView UpdatePasswordStart(HttpServletRequest request) {
-	    
-	    return new ModelAndView("jsp/center/update-password-start");
+	//跳转账户页面
+	@RequestMapping("/toValidatePage")
+	public ModelAndView toValidatePage(HttpServletRequest request) {
+	    return new ModelAndView("jsp/center/update-password1");
 	}
-
+	
+	//跳转验证页面
+	@RequestMapping("/toIdentity")
+	public ModelAndView toIdentity(HttpServletRequest request, HttpServletResponse response){
+	    ModelAndView model = new ModelAndView("jsp/center/update-password2");
+	    String cacheKey = request.getParameter("cacheKey");
+	    SLPClientUser user = (SLPClientUser) CacheUtil.getValue(cacheKey, UpdatePassword.CACHE_NAMESPACE, SLPClientUser.class);
+	    model.addObject("email", user.getUserEmail()!=null?user.getUserEmail():"未绑定邮箱");
+	    model.addObject("phone", user.getUserMp()!=null?user.getUserMp():"未绑定验证手机");
+	    //重新生成uuid
+	    String uuid = UUIDUtil.genId32();
+	    CacheUtil.setValue(uuid, 300, user, UpdatePassword.CACHE_NAMESPACE);
+	    model.addObject("cacheKey",uuid);
+	    return model;
+	}
+    //跳转修改密码页面
+    @RequestMapping("/toPasswordPage")
+    public ModelAndView toPasswordPage(HttpServletRequest request, HttpServletResponse response){
+        ModelAndView model = new ModelAndView("jsp/center/update-password3");
+        
+        String cacheKey = request.getParameter("cacheKey");
+        SLPClientUser user = (SLPClientUser) CacheUtil.getValue(cacheKey, UpdatePassword.CACHE_NAMESPACE, SLPClientUser.class);
+        model.addObject("userId",user.getUserId());
+        return model;
+    }
+    //跳转发送成功页面
+    @RequestMapping("/sendEmailSuccess")
+    public ModelAndView sendEmailSuccess(HttpServletRequest request, HttpServletResponse response){
+        return new ModelAndView("jsp/center/send-email-success");
+    }
+    
+    //检查账户是否存在
 	@RequestMapping("/validateUserName")
 	@ResponseBody
 	public ResponseData<String> validateUsername(HttpServletRequest request, HttpServletResponse response){
         ResponseData<String> responseData = new ResponseData<String>("success", "success", null);
         ResponseHeader responseHeader = new ResponseHeader(true,"success","查询成功");
         String sessionId = request.getSession().getId();
+        SLPClientUser user = new SLPClientUser();
         ICacheClient cacheClient = MCSClientFactory.getCacheClient(UpdatePassword.CACHE_NAMESPACE);
         // 检查图片验证码
         String pictureVerifyCodeCache = cacheClient.get(UpdatePassword.CACHE_KEY_VERIFY_PICTURE + sessionId).toLowerCase();
@@ -84,17 +109,17 @@ public class UpdatePasswordController {
         String userName = request.getParameter("userName");
         String tenantId = request.getParameter("tenantId");
         Log.info("++++++++++++++++++++++++"+pictureVerifyCodeCache+"++++++++++++++++++++++++++++");
-        LoginRequest loginRequest = new LoginRequest();
-        LoginResponse loginResponse = new LoginResponse();
-        loginRequest.setTenantId(tenantId);
-        loginRequest.setUserType(userType);
+        QueryBaseInfoRequest queryBaseInfoRequest = new QueryBaseInfoRequest();
+        SearchUserResponse searchUserResponse = new SearchUserResponse();
+        queryBaseInfoRequest.setTenantId(tenantId);
+        queryBaseInfoRequest.setUserType(userType);
         //判断登录类型
         if (RegexUtils.checkIsPhone(userName)) {
-            loginRequest.setUserMp(userName);
+            queryBaseInfoRequest.setUserMp(userName);
         } else if (RegexUtils.checkIsEmail(userName)) {
-            loginRequest.setUserEmail(userName);
+            queryBaseInfoRequest.setUserEmail(userName);
         } else {
-            loginRequest.setUserLoginName(userName);
+            queryBaseInfoRequest.setUserLoginName(userName);
         }
         if(!pictureVerifyCodeCache.equals(captcha)){
             responseHeader.setIsSuccess(true);
@@ -102,24 +127,31 @@ public class UpdatePasswordController {
             responseData = new ResponseData<String>("10012", "验证码错误", null);
         }else{
             //调dubbo服务
-            LoadAccountService loadService = new LoadAccountService();
+            IUcUserSV ucUserSV = DubboConsumerFactory.getService("iUcUserSV");
             try {
-                loginResponse = loadService.login(loginRequest);
-            } catch (RPCSystemException e) {
-                //查询错误
+                searchUserResponse = ucUserSV.queryBaseInfo(queryBaseInfoRequest);
                 responseHeader.setIsSuccess(true);
+                responseData = new ResponseData<String>("10000", "校验成功", null);
+            } catch (Exception e) {
+                //查询错误
+                responseHeader.setIsSuccess(false);
                 responseData = new ResponseData<String>("10014", "系统错误", null);
             }
-            if(loginResponse.getResponseHeader().getResultCode().equals(UserLoginErrorCode.USER_ERR_001)){
-                responseHeader.setIsSuccess(true);
-                responseHeader.setResultCode("10013");
-                responseData = new ResponseData<String>("10013", "用户名不存在", null);
+            if(searchUserResponse.getUserId()==null){
+                responseHeader.setIsSuccess(false);
+                responseHeader.setResultCode("10015");
+                responseData = new ResponseData<String>("10015", "该账户不存在", null);
+            }else{
+                String cacheKey = UUIDUtil.genId32();
+                BeanUtils.copyProperties(searchUserResponse, user);
+                CacheUtil.setValue(cacheKey, 300, user, UpdatePassword.CACHE_NAMESPACE);
+                responseData.setData(cacheKey);
             }
         }
         responseData.setResponseHeader(responseHeader);
         return responseData;
 	}
-	
+	//获取图片验证码
 	@RequestMapping("/getImageVerifyCode")
 	@ResponseBody
 	public void getImageVerifyCode(HttpServletRequest request, HttpServletResponse response) {
@@ -133,33 +165,25 @@ public class UpdatePasswordController {
 		}
 	}
 
+	//更新密码
 	@RequestMapping("/updatePassword")
     @ResponseBody
 	public ResponseData<String> submit(HttpServletRequest request, HttpServletResponse response){
 	    String tenantId = request.getParameter("tenantId");
-	    String userType=request.getParameter("userType");
-	    String userName=request.getParameter("userLoginName");
+	    String userId = request.getParameter("userId");
 	    String newPassowrd=request.getParameter("userLoginPwd");
 	    
-	    UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
-	    updatePasswordRequest.setTenantId(tenantId);
-	    updatePasswordRequest.setUserType(userType);
-	    updatePasswordRequest.setUserLoginPwd(newPassowrd);
-	    //判断登录类型
-        if (RegexUtils.checkIsPhone(userName)) {
-            updatePasswordRequest.setUserMp(userName);
-        } else if (RegexUtils.checkIsEmail(userName)) {
-            updatePasswordRequest.setUserEmail(userName);
-        } else {
-            updatePasswordRequest.setUserLoginName(userName);
-        }
+	    UcUserPasswordRequest ucUserPasswordRequest = new UcUserPasswordRequest();
+	    ucUserPasswordRequest.setTenantId(tenantId);
+	    ucUserPasswordRequest.setAccountId(userId);
+	    ucUserPasswordRequest.setAccountPassword(newPassowrd);
         
         //调用dubbo服务
-        IUcUserSecurityManageSV iUcUserSecurityManageSV = DubboConsumerFactory.getService("iUcUserSecurityManageSV");
+        IUcUserSecurityManageSV ucUserSecurityManageSV = DubboConsumerFactory.getService("iUcUserSecurityManageSV");
         ResponseData<String> responseData = null;
         ResponseHeader responseHeader = null;
         try{
-            iUcUserSecurityManageSV.updatePassword(updatePasswordRequest);
+            ucUserSecurityManageSV.setPasswordData(ucUserPasswordRequest);
             Log.info("更新成功");
             responseData = new ResponseData<String>("success", "success", null);
             responseHeader = new ResponseHeader(true,"success",null);
@@ -171,14 +195,6 @@ public class UpdatePasswordController {
 	    return responseData;
 	}
 	
-	
-	@RequestMapping("/toSuccessPage")
-    public ModelAndView toSuccessPage(){
-	    
-	     return new ModelAndView("jsp/center/update-password-success");
-	}
-	
-	
 	/**
 	 * 发送验证码
 	 * 
@@ -186,14 +202,12 @@ public class UpdatePasswordController {
 	 */
 	@RequestMapping("/sendVerify")
 	@ResponseBody
-	public ResponseData<String> sendVerify(HttpServletRequest request, String confirmType) {
-		SSOClientUser userClient = (SSOClientUser) request.getSession().getAttribute(SSOClientConstants.USER_SESSION_KEY);
+	public ResponseData<String> sendVerify(HttpServletRequest request) {
 		ResponseData<String> responseData = null;
-		ResponseHeader responseHeader = null;
-		String sessionId = request.getSession().getId();
 		IConfigClient configClient = CCSClientFactory.getDefaultConfigClient();
 		try{
-		    if (userClient != null) {
+		    //判断和绑定邮箱是否一致
+		    /*if (user != null) {
 	            if (UpdatePassword.CHECK_TYPE_PHONE.equals(confirmType)) {
 	                // 检查ip发送次数
 	                ResponseData<String> checkIpSendPhone = VerifyUtil.checkIPSendPhoneCount(UpdatePassword.CACHE_NAMESPACE, IPUtil.getIp(request)+UpdatePassword.CACHE_KEY_IP_SEND_PHONE_NUM);
@@ -201,7 +215,7 @@ public class UpdatePasswordController {
 	                    return checkIpSendPhone;
 	                }
 	                // 发送手机验证码
-	                String isSuccess = sendPhoneVerifyCode(sessionId, userClient);
+	                String isSuccess = sendPhoneVerifyCode(sessionId, user);
 	                if ("0000".equals(isSuccess)) {
 	                    responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "短信验证码发送成功", null);
 	                    ResponseHeader header = new ResponseHeader();
@@ -227,14 +241,14 @@ public class UpdatePasswordController {
 	                    responseData.setResponseHeader(header);
 	                    return responseData;
 	                }
-	            } else if (UpdatePassword.CHECK_TYPE_EMAIL.equals(confirmType)) {
+	            } else */
 	                // 检查ip发送次数
 	                ResponseData<String> checkIpSendEmail = VerifyUtil.checkIPSendEmailCount(UpdatePassword.CACHE_NAMESPACE, IPUtil.getIp(request)+UpdatePassword.CACHE_KEY_IP_SEND_EMAIL_NUM);
 	                if(!checkIpSendEmail.getResponseHeader().isSuccess()){
 	                    return checkIpSendEmail;
 	                }
 	                // 发送邮件验证码
-	                String isSuccess = sendEmailVerifyCode(sessionId, userClient);
+	                String isSuccess = sendEmailVerifyURL(request);
 	                if ("0000".equals(isSuccess)) {
 	                    responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "邮箱验证码发送成功", null);
 	                    ResponseHeader header = new ResponseHeader();
@@ -242,7 +256,8 @@ public class UpdatePasswordController {
 	                    header.setResultCode(ResultCodeConstants.SUCCESS_CODE);
 	                    responseData.setResponseHeader(header);
 	                    return responseData;
-	                } else if ("0002".equals(isSuccess)) {
+	                } 
+	                if ("0002".equals(isSuccess)) {
 	                    String maxTimeStr = configClient.get(EmailVerifyConstants.SEND_VERIFY_MAX_TIME_KEY);
 	                    String errorMsg = Integer.valueOf(maxTimeStr)/60+"分钟内不可重复发送";
 	                    responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, errorMsg, null);
@@ -252,26 +267,7 @@ public class UpdatePasswordController {
 	                    header.setResultMessage(errorMsg);
 	                    responseData.setResponseHeader(header);
 	                    return responseData;
-	                } else {
-	                    responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "邮箱验证码发送失败", null);
-	                    ResponseHeader header = new ResponseHeader();
-	                    header.setIsSuccess(false);
-	                    header.setResultCode(ResultCodeConstants.ERROR_CODE);
-	                    responseData.setResponseHeader(header);
-	                    return responseData;
-	                }
-	            } else {
-	                responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "验证码发送失败,验证方式不正确", null);
-	                responseHeader = new ResponseHeader(false, VerifyConstants.ResultCodeConstants.ERROR_CODE, "验证码发送失败");
-	                responseData.setResponseHeader(responseHeader);
-	                return responseData;
-	            }
-	        } else {
-	            responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "认证信息失效", "/center/password/confirminfo");
-	            responseHeader = new ResponseHeader(false, VerifyConstants.ResultCodeConstants.ERROR_CODE, "认证信息失效");
-	            responseData.setResponseHeader(responseHeader);
-	            return responseData;
-	        }
+	                } 
 		}catch(Exception e){
 		    LOGGER.error("发送验证码错误：" + e);
 		}
@@ -283,12 +279,12 @@ public class UpdatePasswordController {
 	 * 
 	 * @param userClient
 	 */
-	private String sendPhoneVerifyCode(String sessionId, SSOClientUser userClient) {
+	/*private String sendPhoneVerifyCode(String sessionId, SLPClientUser user) {
 		SMDataInfoNotify smDataInfoNotify = new SMDataInfoNotify();
 		String phoneVerifyCode = RandomUtil.randomNum(PhoneVerifyConstants.VERIFY_SIZE);
 		// 查询是否发送过短信
 		String smstimes = "1";
-		String smskey = UpdatePassword.CACHE_KEY_SEND_PHONE_NUM + userClient.getPhone();
+		String smskey = UpdatePassword.CACHE_KEY_SEND_PHONE_NUM + user.getUserMp();
 		ICacheClient cacheClient = MCSClientFactory.getCacheClient(UpdatePassword.CACHE_NAMESPACE);
 		IConfigClient defaultConfigClient = CCSClientFactory.getDefaultConfigClient();
 		String times = cacheClient.get(smskey);
@@ -305,13 +301,13 @@ public class UpdatePasswordController {
 	            List<SMData> dataList = new LinkedList<SMData>();
 	            SMData smData = new SMData();
 	            smData.setGsmContent("${VERIFY}:" + phoneVerifyCode + "^${VALIDMINS}:" + Integer.valueOf(overTimeStr) / 60);
-	            smData.setPhone(userClient.getPhone());
+	            smData.setPhone(user.getUserMp());
 	            smData.setTemplateId(PhoneVerifyConstants.TEMPLATE_RETAKE_PASSWORD_ID);
 	            smData.setServiceType(PhoneVerifyConstants.SERVICE_TYPE);
 	            dataList.add(smData);
 	            smDataInfoNotify.setDataList(dataList);
 	            smDataInfoNotify.setMsgSeq(VerifyUtil.createPhoneMsgSeq());
-	            smDataInfoNotify.setTenantId(userClient.getTenantId());
+	            smDataInfoNotify.setTenantId(user.getTenantId());
 	            smDataInfoNotify.setSystemId(Constants.SYSTEM_ID);
 	            boolean flag = VerifyUtil.sendPhoneInfo(smDataInfoNotify);
 	            if (flag) {
@@ -329,25 +325,75 @@ public class UpdatePasswordController {
 		    LOGGER.error("发送验证码错误：" + e);
 		}
 		return null;
-	}
+	}*/
 
+	/**
+     * 发送验证邮件
+     * 
+     */
+    private String sendEmailVerifyURL(HttpServletRequest request) {
+        // 查询是否发送过邮件
+        String smstimes = "1";
+        String smskey = UpdatePassword.CACHE_KEY_SEND_EMAIL_NUM;
+        ICacheClient cacheClient = MCSClientFactory.getCacheClient(UpdatePassword.CACHE_NAMESPACE);
+        IConfigClient defaultConfigClient = CCSClientFactory.getDefaultConfigClient();
+        String times = cacheClient.get(smskey);
+        try{
+            if (StringUtil.isBlank(times)) {
+                // 邮箱验证
+                String email = request.getParameter("email");
+                String nickName = request.getParameter("userName");
+                SendEmailRequest emailRequest = new SendEmailRequest();
+                emailRequest.setTomails(new String[] { email });
+                emailRequest.setTemplateRUL(UpdatePassword.TEMPLATE_EMAIL_URL);
+                emailRequest.setSubject(UpdatePassword.EMAIL_SUBJECT);
+                // 获取url
+                String cacheKey = request.getParameter("cacheKey");
+                String path = request.getContextPath();  
+                String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
+                String url = basePath+"/center/password/toPasswordPage?cacheKey="+cacheKey;
+                String overTimeStr = defaultConfigClient.get(EmailVerifyConstants.VERIFY_OVERTIME_KEY);
+                // 将发送次数放入缓存
+                String maxTimeStr = defaultConfigClient.get(EmailVerifyConstants.SEND_VERIFY_MAX_TIME_KEY);
+                cacheClient.setex(smskey, Integer.valueOf(maxTimeStr), smstimes);
+                // 超时时间
+                String overTime = ObjectUtils.toString(Integer.valueOf(overTimeStr) / 60);
+                emailRequest.setData(new String[] { nickName, url, overTime });
+                boolean flag = VerifyUtil.sendEmail(emailRequest);
+                if (flag) {
+                    // 成功
+                    return "0000";
+                } else {
+                    // 失败
+                    return "0001";
+                }
+            } else {
+                // 重复发送
+                return "0002";
+            } 
+        }catch(Exception e){
+            LOGGER.error("发送验证码错误：" + e);
+        }
+        return null;
+    }
+	
 	/**
 	 * 发送邮件验证码
 	 * 
 	 * @param accountInfo
 	 */
-	private String sendEmailVerifyCode(String sessionId, SSOClientUser userClient) {
+	/*private String sendEmailVerifyCode(String sessionId, SLPClientUser user) {
 		// 查询是否发送过邮件
 		String smstimes = "1";
-		String smskey = UpdatePassword.CACHE_KEY_SEND_EMAIL_NUM + userClient.getPhone();
+		String smskey = UpdatePassword.CACHE_KEY_SEND_EMAIL_NUM + user.getUserEmail();
 		ICacheClient cacheClient = MCSClientFactory.getCacheClient(UpdatePassword.CACHE_NAMESPACE);
 		IConfigClient defaultConfigClient = CCSClientFactory.getDefaultConfigClient();
 		String times = cacheClient.get(smskey);
 		try{
 		    if (StringUtil.isBlank(times)) {
 	            // 邮箱验证
-	            String email = userClient.getEmail();
-	            String nickName = userClient.getNickName();
+	            String email = user.getUserEmail();
+	            String nickName = user.getUserId();
 	            SendEmailRequest emailRequest = new SendEmailRequest();
 	            emailRequest.setTomails(new String[] { email });
 	            emailRequest.setTemplateRUL(UpdatePassword.TEMPLATE_EMAIL_URL);
@@ -381,7 +427,7 @@ public class UpdatePasswordController {
 		}
 		return null;
 	}
-
+*/
 	/**
 	 * 身份认证
 	 * 
@@ -464,7 +510,7 @@ public class UpdatePasswordController {
 		ResponseData<String> responseData = null;
 		ResponseHeader responseHeader = null;
 		String uuid = request.getParameter(Constants.UUID.KEY_NAME);
-		SSOClientUser userClient = (SSOClientUser) CacheUtil.getValue(uuid, Constants.UpdatePassword.CACHE_NAMESPACE, SSOClientUser.class);
+		SLPClientUser userClient = (SLPClientUser) CacheUtil.getValue(uuid, Constants.UpdatePassword.CACHE_NAMESPACE, SSOClientUser.class);
 		if (userClient == null) {
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "身份认证失效", "/center/password/confirminfo");
 			responseHeader = new ResponseHeader(false, VerifyConstants.ResultCodeConstants.USER_INFO_NULL, "认证身份失效");
@@ -482,9 +528,9 @@ public class UpdatePasswordController {
 			// 更新密码
 			IUcUserSecurityManageSV accountSecurityManageSV = DubboConsumerFactory.getService("iUcUserSecurityManageSV");
 			UcUserPasswordRequest accountPasswordRequest = new UcUserPasswordRequest();
-			accountPasswordRequest.setAccountId(userClient.getAccountId());
+			accountPasswordRequest.setAccountId(userClient.getUserId());
 			accountPasswordRequest.setAccountPassword(encodePassword);
-			accountPasswordRequest.setUpdateAccountId(userClient.getAccountId());
+			//accountPasswordRequest.setUpdateAccountId(userClient.getAccountId());
 			BaseResponse resultData = accountSecurityManageSV.setPasswordData(accountPasswordRequest);
 			if (ResultCode.SUCCESS_CODE.equals(resultData.getResponseHeader().getResultCode())) {
 				String newuuid = UUIDUtil.genId32();
@@ -512,4 +558,5 @@ public class UpdatePasswordController {
 		CacheUtil.deletCache(uuid, Constants.UpdatePassword.CACHE_NAMESPACE);
 		return new ModelAndView("jsp/center/update-password-success");
 	}
+	
 }

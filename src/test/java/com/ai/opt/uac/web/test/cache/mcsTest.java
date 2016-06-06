@@ -12,7 +12,7 @@ import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 public class mcsTest {
     private ICacheClient cacheClient;
 
-    private String namespace = "com.ai.opt.uac.sso.unicache";
+    private String namespace = "com.ai.opt.uac.updatepassword.cache";
 
     @Before
     public void initData() {

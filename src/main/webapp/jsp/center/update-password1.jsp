@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
 	(function() {
-		seajs.use('app/center/changePassword/update-password', function(
+		seajs.use('app/center/password/update-password1', function(
 				UpdatePasswordPager) {
 			var pager = new UpdatePasswordPager();
 			pager.render();
@@ -23,70 +23,6 @@
 			el : '#togglePassword'
 		});
 	});
-	//判断输入密码的类型  
-	function CharMode(iN) {
-		if (iN >= 48 && iN <= 57) //数字  
-			return 1;
-		if (iN >= 65 && iN <= 90) //大写  
-			return 2;
-		if (iN >= 97 && iN <= 122) //小写  
-			return 4;
-		else
-			return 8;
-	}
-	//bitTotal函数  
-	//计算密码模式  
-	function bitTotal(num) {
-		modes = 0;
-		for (i = 0; i < 4; i++) {
-			if (num & 1)
-				modes++;
-			num >>>= 1;
-		}
-		return modes;
-	}
-	//返回强度级别  
-	function checkStrong(sPW) {
-		if (sPW.length <= 8)
-			return 0; //密码太短  
-		Modes = 0;
-		for (i = 0; i < sPW.length; i++) {
-			//密码模式  
-			Modes |= CharMode(sPW.charCodeAt(i));
-		}
-		return bitTotal(Modes);
-	}
-
-	//显示颜色  
-	function pwStrength(pwd) {
-		O_color = "#eeeeee";
-		L_color = "#FF0000";
-		M_color = "#FF9900";
-		H_color = "#33CC00";
-		if (pwd == null || pwd == '') {
-			Lcolor = Mcolor = Hcolor = O_color;
-		} else {
-			S_level = checkStrong(pwd);
-			switch (S_level) {
-			case 0:
-				Lcolor = Mcolor = Hcolor = O_color;
-			case 1:
-				Lcolor = L_color;
-				Mcolor = Hcolor = O_color;
-				break;
-			case 2:
-				Lcolor = Mcolor = M_color;
-				Hcolor = O_color;
-				break;
-			default:
-				Lcolor = Mcolor = Hcolor = H_color;
-			}
-		}
-		document.getElementById("strength_L").style.background = Lcolor;
-		document.getElementById("strength_M").style.background = Mcolor;
-		document.getElementById("strength_H").style.background = Hcolor;
-		return;
-	}
 </script>
 </head>
 
@@ -170,7 +106,7 @@
 						</ul>
 						<ul>
 							<li class="checx-word"><input type="button"
-								class="slp-btn regsiter-btn" id="next1" value="下一步"></li>
+								class="slp-btn regsiter-btn" id="next" value="下一步"></li>
 						</ul>
 					</div>
 					
@@ -217,16 +153,16 @@
 									class="red" id="emailErrMsgShow">邮箱不能为空</span></li>
 							</ul>
 							<ul>
-								<li class="checx-word"><input type="button"
+								<li class="checx-word"><input type="button" id="SENDEMAIL"
 									class="slp-btn regsiter-btn" value="发送验证邮件"></li>
 							</ul>
 						</div>
 					</div>
 					</div>
-				
+					
 				<div class="center-main" id="password-date3" style="display: none;">
 					<div class="list-int">
-						<ul>
+					<ul>
 					<li class="word">新密码:</li>
 					<li><input type="password" class="int-medium"
 						placeholder="请输入密码" id="newPassword"></li>
@@ -264,15 +200,12 @@
 					<input type="hidden" id="captchaEmptyFlag"/>
 					<input type="hidden" id="captchaErrFlag"/>
 					<input type="hidden" id="phoneEmptyFlag"/>
-					<input type="hidden" id="phoneErrFlag"/>
 					<input type="hidden" id="phoneVerifyCodeEmptyFlag"/>
 					<input type="hidden" id="phoneVerifyCodeErrFlag"/>
 					<input type="hidden" id="passwordEmptyFlag"/>
 					<input type="hidden" id="newPasswordEmptyFlag"/>
-					<input type="hidden" id="emailEmptyFlag"/>
 					<input type="hidden" id="emailErrFlag"/>
 		         	<input type="hidden" id="passwordErrFlag"/>
-		         	<input type="hidden" id="newPasswordErrFlag"/>
 		         	<input type="hidden" id="passwordNotEqualFlag"/>
 		         	<input type="hidden" id="tenantId" value="0"/>
 		         	</li>

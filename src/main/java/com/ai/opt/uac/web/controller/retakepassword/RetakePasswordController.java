@@ -480,7 +480,7 @@ public class RetakePasswordController {
 		} else {
 		    IUcUserSecurityManageSV accountManageSV = DubboConsumerFactory.getService("iUcUserSecurityManageSV");
 		    UcUserPasswordRequest passwordRequest = new UcUserPasswordRequest();
-			passwordRequest.setAccountId(userClient.getAccountId());
+//			passwordRequest.setAccountId(userClient.getAccountId());
 			String encodePassword = Md5Encoder.encodePassword(password);
 			passwordRequest.setAccountPassword(encodePassword);
 			passwordRequest.setUpdateAccountId(userClient.getAccountId());
