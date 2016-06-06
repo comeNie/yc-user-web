@@ -125,13 +125,13 @@ define(
 									data : param,
 									message : "正在加载数据..",
 									success : function(data) {
-									if (data.responseHeader.resultCode == "10012") {
+									if (data.responseHeader.resultCode == "100001") {
 										$("#captchaErrMsgShow").text("验证码错误");
 										$("#captchaErrMsg").show();
 										$('#captchaErrFlag').val("0");
 										return false;
 									}
-									if (data.responseHeader.resultCode == "10015") {
+									if (data.responseHeader.resultCode == "100004") {
 										$("#userNameErrMsgShow").text("此用户不存在，请确认用户类型和帐户名称");
 										$("#userNameErrMsg").show();
 										$('#errorUserNameFlag').val("0");

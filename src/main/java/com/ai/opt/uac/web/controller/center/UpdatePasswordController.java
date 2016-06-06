@@ -123,24 +123,24 @@ public class UpdatePasswordController {
         }
         if(!pictureVerifyCodeCache.equals(captcha)){
             responseHeader.setIsSuccess(true);
-            responseHeader.setResultCode("10012");
-            responseData = new ResponseData<String>("10012", "验证码错误", null);
+            responseHeader.setResultCode(VerifyConstants.ResultCodeConstants.REGISTER_PICTURE_ERROR);
+            responseData = new ResponseData<String>(VerifyConstants.ResultCodeConstants.REGISTER_PICTURE_ERROR, "验证码错误", null);
         }else{
             //调dubbo服务
             IUcUserSV ucUserSV = DubboConsumerFactory.getService("iUcUserSV");
             try {
                 searchUserResponse = ucUserSV.queryBaseInfo(queryBaseInfoRequest);
                 responseHeader.setIsSuccess(true);
-                responseData = new ResponseData<String>("10000", "校验成功", null);
+                responseData = new ResponseData<String>(VerifyConstants.ResultCodeConstants.SUCCESS_CODE, "校验成功", null);
             } catch (Exception e) {
                 //查询错误
                 responseHeader.setIsSuccess(false);
-                responseData = new ResponseData<String>("10014", "系统错误", null);
+                responseData = new ResponseData<String>(VerifyConstants.ResultCodeConstants.ERROR_CODE, "系统错误", null);
             }
             if(searchUserResponse.getUserId()==null){
                 responseHeader.setIsSuccess(false);
-                responseHeader.setResultCode("10015");
-                responseData = new ResponseData<String>("10015", "该账户不存在", null);
+                responseHeader.setResultCode(VerifyConstants.ResultCodeConstants.USERNAME_ERROR);
+                responseData = new ResponseData<String>(VerifyConstants.ResultCodeConstants.USERNAME_ERROR, "该账户不存在", null);
             }else{
                 String cacheKey = UUIDUtil.genId32();
                 BeanUtils.copyProperties(searchUserResponse, user);

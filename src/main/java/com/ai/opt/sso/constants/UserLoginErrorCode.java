@@ -22,7 +22,7 @@ public class UserLoginErrorCode implements Serializable{
      */
     public static final String USER_ERR_004 = "USER_ERR_004";
     /**
-     * 验证码为空
+     * 验证码错误
      */
     public static final String USER_ERR_005 = "USER_ERR_005";
     
