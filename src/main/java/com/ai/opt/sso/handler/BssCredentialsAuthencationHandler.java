@@ -20,6 +20,7 @@ import org.jasig.cas.authentication.handler.PrincipalNameTransformer;
 import org.jasig.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
 import org.jasig.cas.authentication.principal.SimplePrincipal;
 import org.jasig.cas.authentication.support.PasswordPolicyConfiguration;
+import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
 import com.ai.opt.base.exception.RPCSystemException;
@@ -182,10 +183,7 @@ public final class BssCredentialsAuthencationHandler
          * throw new CredentialException("账号已失效"); }
          */
 
-            bssCredentials.setUserType(userType);
-            bssCredentials.setUserNickname(response.getUserNickname());
-            bssCredentials.setTenantId(response.getTenantId());
-            bssCredentials.setUserId(response.getUserId());
+        BeanUtils.copyProperties(response, bssCredentials);
             
         logger.info("用户 [" + username + "] 认证成功。");
         logger.info(bssCredentials.toString());

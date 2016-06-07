@@ -185,7 +185,8 @@ define(
 									$("#passwordErrMsg").show();
 									return false;
 								}if(data.responseHeader.resultCode=="000000"){
-									window.location.href = _base+"/center/password/sendEmailSuccess";
+									$("#password-date2").hide();
+									$("#send-email").show();
 								}
 								},
 								

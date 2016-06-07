@@ -43,6 +43,11 @@ public class BssCredentials extends RememberMeUsernamePasswordCredential {
      */
     private String userNickname;
 
+    /**
+     * 用户手机号
+     */
+    private String userMp;
+
     public String getTenantId() {
         return tenantId;
     }
@@ -89,6 +94,14 @@ public class BssCredentials extends RememberMeUsernamePasswordCredential {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUserMp() {
+        return userMp;
+    }
+
+    public void setUserMp(String userMp) {
+        this.userMp = userMp;
     }
 
 }

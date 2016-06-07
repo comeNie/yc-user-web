@@ -129,7 +129,7 @@ public class UpdatePasswordController {
             //调dubbo服务
             IUcUserSV ucUserSV = DubboConsumerFactory.getService("iUcUserSV");
             try {
-                searchUserResponse = ucUserSV.queryBaseInfo(queryBaseInfoRequest);
+                searchUserResponse = ucUserSV.queryByBaseInfo(queryBaseInfoRequest);
                 responseHeader.setIsSuccess(true);
                 responseData = new ResponseData<String>(VerifyConstants.ResultCodeConstants.SUCCESS_CODE, "校验成功", null);
             } catch (Exception e) {

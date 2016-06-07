@@ -184,6 +184,7 @@
             		<value>userType</value>
             		<value>username</value>
             		<value>userNickname</value>
+            		<value>userMp</value>
             	</list>
             </property>
         </bean>

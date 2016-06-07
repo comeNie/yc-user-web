@@ -183,6 +183,7 @@
 						</div>
 					<!--步骤结束-->
              <div class="verify-mailbox">
+             <div style="margin-top:82px;text-align: center;">
              	<ul>
              		<li><img src="${_base }/theme/slp/images/icon-mail.png"></li>
              		<li class="word">邮箱绑定邮件已发送至您的邮箱：ying****un@163.com</li>
@@ -190,8 +191,7 @@
              		<li class="vermail-btn"><input type="button" class="slp-btn regsiter-btn" value="查看验证邮件"></li>	
              	</ul>
              	
-             	
-             </div>
+             	</div>
       </div>
 
   </div>  

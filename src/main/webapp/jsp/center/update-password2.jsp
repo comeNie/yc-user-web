@@ -182,6 +182,17 @@
 			</div>
 			</div>
 			
+			<div class="verify-mailbox" id="send-email" style="display:none">
+             <div style="margin-top:82px;text-align: center;">
+             	<ul>
+             		<li><img src="${_base }/theme/slp/images/icon-mail.png"></li>
+             		<li class="word">邮箱绑定邮件已发送至您的邮箱：ying****un@163.com</li>
+             		<li><a href="#">请在邮件中点击验证链接完成邮箱绑定<span>（验证链接24小时内有效)</span></a></li>
+             		<li class="vermail-btn"><input type="button" class="slp-btn regsiter-btn" value="查看验证邮件"></li>	
+             	</ul>
+             	</div>
+      			</div>
+			
 			<div class="regeiter-success" id="password-date4" style="display: none;">
                  <p><img src="${_base}/theme/slp/images/succ.png"></p>
                  <p class="word">新密码已经设置成功!</p>

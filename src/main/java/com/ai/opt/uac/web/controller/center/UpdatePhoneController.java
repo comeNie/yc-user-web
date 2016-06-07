@@ -537,7 +537,7 @@ public class UpdatePhoneController {
 				// 更新手机
 			    IUcUserSecurityManageSV accountSecurityManageSV = DubboConsumerFactory.getService("iUcUserSecurityManageSV");
 			    UcUserPhoneRequest accountPhoneRequest = new UcUserPhoneRequest();
-				accountPhoneRequest.setAccountId(userClient.getAccountId());
+				//accountPhoneRequest.setAccountId(userClient.getAccountId());
 				accountPhoneRequest.setPhone(phone);
 				accountPhoneRequest.setUpdateAccountId(userClient.getAccountId());
 				BaseResponse resultData = accountSecurityManageSV.setPhoneData(accountPhoneRequest);
