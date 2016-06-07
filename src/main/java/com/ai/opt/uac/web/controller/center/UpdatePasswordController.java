@@ -69,11 +69,12 @@ public class UpdatePasswordController {
 	    ModelAndView model = new ModelAndView("jsp/center/update-password2");
 	    String cacheKey = request.getParameter("cacheKey");
 	    SLPClientUser user = (SLPClientUser) CacheUtil.getValue(cacheKey, UpdatePassword.CACHE_NAMESPACE, SLPClientUser.class);
-	    model.addObject("email", user.getUserEmail()!=null?user.getUserEmail():"未绑定邮箱");
+	    model.addObject("email", user.getUserEmail()!=null&&"10".equals(user.getEmailValidateFlag())?user.getUserEmail():"未绑定邮箱");
 	    model.addObject("phone", user.getUserMp()!=null?user.getUserMp():"未绑定验证手机");
 	    //重新生成uuid
 	    String uuid = UUIDUtil.genId32();
 	    CacheUtil.setValue(uuid, 300, user, UpdatePassword.CACHE_NAMESPACE);
+	    CacheUtil.deletCache(cacheKey, UpdatePassword.CACHE_NAMESPACE);
 	    model.addObject("cacheKey",uuid);
 	    return model;
 	}
@@ -84,6 +85,7 @@ public class UpdatePasswordController {
         
         String cacheKey = request.getParameter("cacheKey");
         SLPClientUser user = (SLPClientUser) CacheUtil.getValue(cacheKey, UpdatePassword.CACHE_NAMESPACE, SLPClientUser.class);
+        CacheUtil.deletCache(cacheKey, UpdatePassword.CACHE_NAMESPACE);
         model.addObject("userId",user.getUserId());
         return model;
     }

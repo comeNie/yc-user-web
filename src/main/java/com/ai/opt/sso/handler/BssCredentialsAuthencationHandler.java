@@ -1,7 +1,6 @@
 package com.ai.opt.sso.handler;
 
 import java.security.GeneralSecurityException;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -25,7 +24,6 @@ import org.springframework.util.StringUtils;
 
 import com.ai.opt.base.exception.RPCSystemException;
 import com.ai.opt.sdk.components.mcs.MCSClientFactory;
-import com.ai.opt.sdk.util.DateUtil;
 import com.ai.opt.sdk.util.Md5Encoder;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.opt.sso.constants.SSOConstants;
@@ -33,7 +31,6 @@ import com.ai.opt.sso.constants.UserLoginErrorCode;
 import com.ai.opt.sso.exception.CaptchaErrorException;
 import com.ai.opt.sso.exception.CaptchaIsNullException;
 import com.ai.opt.sso.exception.CaptchaOutTimeException;
-import com.ai.opt.sso.exception.DefaultLoginException;
 import com.ai.opt.sso.exception.EmailNotExistException;
 import com.ai.opt.sso.exception.PasswordErrorException;
 import com.ai.opt.sso.exception.PasswordIsNullException;
@@ -51,10 +48,10 @@ import com.ai.slp.user.api.login.param.LoginResponse;
 public final class BssCredentialsAuthencationHandler
         extends AbstractPreAndPostProcessingAuthenticationHandler {
 
-    //登录密码实现计数
+/*    //登录密码实现计数
     int count = 0;
     //时间限定
-    Date expireDate = new Date();
+    Date expireDate = new Date();*/
 
     @Resource
     private LoadAccountService loadAccountService;
@@ -155,21 +152,21 @@ public final class BssCredentialsAuthencationHandler
             String encryDbPwd = Md5Encoder.encodePassword(SSOConstants.AIOPT_SALT_KEY + dbPwd);
             // logger.info("【encryDbPwd】=" + encryDbPwd);
 
-            if (count >= 2 && expireDate.getTime() > DateUtil.getCurrentTimeMillis()) {
+ /*           if (count >= 2 && expireDate.getTime() > DateUtil.getCurrentTimeMillis()) {
                 throw new DefaultLoginException();
-            }
+            }*/
             logger.info("【pwdFromPage】=" + pwdFromPage);
             if (!encryDbPwd.equals(pwdFromPage)) {
                 // 密码不对
                 logger.error("密码错误！");
-                if (count == 0) {
+/*                if (count == 0) {
                     expireDate.setTime(DateUtil.getCurrentTimeMillis() + 3 * 60 * 1000);
                     count++;
                 } else {
                     if (DateUtil.getCurrentTimeMillis() >= expireDate.getTime())
                         expireDate.setTime(DateUtil.getCurrentTimeMillis() + 3 * 60 * 1000);
                     count++;
-                }
+                }*/
                 // throw new BusinessException(UserLoginErrorCode.USER_ERR_006, "密码错误");
                 throw new PasswordErrorException();
             }
