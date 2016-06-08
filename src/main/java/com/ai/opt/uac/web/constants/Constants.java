@@ -79,6 +79,7 @@ public final class Constants {
 		public static final String FAIL_CODE = "0";
 		
 		public static final String SUCCESS_CODE = "1";
+		
 	}
     
     public static final class Register {
@@ -141,6 +142,9 @@ public final class Constants {
         public static final String CACHE_KEY_REGISTER_ACCOUNT_ID = "account-id";
         /** 账号ID的存储时间 */
         public static final int CACHE_REGISTER_ACCOUNT_ID_TIME = 300;
+        
+        /**租户Id值*/
+        public static final String TENANT_ID="SLP";
     }
     
     public static final class UpdatePassword{
