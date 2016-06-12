@@ -353,7 +353,7 @@ public class UpdatePasswordController {
                 String cacheKey = request.getParameter("cacheKey");
                 String path = request.getContextPath();  
                 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
-                String url = basePath+"/center/password/toPasswordPage?cacheKey="+cacheKey;
+                String url = basePath+"center/password/toPasswordPage?cacheKey="+cacheKey;
                 String overTimeStr = defaultConfigClient.get(EmailVerifyConstants.VERIFY_OVERTIME_KEY);
                 // 将发送次数放入缓存
                 String maxTimeStr = defaultConfigClient.get(EmailVerifyConstants.SEND_VERIFY_MAX_TIME_KEY);
