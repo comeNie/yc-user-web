@@ -97,7 +97,7 @@
 					<input type="hidden" name="lt" value="${loginTicket}" /> <input
 						type="hidden" name="execution" value="${flowExecutionKey}" /> <input
 						type="hidden" name="_eventId" value="submit" /> <input
-						type="hidden" name="tenantId" value="0" /><input
+						type="hidden" name="tenantId" value="SLP" /><input
 						type="hidden" name="sessionId" value="<%=request.getSession().getId()%>"/>
 				</div>
 			</div>

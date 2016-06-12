@@ -20,9 +20,12 @@
 	})();
 
 	$(function() {
-		$('#password').togglePassword({
-			el : '#togglePassword'
-		});
+		if(${email}==""){
+			$("#SENDEMAIL").attr("disabled",disabled);
+		}		
+		if(${phone}==""){
+			$("#PHONE_IDENTIFY").attr("disabled",disabled);
+		}		
 	});
 </script>
 </head>
@@ -178,7 +181,7 @@
 					<li><input type="password" class="int-medium"
 						placeholder="再次确认密码" id="newPasswordConfirm"></li>
 					<li class="lable" style="display: none;" id="newPasswordErrMsg"><img
-						src="${_base}/theme/slp/images/icon-a.png"><span id="newPasswordErrMsgShow">两次输入的密码不一致</span></li>
+						src="${_base}/theme/slp/images/icon-a.png"><span  id="newPasswordErrMsgShow" class="red">两次输入的密码不一致</span></li>
 				</ul>
 				<ul>
 					<li class="checx-word">
@@ -200,7 +203,7 @@
 					<input type="hidden" id="newPasswordEmptyFlag"/>
 		         	<input type="hidden" id="passwordErrFlag"/>
 		         	<input type="hidden" id="passwordNotEqualFlag"/>
-		         	<input type="hidden" id="tenantId" value="0"/>
+		         	<input type="hidden" id="tenantId" value="SLP"/>
 		         	</li>
 				</ul>
 				<!--主体内容结束-->
