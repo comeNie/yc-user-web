@@ -102,8 +102,7 @@ define(
 							} else {
 								$("#newPasswordErrMsg").hide();
 								$("#passwordNotEqualFlag").val("1");
-								$("#confirmationPasswordImage").attr('src',
-										_base + '/theme/slp/images/icon-b.png');
+								$("#confirmationPasswordImage").attr('src',_base + '/theme/slp/images/icon-b.png');
 								return true;
 							}
 						},
@@ -113,6 +112,7 @@ define(
 							var newPasswordEmptyFlag = $('#newPasswordEmptyFlag').val();
 							var passwordNotEqualFlag = $("#passwordNotEqualFlag").val();
 							var passwordEmptyFlag = $("#passwordEmptyFlag").val();
+							alert(passwordNotEqualFlag);
 							if (passwordErrFlag != "0"
 								&& newPasswordEmptyFlag != "0"
 								&& passwordNotEqualFlag != "0"
