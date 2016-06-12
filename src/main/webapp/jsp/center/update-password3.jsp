@@ -19,14 +19,6 @@
 		});
 	})();
 
-	$(function() {
-		if(${email}==""){
-			$("#SENDEMAIL").attr("disabled",disabled);
-		}		
-		if(${phone}==""){
-			$("#PHONE_IDENTIFY").attr("disabled",disabled);
-		}		
-	});
 </script>
 </head>
 

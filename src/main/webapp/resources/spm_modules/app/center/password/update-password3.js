@@ -92,7 +92,7 @@ define(
 								$("#newPasswordErrMsg").show();
 								return false;
 							}
-							if (inputPassword != confirmationPassword) {
+							if (inputP assword != confirmationPassword) {
 								$("#confirmationPasswordImage").attr('src',
 										_base + '/theme/slp/images/icon-a.png');
 								$("#newPasswordErrMsgShow").text("两次输入的密码不一致");

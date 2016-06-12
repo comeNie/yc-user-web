@@ -20,9 +20,12 @@
 	})();
 
 	$(function() {
-		$('#password').togglePassword({
-			el : '#togglePassword'
-		});
+		if("${email}"=="未绑定邮箱"){
+			$("#SENDEMAIL").attr("disabled",true);
+		}
+		if("${phone}"=="未绑定验证手机"){
+			$("#PHONE_IDENTIFY").attr("disabled",true);
+		}
 	});
 </script>
 </head>
@@ -203,7 +206,7 @@
 					<li class="checx-word">
 					<input type="hidden" id="phoneVerifyCodeEmptyFlag"/>
 					<input type="hidden" id="phoneVerifyCodeErrFlag"/>
-		         	<input type="hidden" id="tenantId" value="0"/>
+		         	<input type="hidden" id="tenantId" value="SLP"/>
 		         	</li>
 				</ul>
 				<!--主体内容结束-->

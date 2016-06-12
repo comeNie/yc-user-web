@@ -207,7 +207,7 @@
 					<input type="hidden" id="emailErrFlag"/>
 		         	<input type="hidden" id="passwordErrFlag"/>
 		         	<input type="hidden" id="passwordNotEqualFlag"/>
-		         	<input type="hidden" id="tenantId" value="0"/>
+		         	<input type="hidden" id="tenantId" value="SLP"/>
 		         	</li>
 				</ul>
 				<!--主体内容结束-->
