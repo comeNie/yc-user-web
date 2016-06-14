@@ -47,9 +47,9 @@
 				<div class="login-main">
 				<ul>
 					<li>
-						<div class="login-note">
+						<div class="login-note" style="color:red;">
 							<form:errors path="*" id="msg" cssClass="errors" element="div"
-								htmlEscape="false" />
+								htmlEscape="false"/>
 						</div>
 					</li>
 				</ul>
