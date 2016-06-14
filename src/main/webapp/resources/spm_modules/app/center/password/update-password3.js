@@ -33,6 +33,8 @@ define(
 					//$("#refresh").on("click", this._refrashVitentify);
 					$("#newPassword").on("blur", this._validServicePaw);
 					$("#newPassword").on("focus",this._hidePassword);
+					$("#newPassword").on("focus",this._hidePasswordConfirm);
+					$("#newPassword").on("blur",this._checkConfirm);
 					$("#newPasswordConfirm").on("focus",this._hidePasswordConfirm);
 					$("#newPasswordConfirm").on("blur", this._passwordConfirmation);
 					$("#BTN_PASSWORD").on("click", this._submit);
@@ -56,27 +58,34 @@ define(
 							var password = $('#newPassword').val();
 							if (password == "") {
 								$('#passwordErrMsgShow').text("请输入密码");
+								$('#passwordImg').attr('src',_base+'/theme/slp/images/icon-a.png');
 								$("#passwordErrMsg").show();
 								return false;
 							} else if (/[\x01-\xFF]*/.test(password)) {
 							  if (/^\S*$/.test(password)) {
 								if (/^[\x21-\x7E]{6,20}$/.test(password)) {
-								$("#passwordErrMsg").hide();
-								$('#passwordErrFlag').val("1");
+									$('#passwordErrFlag').val("1");
+									$('#passwordImg').attr('src',_base+'/theme/slp/images/icon-b.png');
+									$('#passwordErrMsgShow').text("");
+									$("#passwordErrMsg").show();
 								} else {
-								$("#passwordErrMsg").show();
-								$('#passwordErrMsgShow').text("6-20个字符，可用字母、数字及符号的组合 ");
+									$('#passwordErrMsgShow').text("6-20个字符，可用字母、数字及符号的组合 ");
+									$('#passwordImg').attr('src',_base+'/theme/slp/images/icon-e.png');
+									$("#passwordErrMsg").show();
+								
 								$('#passwordErrFlag').val("0");
 								return false;
 								}
 								} else {
 									$('#passwordErrMsgShow').text("不允许有空格 ");
+									$('#passwordImg').attr('src',_base+'/theme/slp/images/icon-e.png');
 									$("#passwordErrMsg").attr("style", "display:");
 									$('#passwordErrFlag').val("0");
 									return false;
 								}
 							} else {
 								$('#passwordErrMsgShow').text("支持数字、字母、符号组合 ");
+								$('#passwordImg').attr('src',_base+'/theme/slp/images/icon-e.png');
 								$("#passwordErrMsg").attr("style", "display:");
 								$('#passwordErrFlag').val("0");
 								return false;
@@ -89,6 +98,7 @@ define(
 							var confirmationPassword = $("#newPasswordConfirm").val();
 							if (confirmationPassword == "") {
 								$('#newPasswordErrMsgShow').text("请输入密码");
+								$('#confirmationPasswordImage').attr('src',_base+'/theme/slp/images/icon-a.png');
 								$("#newPasswordErrMsg").show();
 								return false;
 							}
@@ -100,9 +110,10 @@ define(
 								$("#passwordNotEqualFlag").val("0");
 								return false;
 							} else {
-								$("#newPasswordErrMsg").hide();
 								$("#passwordNotEqualFlag").val("1");
+								$('#newPasswordErrMsgShow').text("");
 								$("#confirmationPasswordImage").attr('src',_base + '/theme/slp/images/icon-b.png');
+								$("#newPasswordErrMsg").show();
 								return true;
 							}
 						},
@@ -112,7 +123,6 @@ define(
 							var newPasswordEmptyFlag = $('#newPasswordEmptyFlag').val();
 							var passwordNotEqualFlag = $("#passwordNotEqualFlag").val();
 							var passwordEmptyFlag = $("#passwordEmptyFlag").val();
-							alert(passwordNotEqualFlag);
 							if (passwordErrFlag != "0"
 								&& newPasswordEmptyFlag != "0"
 								&& passwordNotEqualFlag != "0"
@@ -152,6 +162,19 @@ define(
 
 									});
 				    	}
+						},
+						//校验密码一致性
+						_checkConfirm : function() {
+							var inputPassword = $("#newPassword").val();
+							var confirmationPassword = $("#newPasswordConfirm").val();
+							if (inputPassword != confirmationPassword&&!confirmationPassword=="") {
+								$("#newPasswordErrMsgShow").text("两次输入的密码不一致");
+								$('#confirmationPasswordImage').attr('src',_base+'/theme/slp/images/icon-a.png');
+								$("#newPasswordErrMsg").show();
+								$("#passwordNotEqualFlag").val("0");
+								return false;
+							} 
+							$("#newPasswordErrMsg").hide();
 						}
 			});
 			module.exports = UpdatePasswordPager
