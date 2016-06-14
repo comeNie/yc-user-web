@@ -61,8 +61,10 @@ define(
 							} else if (/[\x01-\xFF]*/.test(password)) {
 							  if (/^\S*$/.test(password)) {
 								if (/^[\x21-\x7E]{6,20}$/.test(password)) {
-								$("#passwordErrMsg").hide();
-								$('#passwordErrFlag').val("1");
+									$('#passwordErrFlag').val("1");
+									$('#passwordImg').attr('src',_base+'/theme/slp/images/icon-b.png');
+									$('#passwordErrMsgShow').text("");
+									$("#passwordErrMsg").show();
 								} else {
 								$("#passwordErrMsg").show();
 								$('#passwordErrMsgShow').text("6-20个字符，可用字母、数字及符号的组合 ");
@@ -100,9 +102,10 @@ define(
 								$("#passwordNotEqualFlag").val("0");
 								return false;
 							} else {
-								$("#newPasswordErrMsg").hide();
 								$("#passwordNotEqualFlag").val("1");
+								$('#newPasswordErrMsgShow').text("");
 								$("#confirmationPasswordImage").attr('src',_base + '/theme/slp/images/icon-b.png');
+								$("#newPasswordErrMsg").show();
 								return true;
 							}
 						},
