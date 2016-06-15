@@ -91,9 +91,10 @@
 							<li class="right"><a href="#" onclick="jumpToFind();">忘记密码</a>|<a href="#"
 								onclick="javascript:jumpTo()">注册新账户</a></li>
 						</ul>
+						<ul>
 						<li><input type="button" class="login-bigbtn" value="立即登录"
 							accesskey="l" tabindex="4" onclick="javascript:dologin();"></li>
-					</ul>
+						</ul>
 					<input type="hidden" name="lt" value="${loginTicket}" /> <input
 						type="hidden" name="execution" value="${flowExecutionKey}" /> <input
 						type="hidden" name="_eventId" value="submit" /> <input
