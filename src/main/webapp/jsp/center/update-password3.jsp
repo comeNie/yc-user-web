@@ -163,7 +163,7 @@
 					<li><input type="password" class="int-medium"
 						placeholder="请输入密码" id="newPassword"></li>
 					<li class="lable" style="display: none;" id="passwordErrMsg"><img
-						src="${_base}/theme/slp/images/icon-c.png"><span id="passwordErrMsgShow">6-20个字符，可用字母、数字及符号的组合</span></li>
+					id="passwordImg" src="${_base}/theme/slp/images/icon-c.png"><span id="passwordErrMsgShow">6-20个字符，可用字母、数字及符号的组合</span></li>
 					<!--  <label> <img src="${_base}/theme/slp/images/pass-a.png"> 
 					<img src="${_base}/theme/slp/images/pass-b.png"></label> -->
 						<!-- <img src="${_base}/theme/slp/images/pass-c.png">有被盗风险,建议使用字母、数字和符号两种及以上组合</label> -->
@@ -173,7 +173,7 @@
 					<li><input type="password" class="int-medium"
 						placeholder="再次确认密码" id="newPasswordConfirm"></li>
 					<li class="lable" style="display: none;" id="newPasswordErrMsg"><img
-						src="${_base}/theme/slp/images/icon-a.png"><span  id="newPasswordErrMsgShow" class="red">两次输入的密码不一致</span></li>
+						id="confirmationPasswordImage" src="${_base}/theme/slp/images/icon-a.png"><span  id="newPasswordErrMsgShow" class="red">两次输入的密码不一致</span></li>
 				</ul>
 				<ul>
 					<li class="checx-word">
