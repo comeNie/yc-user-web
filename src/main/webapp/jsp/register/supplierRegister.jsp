@@ -94,7 +94,7 @@ return;
         <div class="logo">
             <ul>
                 <li><a href="#"><img src="${_base}/theme/slp/images/login-logo.png"></a></li>
-                <li>分销商注册</li>
+                <li>供货商注册</li>
             </ul>
         </div>
         
