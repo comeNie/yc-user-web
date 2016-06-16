@@ -31,7 +31,7 @@
                 <li>已有账户，现在</li>
                 <li><input type="button" value="登录" class="slp-btn wih-btn" onclick="location.href='';"></li>
             </ul>
-        </div>
+        </div> 
     </div>
   <!--login－头部结束-->
   <div class="g-regsiter">
