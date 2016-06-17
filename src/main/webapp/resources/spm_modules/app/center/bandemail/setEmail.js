@@ -35,21 +35,12 @@ define('app/center/bandemail/setEmail', function (require, exports, module) {
     	//重写父类
     	setup: function () {
     		BandEmailPager.superclass.setup.call(this);
-    		this._renderClass();
     	},
     	//加载账户数据
     	_renderClass: function(){
 			var _this = this;
-			//初始化展示页面
-			_this._showClass();
 		},
-    	_showClass: function(){
-    		 //左侧菜单显示样式
-	   		$("#setEmail").addClass("current");
-	   		//标题显示
-	   		$("#set_title_id").html("绑定邮箱");
-	   		$("#updateEmail").addClass("current");
-    	},
+    	
     	_checkEmail:function(){
     		var isOk = this._checkEmailFormat();
     		if(isOk){
