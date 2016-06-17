@@ -4,7 +4,7 @@
 <div class="login-head">
 		<div class="logo">
 			<ul>
-				<li><a href="#"><img
+				<li><a href="${mall_index_url }"><img
 						src="${_base}/theme/slp/images/login-logo.png"></a></li>
 				<li>修改密码</li>
 			</ul>
