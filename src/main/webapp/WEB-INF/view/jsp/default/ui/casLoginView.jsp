@@ -26,13 +26,16 @@
 <script type="text/javascript" src="${_baasBase }/js/md5.js"></script>
 <script type="text/javascript" src="${_baasBase }/js/datacheck.js"></script>
 <script language="javascript" src="${pageContext.request.contextPath}/resources/spm_modules/app/login/casLoginView.js"></script>  
+
+
 </head>
+
 <body class="logo-body">
 	<!--login－头部-->
 	<div class="login-head">
 		<div class="logo">
 			<ul>
-				<li><a href="#"><img src="theme/slp/images/login-logo.png" /></a></li>
+				<li><a href="${baas_pt_index_url}"><img src="theme/slp/images/login-logo.png" /></a></li>
 				<li>用户登录</li>
 			</ul>
 		</div>
