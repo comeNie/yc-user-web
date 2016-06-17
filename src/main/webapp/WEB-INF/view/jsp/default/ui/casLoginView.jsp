@@ -35,7 +35,7 @@
 	<div class="login-head">
 		<div class="logo">
 			<ul>
-				<li><a href="${baas_pt_index_url}"><img src="theme/slp/images/login-logo.png" /></a></li>
+				<li><a href="${mall_index_url}"><img src="theme/slp/images/login-logo.png" /></a></li>
 				<li>用户登录</li>
 			</ul>
 		</div>
