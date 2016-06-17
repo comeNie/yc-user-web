@@ -93,7 +93,7 @@ return;
    <div class="login-head">
         <div class="logo">
             <ul>
-                <li><a href="#"><img src="${_base}/theme/slp/images/login-logo.png"></a></li>
+                <li><a href="${mall_index_url}"><img src="${_base}/theme/slp/images/login-logo.png"></a></li>
                 <li>用户注册</li>
             </ul>
         </div>

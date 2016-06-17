@@ -21,7 +21,7 @@
    <div class="login-head">
         <div class="logo">
             <ul>
-                <li><a href="#"><img src="${_base}/theme/slp/images/login-logo.png"></a></li>
+                <li><a href="${mall_index_url}"><img src="${_base}/theme/slp/images/login-logo.png"/></a></li>
                 <li>用户注册</li>
             </ul>
         </div>
@@ -36,8 +36,8 @@
                 <div class="center-main">
                     <div class="center-table">
                        <ul>
-                           <li><A href="${_base}/reg/toRegister?userType=10" >个人用户</A></li>
-                           <li><A href="${_base}/reg/toRegister?userType=11" class="current">企业用户</A></li>
+                           <li><a href="${_base}/reg/toRegister?userType=10" >个人用户</a></li>
+                           <li><a href="${_base}/reg/toRegister?userType=11" class="current">企业用户</a></li>
                        </ul>
                     </div>
                     
