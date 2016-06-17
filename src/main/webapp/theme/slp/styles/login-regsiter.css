@@ -1,10 +1,10 @@
 .logo-body{ background:#fff;}
 /**按钮**/
-.slp-btn{background:#f4792c; color:#fff; font-size:14px;}
+.slp-btn{background:#f4792c; color:#fff; font-size:14px;outline:none}
 .slp-btn:hover{background:#fc721c}
 
 /**下拉 输入**/
-.select-login-small{width:150px; float:left; border:1px solid #e7e7e7; height:40px;font-size:14px;}
+.select-login-small{width:150px; float:left; border:1px solid #e7e7e7; height:40px;font-size:14px;outline:none}
 .select-login-small:hover{border:1px solid #fc721c;}
 
 .int-xlarge{width:300px; float:left; border:1px solid #e7e7e7; height:40px;font-size:14px; padding-left:6px;}
@@ -30,10 +30,10 @@
 .login-footer-main ul li a:hover{color:#f4792c;}
 
 /**登录banner**/
-.logo-banner-big{ width:100%; float:left; height:456px; background:#ec372f; min-width:1200px;}
+.logo-banner-big{ width:100%; float:left; height:456px; background:#fb862a; min-width:1200px;}
 .banner{ width:1200px; margin:0 auto; background:url(../images/logo-banner.png) no-repeat; height:456px;}
 /**登录框**/
-.login-main{width:348px; height:370px; background:#fffbfb; float:right; margin:40px 70px 0 0; padding:20px 27px;}
+.login-main{width:348px; height:370px; background:#fffbfb; float:right; margin:40px 70px 0 0; padding:0px 27px;}
 .login-main ul{ width:100%; margin-top:15px; float:left;position:relative;}
 .login-main ul li{ float:left; font-size:14px; }
 .login-main ul .yazm{ float:left; margin-left:8px;}
@@ -70,20 +70,20 @@
 .steps ul .ash-border{ width:100%; float:left; border-bottom:4px solid #ccc; margin-bottom:20px;}
 .steps ul .ash-yuan{ width:24px; height:24px; background:#ccc; border-radius:50%; text-align:center; color:#fff; font-size:14px; position:absolute; left:68px; margin-right:24px; top:-12px; line-height:24px;}
 /**步骤样式结束***/
-.list-int{ width:750px; margin:60px  auto; }
-.list-int ul{ width:100%; float:left; height:50px;}
+.list-int{ width:770px; margin:60px  auto; }
+.list-int ul{ width:100%; float:left; height:58px;}
 .list-int ul li{ float:left; line-height:30px; margin-left:10px;}
 .list-int ul .word{ width:120px; text-align:right;}
 .list-int ul .word span{ color:red;}
-.list-int ul .lable { font-size:12px;}
+.list-int ul .lable { font-size:12px;margin-top:4px;}
 .list-int ul .lable img{ float:left; margin-top:7px; margin-right:4px;}
 .list-int ul .lable .red{ color:red;}
 .list-int ul .re-btn{ margin-left:4px;}
 .list-int ul .checx-word{ float:left; margin-left:140px;}
 .list-int ul .checx-word a{ color:#005aa0;}
-.list-int ul label{ width:100%; float:left; padding-left:140px; margin-top:2px; font-size:12px; color:#999;}
+.list-int ul label{ width:100%; float:left; padding-left:140px; margin-top:4px; font-size:12px; color:#999;}
 .list-int ul label img{ float:left; margin-right:4px;}
-
+.disabled{background:#f7f7f7;}
 /**注册成功**/
 .regeiter-success{width:1000px; float:left; margin-top:60px;}
 .regeiter-success p{text-align:center; color:#666; margin-bottom:20px; }
@@ -96,15 +96,15 @@
 .int-medium:hover{ border:1px solid #fc721c}
 .int-small{ width:116px; float:left; border:1px solid #e7e7e7; height:30px; padding-left:4px; font-size:12px;}
 .int-small:hover{ border:1px solid #fc721c}
-.int-btn{ width:110px; float:left; background:#ebeaea; border:1px solid #d3d3d3; height:30px; cursor:pointer;}
+.int-btn{ width:110px; float:left; background:#ebeaea; border:1px solid #d3d3d3; height:30px; cursor:pointer;outline:none}
 .int-chec{ width:14px; height:14px;}
-.regsiter-btn{ width:230px; height:40px; cursor:pointer; margin-top:10px;}
+.regsiter-btn{ width:230px; height:40px; cursor:pointer; margin-top:10px;outline:none}
 .slp-btn{background:#f4792c; color:#fff; font-size:14px;}
 .slp-btn:hover{  background:#fc721c}
 
 /**忘记密码**/
 .steps-four{ width: 640px;}
-.select-medium{ width:230px; float:left; border:1px solid #e7e7e7; height:30px; padding-left:4px; font-size:12px;}
+.select-medium{ width:230px; float:left; border:1px solid #e7e7e7; height:30px; padding-left:4px; font-size:12px;outline:none}
 .select-medium:hover{ border:1px solid #fc721c}
 .list-int .yazm img{ height: 30px;}
 .yazm a{line-height: 30px; color: #005aa0;}
