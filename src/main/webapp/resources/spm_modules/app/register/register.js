@@ -395,7 +395,7 @@ define('app/register/register', function (require, exports, module) {
     			$('#userNameImage').attr('src',_base+'/theme/slp/images/icon-a.png');
     			$('#userNameErrorMsgShow').show();
     			$('#errorUserNameMsg').show();
-    			$("#errorUserNameFlag").val("0")
+    			$("#errorUserNameFlag").val("0");
     			flag = false;
     		}else{
     			var reg = /^[\u4e00-\u9fa5a-zA-Z0-9\-\_]{4,20}$/;
@@ -459,10 +459,8 @@ define('app/register/register', function (require, exports, module) {
     	},
     	
     	_checkConfirmPassword:function(){
-    		
     		var confirmationPassword = $("#confirmationPassword").val();
     		var inputPassword = $("#inputPassword").val();
-    		
     		if(confirmationPassword!=""){
     			$("#confirmationPasswordImage").attr('src',_base+'/theme/slp/images/icon-b.png');
     			$("#errorConfirmFlag").val("1");

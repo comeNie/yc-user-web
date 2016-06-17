@@ -49,7 +49,8 @@ define('app/register/supplier-register-success', function (require, exports, mod
 				 time.html(--second);  
 				 setInterval(this._login,1000);     
 			    }else{     
-			     ajaxController.ajax({
+			    	window.location.href =_mall_index_url;
+			     /*ajaxController.ajax({
 						url :_base+"/reg/login?accountIdKey="+key,
 						processing: true,
 						message : "正在处理中，请稍候...",
@@ -62,7 +63,7 @@ define('app/register/supplier-register-success', function (require, exports, mod
 						error: function() {
 							alert("连接服务器超时")
 						}
-					});
+					});*/
 			  } 
 		}
     });
