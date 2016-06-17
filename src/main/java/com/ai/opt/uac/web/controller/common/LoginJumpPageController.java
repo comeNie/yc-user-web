@@ -29,6 +29,6 @@ public class LoginJumpPageController {
 		if (StringUtil.isBlank(service_url)) {
 			service_url = SSOClientUtil.getCasServerUrlPrefixRuntime(request);
 		}
-		return "redirect:"+service_url;
+		return "redirect:"+"http://localhost:8090/slp-mall";
 	}
 }
