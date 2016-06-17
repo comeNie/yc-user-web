@@ -57,7 +57,7 @@
 							<li class="ash-border" id="FinishPasswordBorder"></li>
 							<li class="ash-yuan" id="FinishPasswordYuan">
 							<i class="icon-ok" id="FinishPasswordWord"></i></li>
-							<li>注册成功</li>
+							<li>修改成功</li>
 						</ul>
 						</div>
 					<!--步骤结束-->
