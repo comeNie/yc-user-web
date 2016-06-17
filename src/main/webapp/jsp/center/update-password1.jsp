@@ -28,23 +28,7 @@
 
 <body class="logo-body">
 	<!--login－头部-->
-	<div class="login-head">
-		<div class="logo">
-			<ul>
-				<li><a href="#"><img
-						src="${_base}/theme/slp/images/login-logo.png"></a></li>
-				<li>修改密码</li>
-			</ul>
-		</div>
-
-		<div class="login-btn">
-			<ul>
-				<li>已有账户，现在</li>
-				<li><input type="button" value="登录" class="slp-btn wih-btn"
-					onclick="location.href='${_base}/login';"></li>
-			</ul>
-		</div>
-	</div>
+	<%@ include file="/inc/head-retakepwd.jsp" %>
 	<!--login－头部结束-->
 	<div class="g-regsiter">
 		<!--白色框架-->
