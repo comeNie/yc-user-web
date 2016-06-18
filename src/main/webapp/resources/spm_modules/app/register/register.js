@@ -513,6 +513,7 @@ define('app/register/register', function (require, exports, module) {
     		var errorConfirmFlag=$('#errorConfirmFlag').val();
     		var errorPassEqualsFlag = $("#errorPassEqualsFlag").val();
     		var userType = $("#userType").val();
+    		var loginName = $("#userName").val();
     		var checkbox = $("#agreeChecbox").is(':checked');
     		if(!checkbox){
     			$("#agreeProtocol").show();
@@ -567,8 +568,8 @@ define('app/register/register', function (require, exports, module) {
     							return false;
     			        	}else if(data.responseHeader.resultCode=="000000"){
     			        		$("#errorSmsMsg").attr("style","display:none");
-    			        		var loginName = data.data;
-        			        	window.location.href=_base+"/reg/toRegisterSuccess?loginName="+loginName+"&userType="+userType;
+    			        		var uuid = data.data;
+        			        	window.location.href=_base+"/reg/toRegisterSuccess?loginName="+loginName+"&userType="+userType+"&key="+uuid;
     			        	}
     			        	
     			        },

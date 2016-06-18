@@ -7,6 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" /> 
 <title>注册-成功</title>
  <script type="text/javascript">
+ //var autoInterval;//定时器
 (function () {
 	seajs.use('app/register/agent-register-success', function (RegisterSucessPager) {
 		var pager = new RegisterSucessPager();
@@ -37,7 +38,8 @@
                  <div class="regeiter-success">
                  <p><img src="${_base}/theme/slp/images/succ.png"/></p>
                  <p class="word">恭喜，您的账户 <%=request.getAttribute("loginName") %> 已经注册成功！</p>
-                 <p><span id="time">10</span>秒后，跳转至您的商城首页。<A href="${mall_index_url}">立即前往>></A></p>
+                 <p><span id="time">10</span>秒后，跳转至您的商城首页。<A id="gotoMall" href="javascript:void(0);">立即前往>></A></p>
+                 <input type="hidden" id="k" value="${k }" />
                  </div>
                 </div>
                 </div>

@@ -41,8 +41,10 @@ import com.ai.opt.uac.web.constants.VerifyConstants.EmailVerifyConstants;
 import com.ai.opt.uac.web.constants.VerifyConstants.PhoneVerifyConstants;
 import com.ai.opt.uac.web.constants.VerifyConstants.ResultCodeConstants;
 import com.ai.opt.uac.web.model.email.SendEmailRequest;
+import com.ai.opt.uac.web.model.login.LoginUser;
 import com.ai.opt.uac.web.model.register.GetSMDataReq;
 import com.ai.opt.uac.web.model.register.UpdateEmailReq;
+import com.ai.opt.uac.web.util.CacheUtil;
 import com.ai.opt.uac.web.util.IPUtil;
 import com.ai.opt.uac.web.util.VerifyUtil;
 import com.ai.paas.ipaas.ccs.IConfigClient;
@@ -61,6 +63,7 @@ import com.ai.slp.user.api.ucUserSecurity.param.UcUserEmailRequest;
 import com.ai.slp.user.api.ucuser.intefaces.IUcUserSV;
 import com.ai.slp.user.api.ucuser.param.SearchUserRequest;
 import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
+import com.alibaba.fastjson.JSON;
 
 import net.sf.json.JSONObject;
 
@@ -99,14 +102,21 @@ public class RegisterController {
 
 	@RequestMapping("/toRegisterSuccess")
 	public ModelAndView registerSuccess(@RequestParam(value = "loginName", required = false) String loginName,@RequestParam(value = "userType", required = false) String userType, HttpServletRequest request) {
-		
+		String key=request.getParameter("key");
 	    String loginNameStr = request.getParameter("loginName");
+	    
+	    //将注册的用户信息，转存到cache里，用于自动登录
+	    String uuid=UUIDUtil.genId32();
+	    LoginUser loginUser = (LoginUser)CacheUtil.getValue(key, Constants.LoginConstant.CACHE_NAMESPACE, LoginUser.class);
+	    CacheUtil.setValue(uuid, 1800, JSON.toJSONString(loginUser), Constants.LoginConstant.CACHE_NAMESPACE);
 	    try {
             loginNameStr = new String(loginNameStr.getBytes("iso8859-1"),"utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 	    
+	    //将注册的用户信息，转存到cache里，用于自动登录
+	    request.setAttribute("k", uuid);
 	    request.setAttribute("loginName", loginNameStr);
 		 /**
          * 10 个人注册  11 企业用户  12代理商注册 13分销商注册
@@ -213,9 +223,18 @@ public class RegisterController {
 				header.setResultMessage("注册成功");
 				String accountIdKey = UUIDUtil.genId32();
 				String loginName = userParams.getUcUserParam().getUserLoginName();
-				// 将账号id存到缓存中
+				// 将账号id存到缓存中 TODO 需确认该key是否已经使用？ 
 				iCacheClient.setex(accountIdKey, Register.CACHE_REGISTER_ACCOUNT_ID_TIME, userId);
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "注册成功", loginName);
+				//将登录信息放到cache里面
+				LoginUser autoLoginUser=new LoginUser();
+				autoLoginUser.setUserId(userId);
+				autoLoginUser.setUserType(userParams.getUcUserParam().getUserType());
+				autoLoginUser.setUserName(loginName);
+				autoLoginUser.setPassword(userParams.getUcUserParam().getUserLoginPwd());
+				String uuid=UUIDUtil.genId32();
+				CacheUtil.setValue(uuid, 1800, JSON.toJSONString(autoLoginUser), Constants.LoginConstant.CACHE_NAMESPACE);
+				
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "注册成功", uuid);
 				responseData.setResponseHeader(header);
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, message, null);

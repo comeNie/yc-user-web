@@ -35,6 +35,14 @@ define('app/register/agent-register-success', function (require, exports, module
     		//this._renderIndustryInfo();
     		////this._submit();
     		this._addLogin();
+    		$("#gotoMall").on("click",this._gotoMall);
+    	},
+    	_gotoMall: function(){
+    		var key = $("#k").val();
+    		var service_url=encodeURIComponent(_mall_index_url+'/login');
+    		var url=_base+'/registerLogin?k='+key+"&service="+service_url;
+    		window.location.href=url;
+    		
     	},
     	_addLogin: function(){
     		var _this = this;
@@ -42,28 +50,13 @@ define('app/register/agent-register-success', function (require, exports, module
 			_this._login();
     	},
 		_login: function(){
-			 var key = $("#accountIdKey").val();
 			 var time = $("#time");
 			 var second = $("#time").html();
 			 if(second>0){     
 				 time.html(--second);  
 				 setInterval(this._login,1000);     
 			    }else{     
-			    	window.location.href =_mall_index_url;
-			     /*ajaxController.ajax({
-						url :_base+"/reg/login?accountIdKey="+key,
-						processing: true,
-						message : "正在处理中，请稍候...",
-						success : function(data) {
-							//var status = data.responseHeader.isSuccess;
-							var status=data.responseHeader.resultCode;
-							var url = data.data;
-							window.location.href = _base+url;
-						},
-						error: function() {
-							alert("连接服务器超时")
-						}
-					});*/
+			    	window.location.href =_base+'/registerLogin?k='+$("#k").val()+"&service="+encodeURIComponent(_mall_index_url+'/login');
 			  } 
 		}
     });

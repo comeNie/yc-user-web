@@ -10,12 +10,17 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
+import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.opt.sdk.util.Md5Encoder;
+import com.ai.opt.sdk.util.RandomUtil;
 import com.ai.opt.sso.constants.SSOConstants;
 import com.ai.opt.sso.principal.BssCredentials;
 import com.ai.opt.uac.web.constants.Constants;
+import com.ai.opt.uac.web.constants.Constants.Register;
+import com.ai.opt.uac.web.constants.VerifyConstants.PictureVerifyConstants;
 import com.ai.opt.uac.web.model.login.LoginUser;
 import com.ai.opt.uac.web.util.CacheUtil;
+import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 
 /**
  * 注册后自动登录
@@ -37,10 +42,11 @@ public class RegisterAfterLoginController extends AbstractController {
 		LoginUser loginUser = (LoginUser)CacheUtil.getValue(uuid, Constants.LoginConstant.CACHE_NAMESPACE, LoginUser.class);
 		// username 和password从cache里取
 		if(loginUser != null){
+			String usertype = loginUser.getUserType();
 			String username = loginUser.getUserName();
 			String password = loginUser.getPassword();
 			password = Md5Encoder.encodePassword(SSOConstants.AIOPT_SALT_KEY + password);
-			bindTicketGrantingTicket(username, password, request, response);
+			bindTicketGrantingTicket(usertype,username, password, request, response);
 			CacheUtil.deletCache(uuid, Constants.LoginConstant.CACHE_NAMESPACE);
 		}
 		String viewName = getSignInView(request);
@@ -60,11 +66,20 @@ public class RegisterAfterLoginController extends AbstractController {
 	 * @param response
 	 *            the HttpServletResponse object.
 	 */
-	protected void bindTicketGrantingTicket(String loginName, String loginPassword, HttpServletRequest request, HttpServletResponse response) {
+	protected void bindTicketGrantingTicket(String userType,String loginName, String loginPassword,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			BssCredentials credentials = new BssCredentials();
+			credentials.setUserType(userType);
 			credentials.setUsername(loginName);
 			credentials.setPassword(loginPassword);
+			
+			//伪造验证码
+			String cacheKey = Register.CACHE_KEY_VERIFY_PICTURE + request.getSession().getId();
+			String captchaCode= RandomUtil.randomString(PictureVerifyConstants.VERIFY_SIZE);
+			ICacheClient cacheClient = MCSClientFactory.getCacheClient(Register.CACHE_NAMESPACE);
+			cacheClient.setex(cacheKey, 1800, captchaCode);
+			credentials.setCaptchaCode(captchaCode);
+			credentials.setSessionId(request.getSession().getId());
 			String ticketGrantingTicket = centralAuthenticationService.createTicketGrantingTicket(credentials);
 			ticketGrantingTicketCookieGenerator.addCookie(request, response, ticketGrantingTicket);
 		} catch (TicketException te) {
