@@ -121,12 +121,12 @@ public class RegisterController {
 	    request.setAttribute("k", uuid);
 	    request.setAttribute("loginName", loginNameStr);
 	    
-	    Cookie[] cookies = request.getCookies();
+	  /*  Cookie[] cookies = request.getCookies();
 	    if(!CollectionUtil.isEmpty(cookies)){
 	        for(Cookie cookie:cookies){
 	            cookie.setMaxAge(0);
 	        }
-	    }
+	    }*/
 	    
 		 /**
          * 10 个人注册  11 企业用户  12代理商注册 13分销商注册
