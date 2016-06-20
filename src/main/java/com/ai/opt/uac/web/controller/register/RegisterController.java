@@ -124,7 +124,9 @@ public class RegisterController {
 	    Cookie[] cookies = request.getCookies();
 	    if(!CollectionUtil.isEmpty(cookies)){
 	        for(Cookie cookie:cookies){
-	            cookie.setMaxAge(0);
+	            if("CASTGC".equals(cookie.getName())){
+	                cookie.setMaxAge(0);
+	            }
 	        }
 	    }
 	    
