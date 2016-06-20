@@ -3,7 +3,6 @@
 <html>
 <head>
 <%@ include file="/inc/inc.jsp"%>
-<img src="${_mall_index_url}/ssologout" style="display: none"></img>
 <!--Support IE Text -->
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" /> 
 <title>注册-成功</title>
@@ -19,6 +18,7 @@
 </script>
 </head>
 <body class="logo-body">
+<img src="${_mall_index_url}/ssologout" style="display: none"></img>
    <!--login－头部-->
    <div class="login-head">
         <div class="logo">
