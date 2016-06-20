@@ -124,9 +124,11 @@ public class RegisterController {
 	    Cookie[] cookies = request.getCookies();
 	    if(!CollectionUtil.isEmpty(cookies)){
 	        for(Cookie cookie:cookies){
-	            if("CASTGC".equals(cookie.getName())){
+	            if("CASTGC".equalsIgnoreCase(cookie.getName()) || "CASPRIVACY".equalsIgnoreCase(cookie.getName())){
+	            	LOG.error("清除单点登录信息【"+cookie.getName()+"】:"+JSON.toJSONString(cookie));
 	                cookie.setMaxAge(0);
 	            }
+	            
 	        }
 	    }
 	    
