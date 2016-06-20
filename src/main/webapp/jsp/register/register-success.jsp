@@ -16,8 +16,8 @@
 })(); 
 </script>
 </head>
-
 <body class="logo-body">
+<img src="${_base }/logout"></img>
    <!--login－头部-->
    <div class="login-head">
         <div class="logo">
