@@ -9,9 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
@@ -28,6 +31,7 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.ccs.CCSClientFactory;
 import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.RandomUtil;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.opt.sdk.util.UUIDUtil;
@@ -65,8 +69,6 @@ import com.ai.slp.user.api.ucuser.param.SearchUserRequest;
 import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
 import com.alibaba.fastjson.JSON;
 
-import net.sf.json.JSONObject;
-
 @RequestMapping("/reg")
 @Controller
 public class RegisterController {
@@ -95,7 +97,7 @@ public class RegisterController {
 	}
 
 	@RequestMapping("/toRegisterEmail")
-	public ModelAndView registerEmail(@RequestParam(value = "accountIdKey", required = false) String accountIdKey, HttpServletRequest request) {
+	public ModelAndView registerEmail(@RequestParam(value = "accountIdKey", required = false) String accountIdKey, HttpServletRequest request,HttpServletResponse response) {
 		request.setAttribute("accountIdKey", accountIdKey);
 		return new ModelAndView("jsp/register/register-email");
 	}
@@ -118,6 +120,14 @@ public class RegisterController {
 	    //将注册的用户信息，转存到cache里，用于自动登录
 	    request.setAttribute("k", uuid);
 	    request.setAttribute("loginName", loginNameStr);
+	    
+	    Cookie[] cookies = request.getCookies();
+	    if(!CollectionUtil.isEmpty(cookies)){
+	        for(Cookie cookie:cookies){
+	            cookie.setMaxAge(0);
+	        }
+	    }
+	    
 		 /**
          * 10 个人注册  11 企业用户  12代理商注册 13分销商注册
          */
