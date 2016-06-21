@@ -46,12 +46,12 @@
 						<ul>
 							<li class="ash-border" id="VerificationBorder"></li>
 							<li class="ash-yuan" id="VerificationYuan">2</li>
-							<li class="yellow-word" id="VerificationWord">验证身份</li>
+							<li class="" id="VerificationWord">验证身份</li>
 						</ul>
 						<ul>
 							<li class="ash-border" id="PasswordVerificationBorder"></li>
 							<li class="ash-yuan" id="PasswordVerificationYuan">3</li>
-							<li class="yellow-word" id="PasswordVerificationWord">设置新密码</li>
+							<li class="" id="PasswordVerificationWord">设置新密码</li>
 						</ul>
 						<ul>
 							<li class="ash-border" id="FinishPasswordBorder"></li>
