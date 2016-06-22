@@ -71,6 +71,7 @@ public class UpdatePasswordController {
 	    SLPClientUser user = (SLPClientUser) CacheUtil.getValue(cacheKey, UpdatePassword.CACHE_NAMESPACE, SLPClientUser.class);
 	    model.addObject("email", user.getUserEmail()!=null&&"10".equals(user.getEmailValidateFlag())?user.getUserEmail():"未绑定邮箱");
 	    model.addObject("phone", user.getUserMp()!=null?user.getUserMp():"未绑定验证手机");
+	    model.addObject("userName",user.getUserLoginName());
 	    //重新生成uuid
 	    String uuid = UUIDUtil.genId32();
 	    CacheUtil.setValue(uuid, 300, user, UpdatePassword.CACHE_NAMESPACE);
@@ -92,6 +93,7 @@ public class UpdatePasswordController {
     //跳转发送成功页面
     @RequestMapping("/sendEmailSuccess")
     public ModelAndView sendEmailSuccess(HttpServletRequest request, HttpServletResponse response){
+        
         return new ModelAndView("jsp/center/send-email-success");
     }
     
@@ -344,7 +346,7 @@ public class UpdatePasswordController {
             if (StringUtil.isBlank(times)) {
                 // 邮箱验证
                 String email = request.getParameter("email");
-                String nickName = request.getParameter("userName");
+                String userName = request.getParameter("userName");
                 SendEmailRequest emailRequest = new SendEmailRequest();
                 emailRequest.setTomails(new String[] { email });
                 emailRequest.setTemplateRUL(UpdatePassword.TEMPLATE_EMAIL_URL);
@@ -360,7 +362,7 @@ public class UpdatePasswordController {
                 cacheClient.setex(smskey, Integer.valueOf(maxTimeStr), smstimes);
                 // 超时时间
                 String overTime = ObjectUtils.toString(Integer.valueOf(overTimeStr) / 60);
-                emailRequest.setData(new String[] { nickName, url, overTime });
+                emailRequest.setData(new String[] { userName, url, overTime });
                 boolean flag = VerifyUtil.sendEmail(emailRequest);
                 if (flag) {
                     // 成功
