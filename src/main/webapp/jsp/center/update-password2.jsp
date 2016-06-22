@@ -172,7 +172,7 @@
              	<ul style="width:100%;float:left;">
              		<li style="text-align:center;line-height:30px;"><img src="${_base }/theme/slp/images/icon-mail.png"></li>
              		<li class="word" style="text-align:center;line-height:30px;">邮箱绑定邮件已发送至您的邮箱：${email }</li>
-             		<li style="text-align:center;line-height:30px;">请在邮件中点击验证链接完成邮箱绑定<span>（验证链接24小时内有效)</span></li>
+             		<li style="text-align:center;line-height:30px;">请在邮件中点击验证链接完成邮箱绑定<span>（验证链接30分钟内有效)</span></li>
              		<!-- <li class="vermail-btn" style="text-align:center;line-height:30px;"><input type="button" class="slp-btn regsiter-btn" value="查看验证邮件"></li> -->	
              	</ul>
              	</div>

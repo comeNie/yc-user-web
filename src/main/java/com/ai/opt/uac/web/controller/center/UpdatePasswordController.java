@@ -43,6 +43,7 @@ import com.ai.opt.uac.web.util.CacheUtil;
 import com.ai.opt.uac.web.util.IPUtil;
 import com.ai.opt.uac.web.util.VerifyUtil;
 import com.ai.paas.ipaas.ccs.IConfigClient;
+import com.ai.paas.ipaas.mcs.impl.CacheClient;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.slp.user.api.ucUserSecurity.interfaces.IUcUserSecurityManageSV;
 import com.ai.slp.user.api.ucUserSecurity.param.UcUserPasswordRequest;
@@ -83,11 +84,15 @@ public class UpdatePasswordController {
     @RequestMapping("/toPasswordPage")
     public ModelAndView toPasswordPage(HttpServletRequest request, HttpServletResponse response){
         ModelAndView model = new ModelAndView("jsp/center/update-password3");
+        ICacheClient cacheClient = MCSClientFactory.getCacheClient(UpdatePassword.CACHE_NAMESPACE);
         
         String cacheKey = request.getParameter("cacheKey");
+        String cacheCache = cacheClient.get("cacheKey");
+        if(cacheCache!=""&&cacheCache.equals(cacheKey)){
         SLPClientUser user = (SLPClientUser) CacheUtil.getValue(cacheKey, UpdatePassword.CACHE_NAMESPACE, SLPClientUser.class);
-        CacheUtil.deletCache(cacheKey, UpdatePassword.CACHE_NAMESPACE);
         model.addObject("userId",user.getUserId());
+        CacheUtil.deletCache(cacheKey, UpdatePassword.CACHE_NAMESPACE);
+       }
         return model;
     }
     //跳转发送成功页面
@@ -357,6 +362,7 @@ public class UpdatePasswordController {
                 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
                 String url = basePath+"center/password/toPasswordPage?cacheKey="+cacheKey;
                 String overTimeStr = defaultConfigClient.get(EmailVerifyConstants.VERIFY_OVERTIME_KEY);
+                cacheClient.setex("cacheKey", Integer.valueOf(overTimeStr)/60*500, cacheKey);
                 // 将发送次数放入缓存
                 String maxTimeStr = defaultConfigClient.get(EmailVerifyConstants.SEND_VERIFY_MAX_TIME_KEY);
                 cacheClient.setex(smskey, Integer.valueOf(maxTimeStr), smstimes);
