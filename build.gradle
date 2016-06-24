@@ -56,14 +56,9 @@ dependencies {
     compile 'jstl:jstl:1.2'
     //cache
     compile 'com.ai.runner.center.mmp:manager:1.0.0-SNAPSHOT'
-    //alibaba
-    compile ('com.alibaba:dubbox:2.8.3'){
-        exclude group: 'org.springframework', module: 'spring'
-    }
     
     compile ('com.ai.opt.sdk:opt-sdk:2.0-SNAPSHOT'){
-        exclude group: 'org.springframework', module: 'spring'
-        exclude group: 'org.quartz-scheduler'
+        exclude group: 'org.quartz-scheduler', module: 'quartz'
     }
     
     compile 'org.javassist:javassist:3.19.0-GA'
@@ -71,9 +66,15 @@ dependencies {
     
     //dubbo
     
-    compile 'com.ai.opt.xss.filter:opt-xss-firewall:1.0-SNAPSHOT'
-    compile 'com.ai.opt.uni.session:opt-uni-session:2.0-SNAPSHOT'
-    compile 'com.ai.opt.sso.client:opt-sso-client:1.0.2-SNAPSHOT'
+    compile ('com.ai.opt.xss.filter:opt-xss-firewall:1.0-SNAPSHOT'){
+        exclude group: 'org.quartz-scheduler', module: 'quartz'
+    }
+    compile ('com.ai.opt.uni.session:opt-uni-session:2.0-SNAPSHOT'){
+        exclude group: 'org.quartz-scheduler', module: 'quartz'
+    }
+    compile ('com.ai.opt.sso.client:opt-sso-client:1.0.2-SNAPSHOT'){
+        exclude group: 'org.quartz-scheduler', module: 'quartz'
+    }
     
     compile 'com.ai.slp.user:login:1.0-SNAPSHOT'
     compile 'com.ai.slp.user:register:1.0-SNAPSHOT'
