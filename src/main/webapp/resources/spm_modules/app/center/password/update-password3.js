@@ -146,7 +146,7 @@ define(
 								$("#FinishPasswordYuan").removeClass()
 										.addClass("yellow-yuan");
 								$("#FinishPasswordWord").removeClass()
-										.addClass("yellow-word");
+										.addClass("icon-ok");
 								$("#password-date1").hide();
 								$("#password-date2").hide();
 								$("#password-date3").hide();

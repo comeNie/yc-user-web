@@ -167,9 +167,8 @@ define(
 						//发送验证邮件
 						_sendEmail : function(){
 								var param = {
-								userType: $("#userType").val(),
-								userLoginName: $("#userName").val(),
-								email:$("#email").val(),
+								userName: $("#userName").val(),
+								email:$("#email").html(),
 								tenantId:$("#tenantId").val(),
 								};
 

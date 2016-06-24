@@ -55,7 +55,7 @@
 						<ul>
 							<li class="ash-border" id="PasswordVerificationBorder"></li>
 							<li class="ash-yuan" id="PasswordVerificationYuan">3</li>
-							<li class="yellow-word" id="PasswordVerificationWord">设置新密码</li>
+							<li class="" id="PasswordVerificationWord">设置新密码</li>
 						</ul>
 						<ul>
 							<li class="ash-border" id="FinishPasswordBorder"></li>
@@ -78,7 +78,7 @@
 						</ul>
 						<ul>
 							<li class="word">账户名称:</li>
-							<li><input type="text" class="int-medium" id="userName" placeholder="用户名/手机/已验证邮箱"></li>
+							<li><input type="text" class="int-medium" id="userName" placeholder="用户名/手机/已验证邮箱" value="${userName }"></li>
 							<li class="lable" id="userNameErrMsg" style="display: none;"><img
 								src="${_base}/theme/slp/images/icon-a.png"><span
 								class="red" id="userNameErrMsgShow">此用户不存在，请确认用户类型和帐户名称</span></li>
@@ -110,8 +110,7 @@
 						<div class="phone">
 							<ul>
 								<li class="word">手机:</li>
-								<li><input type="text" class="int-medium" id="phone"
-									value="${phone }" disabled="disabled"></li>
+								<li id="phone">${phone }</li>
 							</ul>
 							<ul>
 								<li class="word">短信验证码:</li>
@@ -130,9 +129,7 @@
 						<div class="mail" style="display: none;">
 							<ul>
 								<li class="word">已验证邮箱:</li>
-								<li><input type="text" class="int-medium"
-									value="${email }" id="email" disabled="disabled">
-								</li>
+								<li id="email">${email }</li>
 							</ul>
 							<ul>
 								<li class="checx-word"><input type="button" id="SENDEMAIL"
@@ -169,16 +166,18 @@
 			</div>
 			</div>
 			
-			<div class="verify-mailbox" id="send-email" style="display:none">
-             <div style="margin-top:82px;text-align: center;">
-             	<ul>
-             		<li><img src="${_base }/theme/slp/images/icon-mail.png"></li>
-             		<li class="word">邮箱绑定邮件已发送至您的邮箱：ying****un@163.com</li>
-             		<li><a href="#">请在邮件中点击验证链接完成邮箱绑定<span>（验证链接24小时内有效)</span></a></li>
-             		<li class="vermail-btn"><input type="button" class="slp-btn regsiter-btn" value="查看验证邮件"></li>	
+			
+		<div class="verify-mailbox" id="send-email" style="display:none">
+             <div style="width:430px;margin:0 auto;padding-top:50px;overflow:hidden;">
+             	<ul style="width:100%;float:left;">
+             		<li style="text-align:center;line-height:30px;"><img src="${_base }/theme/slp/images/icon-mail.png"></li>
+             		<li class="word" style="text-align:center;line-height:30px;">邮箱绑定邮件已发送至您的邮箱：${email }</li>
+             		<li style="text-align:center;line-height:30px;">请在邮件中点击验证链接完成邮箱绑定<span>（验证链接30分钟内有效)</span></li>
+             		<!-- <li class="vermail-btn" style="text-align:center;line-height:30px;"><input type="button" class="slp-btn regsiter-btn" value="查看验证邮件"></li> -->	
              	</ul>
              	</div>
       			</div>
+
 			
 			<div class="regeiter-success" id="password-date4" style="display: none;">
                  <p><img src="${_base}/theme/slp/images/succ.png"></p>

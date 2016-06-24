@@ -43,6 +43,7 @@ import com.ai.opt.uac.web.util.CacheUtil;
 import com.ai.opt.uac.web.util.IPUtil;
 import com.ai.opt.uac.web.util.VerifyUtil;
 import com.ai.paas.ipaas.ccs.IConfigClient;
+import com.ai.paas.ipaas.mcs.impl.CacheClient;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.slp.user.api.ucUserSecurity.interfaces.IUcUserSecurityManageSV;
 import com.ai.slp.user.api.ucUserSecurity.param.UcUserPasswordRequest;
@@ -71,6 +72,7 @@ public class UpdatePasswordController {
 	    SLPClientUser user = (SLPClientUser) CacheUtil.getValue(cacheKey, UpdatePassword.CACHE_NAMESPACE, SLPClientUser.class);
 	    model.addObject("email", user.getUserEmail()!=null&&"10".equals(user.getEmailValidateFlag())?user.getUserEmail():"未绑定邮箱");
 	    model.addObject("phone", user.getUserMp()!=null?user.getUserMp():"未绑定验证手机");
+	    model.addObject("userName",user.getUserLoginName());
 	    //重新生成uuid
 	    String uuid = UUIDUtil.genId32();
 	    CacheUtil.setValue(uuid, 300, user, UpdatePassword.CACHE_NAMESPACE);
@@ -82,16 +84,21 @@ public class UpdatePasswordController {
     @RequestMapping("/toPasswordPage")
     public ModelAndView toPasswordPage(HttpServletRequest request, HttpServletResponse response){
         ModelAndView model = new ModelAndView("jsp/center/update-password3");
+        ICacheClient cacheClient = MCSClientFactory.getCacheClient(UpdatePassword.CACHE_NAMESPACE);
         
         String cacheKey = request.getParameter("cacheKey");
+        String cacheCache = cacheClient.get("cacheKey");
+        if(cacheCache!=""&&cacheCache.equals(cacheKey)){
         SLPClientUser user = (SLPClientUser) CacheUtil.getValue(cacheKey, UpdatePassword.CACHE_NAMESPACE, SLPClientUser.class);
-        CacheUtil.deletCache(cacheKey, UpdatePassword.CACHE_NAMESPACE);
         model.addObject("userId",user.getUserId());
+        CacheUtil.deletCache(cacheKey, UpdatePassword.CACHE_NAMESPACE);
+       }
         return model;
     }
     //跳转发送成功页面
     @RequestMapping("/sendEmailSuccess")
     public ModelAndView sendEmailSuccess(HttpServletRequest request, HttpServletResponse response){
+        
         return new ModelAndView("jsp/center/send-email-success");
     }
     
@@ -344,7 +351,7 @@ public class UpdatePasswordController {
             if (StringUtil.isBlank(times)) {
                 // 邮箱验证
                 String email = request.getParameter("email");
-                String nickName = request.getParameter("userName");
+                String userName = request.getParameter("userName");
                 SendEmailRequest emailRequest = new SendEmailRequest();
                 emailRequest.setTomails(new String[] { email });
                 emailRequest.setTemplateRUL(UpdatePassword.TEMPLATE_EMAIL_URL);
@@ -355,12 +362,13 @@ public class UpdatePasswordController {
                 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
                 String url = basePath+"center/password/toPasswordPage?cacheKey="+cacheKey;
                 String overTimeStr = defaultConfigClient.get(EmailVerifyConstants.VERIFY_OVERTIME_KEY);
+                cacheClient.setex("cacheKey", Integer.valueOf(overTimeStr)/60*500, cacheKey);
                 // 将发送次数放入缓存
                 String maxTimeStr = defaultConfigClient.get(EmailVerifyConstants.SEND_VERIFY_MAX_TIME_KEY);
                 cacheClient.setex(smskey, Integer.valueOf(maxTimeStr), smstimes);
                 // 超时时间
                 String overTime = ObjectUtils.toString(Integer.valueOf(overTimeStr) / 60);
-                emailRequest.setData(new String[] { nickName, url, overTime });
+                emailRequest.setData(new String[] { userName, url, overTime });
                 boolean flag = VerifyUtil.sendEmail(emailRequest);
                 if (flag) {
                     // 成功
