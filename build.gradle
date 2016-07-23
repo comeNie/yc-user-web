@@ -57,24 +57,21 @@ dependencies {
     //cache
     compile 'com.ai.runner.center.mmp:manager:1.0.0-SNAPSHOT'
     
-    compile ('com.ai.opt.sdk:opt-sdk:2.0-SNAPSHOT'){
-        exclude group: 'org.quartz-scheduler', module: 'quartz'
-    }
-    
     compile 'org.javassist:javassist:3.19.0-GA'
     
     
     //dubbo
     
-    compile ('com.ai.opt.xss.filter:opt-xss-firewall:1.0-SNAPSHOT'){
-        exclude group: 'org.quartz-scheduler', module: 'quartz'
-    }
-    compile ('com.ai.opt.uni.session:opt-uni-session:2.0-SNAPSHOT'){
-        exclude group: 'org.quartz-scheduler', module: 'quartz'
-    }
-    compile ('com.ai.opt.sso.client:opt-sso-client:1.0.2-SNAPSHOT'){
-        exclude group: 'org.quartz-scheduler', module: 'quartz'
-    }
+    compile 'com.ai.opt.xss.filter:opt-xss-firewall:1.0-SNAPSHOT'
+	compile 'com.ai.opt.sso.client:opt-sso-client:1.0.2-SNAPSHOT'
+	compile ('com.ai.opt.uni.session:opt-uni-session:2.0-SNAPSHOT'){
+		exclude group: 'org.springframework'
+		exclude group: 'org.quartz-scheduler'
+	}
+	compile ('com.ai.opt.sdk:opt-sdk:2.1-SNAPSHOT'){
+		exclude group: 'org.springframework', module: 'quartz'
+		exclude group: 'org.quartz-scheduler'
+	}
     
     compile 'com.ai.slp.user:login:1.0-SNAPSHOT'
     compile 'com.ai.slp.user:register:1.0-SNAPSHOT'
