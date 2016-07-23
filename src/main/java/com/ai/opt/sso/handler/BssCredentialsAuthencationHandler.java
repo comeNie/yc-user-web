@@ -181,10 +181,11 @@ public final class BssCredentialsAuthencationHandler
          */
 
         BeanUtils.copyProperties(response, bssCredentials);
+        bssCredentials.setUsername(response.getUserLoginName());
             
         logger.info("用户 [" + username + "] 认证成功。");
         logger.info(bssCredentials.toString());
-        return creatHandlerResult(bssCredentials, new SimplePrincipal(username), null);
+        return creatHandlerResult(bssCredentials, new SimplePrincipal(bssCredentials.getUsername()), null);
     }
 
     private HandlerResult creatHandlerResult(BssCredentials bssCredentials,
