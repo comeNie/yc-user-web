@@ -57,6 +57,8 @@ import com.ai.runner.base.exception.CallerException;
 import com.ai.runner.center.mmp.api.manager.interfaces.SMSServices;
 import com.ai.runner.center.mmp.api.manager.param.SMData;
 import com.ai.runner.center.mmp.api.manager.param.SMDataInfoNotify;
+import com.ai.slp.common.api.servicenum.interfaces.IServiceNumSV;
+import com.ai.slp.common.api.servicenum.param.ServiceNum;
 import com.ai.slp.user.api.register.interfaces.IRegisterSV;
 import com.ai.slp.user.api.register.param.RegisterParamsRequest;
 import com.ai.slp.user.api.register.param.RegisterResponse;
@@ -221,6 +223,10 @@ public class RegisterController {
 				return responseData;
 			}
 			IRegisterSV iRegisterSV = DubboConsumerFactory.getService("iRegisterSV");
+			IServiceNumSV serviceNumSV = DubboConsumerFactory.getService("iServiceNumSV");
+			ServiceNum serviceNum = serviceNumSV.getServiceNumByPhone(userParams.getUcUserParam().getUserMp());
+			userParams.getUcUserParam().setProvinceCode(serviceNum.getProvinceCode());
+			userParams.getUcUserParam().setCityCode(serviceNum.getCityCode());
 			RegisterResponse response = iRegisterSV.insertUcUser(userParams);
 			//PhoneRegisterResponse response = iRegisterSV.registerByPhone(request);
 			String code =response.getResponseCode();
