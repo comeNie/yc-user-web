@@ -166,7 +166,7 @@ define('app/register/register', function (require, exports, module) {
     			$('#errorPhoneFlag').val("0");
     			$('#phoneImage').attr('src',_base+'/theme/slp/images/icon-a.png');
 				return false;
-			}else if( /^0?1[3|4|5|8][0-9]\d{8}$/.test(phone)){
+			}else if( /^0?1\d{10}$/.test(phone)&&phone!="11111111111"){
 				var	param={
     					userMp:$("#phone").val(),
     					userType:$("#userType").val()
