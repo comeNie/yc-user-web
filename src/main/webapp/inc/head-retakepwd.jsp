@@ -5,7 +5,7 @@
 		<div class="logo">
 			<ul>
 				<li><a href="${mall_index_url }"><img
-						src="${_base}/theme/slp/images/login-logo.png"></a></li>
+						src="${_base}/theme/slp/images/hnlogo.png"></a></li>
 				<li>修改密码</li>
 			</ul>
 		</div>
