@@ -30,6 +30,12 @@
 
 </head>
 
+<style type="text/css">
+/**登录banner**/
+.logo-banner-big{ width:100%; float:left; height:456px; background:url(theme/slp/images/bj1.png) no-repeat; min-width:1200px;}
+.banner{ width:1200px; margin:0 auto; background:url(theme/slp/images/logo-banner.png) no-repeat; height:456px;}
+</style>
+
 <body class="logo-body">
 	<!--login－头部-->
 	<div class="login-head">
