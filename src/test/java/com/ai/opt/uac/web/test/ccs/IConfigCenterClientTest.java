@@ -8,11 +8,11 @@ import org.junit.Test;
 
 import com.ai.opt.sdk.components.ccs.CCSClientFactory;
 import com.ai.opt.sdk.constants.SDKConstants;
-import com.ai.opt.uac.web.constants.Constants;
-import com.ai.opt.uac.web.constants.VerifyConstants;
-import com.ai.opt.uac.web.constants.VerifyConstants.EmailVerifyConstants;
-import com.ai.opt.uac.web.constants.VerifyConstants.PhoneVerifyConstants;
-import com.ai.opt.uac.web.constants.VerifyConstants.PictureVerifyConstants;
+import com.ai.opt.user.web.constants.Constants;
+import com.ai.opt.user.web.constants.VerifyConstants;
+import com.ai.opt.user.web.constants.VerifyConstants.EmailVerifyConstants;
+import com.ai.opt.user.web.constants.VerifyConstants.PhoneVerifyConstants;
+import com.ai.opt.user.web.constants.VerifyConstants.PictureVerifyConstants;
 import com.ai.paas.ipaas.ccs.IConfigClient;
 import com.ai.paas.ipaas.ccs.constants.ConfigException;
 

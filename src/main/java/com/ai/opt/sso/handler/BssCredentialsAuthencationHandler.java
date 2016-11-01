@@ -40,7 +40,7 @@ import com.ai.opt.sso.exception.UsernameNotExistException;
 import com.ai.opt.sso.principal.BssCredentials;
 import com.ai.opt.sso.service.LoadAccountService;
 import com.ai.opt.sso.util.RegexUtils;
-import com.ai.opt.uac.web.constants.Constants.Register;
+import com.ai.opt.user.web.constants.Constants.Register;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.slp.user.api.login.param.LoginRequest;
 import com.ai.slp.user.api.login.param.LoginResponse;
