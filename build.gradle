@@ -103,5 +103,5 @@ processResources {
 }
 
 war{
-    baseName  "slp-uac"
+    baseName  "yc-user-web"
 }
